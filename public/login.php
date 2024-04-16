@@ -40,7 +40,7 @@ session_start();
 
                                     <?php } ?>
                                     <div class="card-body">
-                                        <form action="/mah-portal/process/login-process.php" method="POST">
+                                        <form action="../process/login-process.php" method="POST">
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="username" type="text" placeholder="username" name="username" />
                                                 <label for="inputEmail">Username</label>

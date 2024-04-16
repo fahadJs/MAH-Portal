@@ -1,21 +1,21 @@
-<?php 
+<?php
 
-session_start(); 
+session_start();
 
 include "../db/db.php";
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
 
-    function validate($data){
+    function validate($data)
+    {
 
-       $data = trim($data);
+        $data = trim($data);
 
-       $data = stripslashes($data);
+        $data = stripslashes($data);
 
-       $data = htmlspecialchars($data);
+        $data = htmlspecialchars($data);
 
-       return $data;
-
+        return $data;
     }
 
     $uname = validate($_POST['username']);
@@ -27,14 +27,12 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         header("Location: /mah-portal/public/login.php?error=User Name is required");
 
         exit();
-
-    }else if(empty($pass)){
+    } else if (empty($pass)) {
 
         header("Location: /mah-portal/public/login.php?error=Password is required");
 
         exit();
-
-    }else{
+    } else {
 
         $sql = "SELECT * FROM admin WHERE username='$uname' AND password='$pass'";
 
@@ -57,29 +55,22 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 header("Location: /mah-portal/public/index.php");
 
                 exit();
-
-            }else{
+            } else {
 
                 header("Location: /mah-portal/public/login.php?error=Incorect User name or password");
 
                 exit();
-
             }
-
-        }else{
+        } else {
 
             header("Location: /mah-portal/public/login.php?error=Incorect User name or password");
 
             exit();
-
         }
-
     }
-
-}else{
+} else {
 
     header("Location: index.php");
 
     exit();
-
 }
