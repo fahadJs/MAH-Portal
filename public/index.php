@@ -202,25 +202,102 @@ if (!isset($_SESSION['user_id'])) {
                         <div class="row">
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Primary Card</div>
+                                    <div class="card-body">Biryani</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    <input type="text" class="form-control" placeholder="No. of Plates">
+                                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">Warning Card</div>
+                                    <div class="card-body">Yakhni Pulao</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                    <input type="text" class="form-control" placeholder="No. of Plates">
+                                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">Success Card</div>
+                                    <div class="card-body">Daal Chawal</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <input type="text" class="form-control" placeholder="No. of Plates">
+                                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-danger text-white mb-4">
+                                    <div class="card-body">Chicken Karahi</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <input type="text" class="form-control" placeholder="No. of Plates">
+                                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-primary text-white mb-4">
+                                    <div class="card-body">Chicken Qorma</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <input type="text" class="form-control" placeholder="No. of Plates">
+                                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-warning text-white mb-4">
+                                    <div class="card-body">Anda Chana</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <input type="text" class="form-control" placeholder="No. of Plates">
+                                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-success text-white mb-4">
+                                    <div class="card-body">Mix Sabzi</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <input type="text" class="form-control" placeholder="No. of Plates">
+                                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-danger text-white mb-4">
+                                    <div class="card-body">Kari Pakora</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <input type="text" class="form-control" placeholder="No. of Plates">
+                                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-primary text-white mb-4">
+                                    <div class="card-body">Water Bottles</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <input type="text" class="form-control" placeholder="No. of Plates">
+                                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-md-6">
+                                <div class="card bg-warning text-white mb-4">
+                                    <div class="card-body">Roti</div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between">
+                                    <input type="text" class="form-control" placeholder="No. of Plates">
+                                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="col-xl-3 col-md-6">
+                                <div class="card bg-success text-white mb-4">
+                                    <div class="card-body">Daal Chawal</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <a class="small text-white stretched-link" href="#">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -229,15 +306,16 @@ if (!isset($_SESSION['user_id'])) {
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Danger Card</div>
+                                    <div class="card-body">Chicken Karahi</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <a class="small text-white stretched-link" href="#">View Details</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
-                        <div class="row">
+
+                        <!-- <div class="row">
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -256,7 +334,7 @@ if (!isset($_SESSION['user_id'])) {
                                     <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
