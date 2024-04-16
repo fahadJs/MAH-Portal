@@ -22,9 +22,19 @@ if (!isset($_SESSION['user_id'])) {
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Dashboard - SB Admin</title>
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+        <style>
+            .modal-dialog{
+                background-color: white;
+                padding: 30px;
+                border-radius: 15px;
+                border-radius: 15px;
+            }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <!-- <?php if (isset($error)) : ?>
@@ -129,9 +139,66 @@ if (!isset($_SESSION['user_id'])) {
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4"><?php $error ?></h1>
+                        
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Dashboard</li>
+                             <li class="breadcrumb-item active">Dashboard</li>
                         </ol>
+<form class="row g-3 mb-4">
+  <div class="col-md-4">
+    <label for="inputEmail4" class="form-label">Name</label>
+    <input type="email" class="form-control" id="inputEmail4">
+  </div>
+  <div class="col-md-4">
+    <label for="inputPassword4" class="form-label">Contact</label>
+    <input type="password" class="form-control" id="inputPassword4">
+  </div>
+  <div class="col-md-4">
+    <label for="inputCity" class="form-label">Date</label>
+    <input type="text" class="form-control" id="inputCity">
+  </div>
+  <div class="col-md-4">
+  <label for="inputCity" class="form-label">Choose Deal</label>
+  <select class="form-select" id="inputCity">
+    <option selected>Choose...</option>
+    <option>Deal 01</option>
+    <option>Deal 02</option>
+    <option>Deal 03</option>
+    <option>Deal 04</option>
+    <option>Deal 05</option>
+    <option>Deal 06</option>
+    <option>Deal 07</option>
+    <option>Deal 08</option>
+    <option>Deal 09</option>
+  </select>
+</div>
+
+<div class="col-md-4">
+    <label for="inputCity" class="form-label">Price</label>
+    <input type="text" class="form-control" id="inputCity">
+  </div>
+
+  <div class="col-md-4">
+    <label for="inputCity" class="form-label">Delivery Price</label>
+    <input type="text" class="form-control" id="inputCity">
+  </div>
+  <div class="col-12">
+    <label for="inputAddress" class="form-label">Address</label>
+    <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+  </div>
+  <div class="col-6">
+    <label for="inputAddress2" class="form-label">Email</label>
+    <input type="text" class="form-control" id="inputAddress2" placeholder="someone@example.com">
+  </div>
+
+  <div class="col-6">
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+</form>
+<!-- </div>
+</div>
+</div> -->
+
+                    
                         <div class="row">
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
