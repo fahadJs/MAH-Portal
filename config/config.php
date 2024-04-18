@@ -1,6 +1,11 @@
 <?php
 
-define('DB_HOST', '162.240.101.166');
-define('DB_USER', 'a0786website_mah_portal');
-define('DB_PASS', 'lqEnBGmbJ,YO');
-define('DB_NAME', 'a0786website_mah_portal');
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
+define('DB_HOST', $_ENV['DB_HOST']);
+define('DB_USER', $_ENV['DB_USER']);
+define('DB_PASS', $_ENV['DB_PASS']);
+define('DB_NAME', $_ENV['DB_NAME']);

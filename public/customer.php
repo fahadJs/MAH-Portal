@@ -1,8 +1,6 @@
 <?php
 require_once('../public/header.php');
 require_once('../db/db.php');
-
-
 ?>
 
 
