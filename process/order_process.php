@@ -10,13 +10,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dishNames = $_POST['dish_name'];
     $customerDealIds = $_POST['customer_deal_id'];
     $customerNumbers = $_POST['customer_number'];
+    $persons = $_POST['persons'];
 
     // Prepare and execute SQL insert statements
-    $stmt = $connection->prepare("INSERT INTO orders (cust_number, dish, date) VALUES (?, ?, ?)");
+    $stmt = $connection->prepare("INSERT INTO orders (cust_number, dish, date, persons) VALUES (?, ?, ?, ?)");
 
     // Bind parameters and execute the statement for each submitted order
     for ($i = 0; $i < count($dishNames); $i++) {
-        $stmt->bind_param("sss", $customerNumbers[$i], $dishNames[$i], $currentDate);
+        $stmt->bind_param("sss", $customerNumbers[$i], $dishNames[$i], $currentDate, $persons[$i]);
         $stmt->execute();
 
         if ($dishNames[$i] == '') {
@@ -31,8 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close statement
     $stmt->close();
 
+    $tomorrow = date('Y-m-d', strtotime('+1 day'));
     // Send WhatsApp message
-    $message = "ORDERS FOR " . $currentDate . ":\n\n";
+    $message = "ORDERS FOR " . $tomorrow . ":\n\n";
     $query = "SELECT * FROM orders WHERE date = '$currentDate'";
     $result = mysqli_query($connection, $query);
     while ($row = mysqli_fetch_assoc($result)) {

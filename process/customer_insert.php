@@ -11,6 +11,7 @@ $deal_price = $_POST['deal_price'];
 $delivery_price = $_POST['delivery_price'];
 $start_date = $_POST['start_date'];
 $deal_name = $_POST['deal_name'];
+$number_of_persons = $_POST['number_of_persons'];
 
 function generateCustomID($id)
 {
@@ -18,7 +19,7 @@ function generateCustomID($id)
 }
 
 // Prepare and execute SQL statement to insert customer data
-$query_customer = "INSERT INTO customers (name, contact, email, deal_name, address, deal_price, delivery_price, start_date) VALUES ('$name', '$contact', '$email', '$deal_name', '$address', '$deal_price', '$delivery_price', '$start_date')";
+$query_customer = "INSERT INTO customers (name, contact, email, deal_name, address, deal_price, delivery_price, start_date, persons) VALUES ('$name', '$contact', '$email', '$deal_name', '$address', '$deal_price', '$delivery_price', '$start_date', '$number_of_persons')";
 if (mysqli_query($connection, $query_customer)) {
     // Retrieve the cust_id of the inserted customer
     $cust_id = mysqli_insert_id($connection);

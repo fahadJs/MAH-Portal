@@ -1,4 +1,13 @@
 <?php
+// Start session
+session_start();
+
+// Check if user logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: /mah-portal/public/login.php");
+    exit();
+}
+
 require_once('../public/header.php');
 require_once('../db/db.php');
 
@@ -19,13 +28,15 @@ while ($row = mysqli_fetch_assoc($result)) {
     $dishName = $dealRow['dish'];
     $customerDealId = $dealRow['id'];
     $customerNumber = $row['cust_number'];
+    $persons = $row['persons'];
 
     // Store customer and deal data
     $customers[] = array(
         'id' => $customerDealId,
         'name' => $customerName,
         'number' => $customerNumber,
-        'dish' => $dishName
+        'dish' => $dishName,
+        'persons' => $persons
     );
 }
 ?>
@@ -44,6 +55,8 @@ while ($row = mysqli_fetch_assoc($result)) {
                 <div class="input-group">
                     <span class="input-group-text"><?php echo $customer['number']; ?></span>
                     <input type="text" class="form-control" name="dish_name[]" value="<?php echo $customer['dish']; ?>" aria-label="Dish Name">
+                    <span class="input-group-text">Persons</span>
+                    <input type="text" class="form-control" name="persons[]" value="<?php echo $customer['persons']; ?>" aria-label="Persons" readonly>
                     <input type="text" name="customer_deal_id[]" value="<?php echo $customer['id'] ?>" hidden>
                     <input type="text" name="customer_number[]" value="<?php echo $customer['number'] ?>" hidden>
                 </div>

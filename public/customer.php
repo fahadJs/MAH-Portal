@@ -1,4 +1,15 @@
 <?php
+
+// Start session
+session_start();
+
+// Check if user logged in
+if (!isset($_SESSION['user_id'])) {
+    header("Location: /mah-portal/public/login.php");
+    exit();
+}
+
+
 require_once('../public/header.php');
 require_once('../db/db.php');
 ?>
@@ -17,20 +28,34 @@ require_once('../db/db.php');
             Fetching please wait ...
         </div>
         <div class="col-md-4">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <div class="input-group">
+                <span class="input-group-text">Name</span>
+                <!-- <label for="name" class="form-label">Name</label> -->
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
         </div>
         <div class="col-md-4">
-            <label for="contact" class="form-label">Contact</label>
-            <input type="text" class="form-control" id="contact" name="contact" required>
+            <div class="input-group">
+                <span class="input-group-text">Contact</span>
+                <!-- <label for="name" class="form-label">Name</label> -->
+                <input type="text" class="form-control" id="contact" name="contact" required>
+            </div>
+            <!-- <label for="contact" class="form-label">Contact</label> -->
         </div>
         <div class="col-md-4">
-            <label for="start_date" class="form-label">Start Date</label>
-            <input type="date" class="form-control" id="start_date" name="start_date" required>
+            <div class="input-group">
+                <span class="input-group-text">Start Date</span>
+                <!-- <label for="name" class="form-label">Name</label> -->
+                <input type="date" class="form-control" id="start_date" name="start_date" required>
+            </div>
+            <!-- <label for="start_date" class="form-label">Start Date</label> -->
+            
         </div>
         <div class="col-md-4">
-            <label for="deal_name" class="form-label">Choose Deal</label>
-            <select class="form-select" id="deal_id" name="deal_name" required>
+            <div class="input-group">
+                <span class="input-group-text">Deal</span>
+                <!-- <label for="name" class="form-label">Name</label> -->
+                <select class="form-select" id="deal_id" name="deal_name" required>
                 <option selected>Choose...</option>
                 <?php
                 // Retrieve deals from database and populate dropdown
@@ -41,25 +66,54 @@ require_once('../db/db.php');
                 }
                 ?>
             </select>
+            </div>
+            <!-- <label for="deal_name" class="form-label">Choose Deal</label> -->
+            
         </div>
 
         <div class="col-md-4">
-            <label for="deal_price" class="form-label">Price</label>
-            <input type="number" class="form-control" id="deal_price" name="deal_price" required>
+            <div class="input-group">
+                <span class="input-group-text">Deal Price</span>
+                <!-- <label for="name" class="form-label">Name</label> -->
+                <input type="number" class="form-control" id="deal_price" name="deal_price" required>
+            </div>
+            <!-- <label for="deal_price" class="form-label">Price</label> -->
         </div>
 
         <div class="col-md-4">
-            <label for="delivery_price" class="form-label">Delivery Price</label>
-            <input type="number" class="form-control" id="delivery_price" name="delivery_price" required>
+            <div class="input-group">
+                <span class="input-group-text">Number of Persons</span>
+                <!-- <label for="name" class="form-label">Name</label> -->
+                <input type="number" class="form-control" id="number_of_persons" name="number_of_persons" min="1" required>
+            </div>
+            <!-- <label for="number_of_persons" class="form-label">Number of Persons</label> -->
         </div>
+
         <div class="col-6">
-            <label for="address" class="form-label">Address</label>
-            <input type="text" class="form-control" id="address" name="address" required>
+            <div class="input-group">
+                <span class="input-group-text">Contact</span>
+                <!-- <label for="name" class="form-label">Name</label> -->
+                <input type="text" class="form-control" id="email" name="email" required>
+            </div>
+            <!-- <label for="email" class="form-label">Email</label> -->
         </div>
-        <div class="col-6">
-            <label for="email" class="form-label">Email</label>
-            <input type="text" class="form-control" id="email" name="email" required>
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-text">Delivery Price</span>
+                <!-- <label for="name" class="form-label">Name</label> -->
+                <input type="number" class="form-control" id="delivery_price" name="delivery_price" required>
+            </div>
+            <!-- <label for="delivery_price" class="form-label">Delivery Price</label> -->
         </div>
+        <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">Address</span>
+                <!-- <label for="name" class="form-label">Name</label> -->
+                <input type="text" class="form-control" id="address" name="address" required>
+            </div>
+            <!-- <label for="address" class="form-label">Address</label> -->
+        </div>
+        
 
         <div id="additional_info_form" style="margin-top: -4px;">
 
@@ -77,7 +131,6 @@ require_once('../db/db.php');
         var dealPrice = selectedOption.getAttribute('data-price');
         var dealId = selectedOption.getAttribute('data-id');
         // document.getElementById('deal_price').value = dealPrice;
-
         document.getElementById('loader').style.display = 'block';
 
         var xhr = new XMLHttpRequest();
@@ -157,6 +210,19 @@ require_once('../db/db.php');
             form.appendChild(hiddenInput);
         }
     }
+
+    // function calculateTotalPrice() {
+    //     var dealPrice = parseFloat(document.getElementById('deal_price').value);
+    //     var numberOfPersons = parseInt(document.getElementById('number_of_persons').value);
+
+    //     if (!isNaN(dealPrice) && !isNaN(numberOfPersons)) {
+    //         var totalPrice = dealPrice * numberOfPersons;
+    //         document.getElementById('deal_price').value = totalPrice.toFixed(2); // Display total price with two decimal places
+    //     }
+    // }
+
+    // // Event listener for input field change
+    // document.getElementById('number_of_persons').addEventListener('change', calculateTotalPrice);
 </script>
 
 
