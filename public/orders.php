@@ -65,6 +65,67 @@ while ($row = mysqli_fetch_assoc($result)) {
 
         <button type="submit" class="btn btn-primary">Submit Orders</button>
     </form>
+    <hr>
+
+    <h1 class="mt-4">All Orders</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">All the previous orders - Latest on top</li>
+    </ol>
+    <?php
+    // Fetch data from orders table
+    $query = "SELECT * FROM orders ORDER BY date DESC";
+    $result = mysqli_query($connection, $query);
+
+    // Check if there are any orders
+    if (mysqli_num_rows($result) > 0) {
+        echo '<table class="table">';
+        echo '<thead>';
+        echo '<tr>';
+        echo '<th scope="col">ID</th>';
+        echo '<th scope="col">Customer Number</th>';
+        echo '<th scope="col">Dish</th>';
+        echo '<th scope="col">Date</th>';
+        echo '<th scope="col">Persons</th>';
+        echo '<th scope="col">Type</th>';
+        echo '<th scope="col">Status</th>';
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
+
+        // Output data of each row
+        while ($row = mysqli_fetch_assoc($result)) {
+            $statusClass = '';
+            switch ($row['status']) {
+                case 'pending':
+                    $statusClass = 'alert-warning';
+                    break;
+                case 'delivered':
+                    $statusClass = 'alert-success';
+                    break;
+                default:
+                    $statusClass = 'alert-secondary';
+                    break;
+            }
+
+            echo '<tr>';
+            echo '<td>' . $row['id'] . '</td>';
+            echo '<td>' . $row['cust_number'] . '</td>';
+            echo '<td>' . $row['dish'] . '</td>';
+            echo '<td>' . $row['date'] . '</td>';
+            echo '<td>' . $row['persons'] . '</td>';
+            echo '<td>' . $row['type'] . '</td>';
+            echo '<td><div class="alert ' . $statusClass . ' mb-0" role="alert">' . $row['status'] . '</div></td>';
+            echo '</tr>';
+        }
+
+        echo '</tbody>';
+        echo '</table>';
+    } else {
+        // No orders found
+        echo '<div class="alert alert-danger" role="alert">No orders found.</div>';
+    }
+    ?>
+
 </div>
 
 

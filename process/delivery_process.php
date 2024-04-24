@@ -13,6 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $persons = $_POST['persons'];
     $address = $_POST['address'];
     $distance = $_POST['distance'];
+    // $persons = $_POST['persons'];
     $time = $_POST['time'];
     $fuelCost = $_POST['fuel_cost'];
     $rider = $_POST['rider'];

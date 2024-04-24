@@ -9,7 +9,6 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-
 require_once('../public/header.php');
 require_once('../db/db.php');
 ?>
@@ -49,26 +48,38 @@ require_once('../db/db.php');
                 <input type="date" class="form-control" id="start_date" name="start_date" required>
             </div>
             <!-- <label for="start_date" class="form-label">Start Date</label> -->
-            
+
         </div>
+
         <div class="col-md-4">
+            <div class="input-group">
+                <span class="input-group-text">Type</span>
+                <select class="form-select" id="customer_type" name="customer_type" required>
+                    <option selected>Choose...</option>
+                    <option value="normal">Normal</option>
+                    <option value="tester">Tester</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-4" id="deal_name_dropdown">
             <div class="input-group">
                 <span class="input-group-text">Deal</span>
                 <!-- <label for="name" class="form-label">Name</label> -->
                 <select class="form-select" id="deal_id" name="deal_name" required>
-                <option selected>Choose...</option>
-                <?php
-                // Retrieve deals from database and populate dropdown
-                $query = "SELECT deal_id, deal_name, retail_price FROM deals";
-                $result = mysqli_query($connection, $query);
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<option value='" . $row['deal_name'] . "' data-price='" . $row['retail_price'] .  "' data-id='" . $row['deal_id'] . "'>" . $row['deal_name'] . "</option>";
-                }
-                ?>
-            </select>
+                    <option selected>Choose...</option>
+                    <?php
+                    // Retrieve deals from database and populate dropdown
+                    $query = "SELECT deal_id, deal_name, retail_price FROM deals";
+                    $result = mysqli_query($connection, $query);
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<option value='" . $row['deal_name'] . "' data-price='" . $row['retail_price'] .  "' data-id='" . $row['deal_id'] . "'>" . $row['deal_name'] . "</option>";
+                    }
+                    ?>
+                </select>
             </div>
             <!-- <label for="deal_name" class="form-label">Choose Deal</label> -->
-            
+
         </div>
 
         <div class="col-md-4">
@@ -89,15 +100,15 @@ require_once('../db/db.php');
             <!-- <label for="number_of_persons" class="form-label">Number of Persons</label> -->
         </div>
 
-        <div class="col-6">
+        <div class="col-6" id="e">
             <div class="input-group">
-                <span class="input-group-text">Contact</span>
+                <span class="input-group-text">Email</span>
                 <!-- <label for="name" class="form-label">Name</label> -->
                 <input type="text" class="form-control" id="email" name="email" required>
             </div>
             <!-- <label for="email" class="form-label">Email</label> -->
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" id="d">
             <div class="input-group">
                 <span class="input-group-text">Delivery Price</span>
                 <!-- <label for="name" class="form-label">Name</label> -->
@@ -113,10 +124,15 @@ require_once('../db/db.php');
             </div>
             <!-- <label for="address" class="form-label">Address</label> -->
         </div>
-        
+
 
         <div id="additional_info_form" style="margin-top: -4px;">
 
+        </div>
+
+        <button type="button" id="add_tester_field_btn" class="btn btn-secondary mt-3">Add Tester Dishes Days wise</button>
+        <div id="tester_fields" style="display: none;">
+            <!-- Tester fields will be dynamically added here -->
         </div>
 
         <div class="col-12">
@@ -126,6 +142,12 @@ require_once('../db/db.php');
 </div>
 
 <script>
+    document.getElementById('deal_name_dropdown').style.display = 'none';
+    document.getElementById('add_tester_field_btn').style.display = 'none';
+    document.getElementById('add_tester_field_btn').addEventListener('click', function() {
+        addTesterField(); // Add a new tester field when button is clicked
+    });
+
     document.getElementById('deal_id').addEventListener('change', function() {
         var selectedOption = this.options[this.selectedIndex];
         var dealPrice = selectedOption.getAttribute('data-price');
@@ -205,10 +227,73 @@ require_once('../db/db.php');
 
             var hiddenInput = document.createElement('input');
             hiddenInput.type = 'hidden';
+            hiddenInput.classList.add('dynamic-field');
             hiddenInput.name = 'deal_item_days_' + dealItem.days; // Set the name of the hidden input field
             hiddenInput.value = dealItem.days; // Set the value of the hidden input field
             form.appendChild(hiddenInput);
         }
+    }
+
+    document.getElementById('customer_type').addEventListener('change', function() {
+        var selectedOption = this.value;
+        if (selectedOption === 'normal') {
+            document.getElementById('deal_name_dropdown').style.display = 'block';
+            document.getElementById('tester_fields').style.display = 'none';
+            document.getElementById('add_tester_field_btn').style.display = 'none';
+            var email = document.getElementById('e');
+            var date = document.getElementById('d');
+            email.classList.remove(...email.classList);
+            email.classList.add('col-4');
+            date.classList.remove(...date.classList);
+            date.classList.add('col-4');
+            clearTesterFields();
+        } else if (selectedOption === 'tester') {
+            clearAll();
+            var email = document.getElementById('e');
+            var date = document.getElementById('d');
+            email.classList.remove(...email.classList);
+            email.classList.add('col-6');
+            date.classList.remove(...date.classList);
+            date.classList.add('col-6');
+            document.getElementById('add_tester_field_btn').style.display = 'block';
+            document.getElementById('deal_name_dropdown').style.display = 'none';
+            clearTesterFields();
+            document.getElementById('tester_fields').style.display = 'block';
+            addTesterField();
+        }
+    });
+
+    function clearAll() {
+        var form = document.getElementById('additional_info_form');
+        var dynamicFields = form.querySelectorAll('.dynamic-field');
+        for (var i = 0; i < dynamicFields.length; i++) {
+            dynamicFields[i].remove();
+        }
+    }
+
+    function clearTesterFields() {
+        var testerFieldsContainer = document.getElementById('tester_fields');
+        testerFieldsContainer.innerHTML = '';
+    }
+
+    function addTesterField() {
+        var testerFieldsContainer = document.getElementById('tester_fields');
+        var input = document.createElement('textarea');
+        input.type = 'text';
+        input.name = 'deal_item_name[]';
+        input.classList.add('dynamic-field');
+        input.classList.add('form-control');
+        input.classList.add('mb-4');
+        input.placeholder = 'Tester';
+        testerFieldsContainer.appendChild(input);
+
+        // Add hidden field
+        var hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.classList.add('dynamic-field');
+        hiddenInput.name = 'deal_item_days_' + (document.querySelectorAll('#tester_fields textarea').length); // Set the name of the hidden input field
+        hiddenInput.value = (document.querySelectorAll('#tester_fields textarea').length); // Set the value of the hidden input field
+        testerFieldsContainer.appendChild(hiddenInput);
     }
 
     // function calculateTotalPrice() {

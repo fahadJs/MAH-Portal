@@ -12,14 +12,15 @@ $delivery_price = $_POST['delivery_price'];
 $start_date = $_POST['start_date'];
 $deal_name = $_POST['deal_name'];
 $number_of_persons = $_POST['number_of_persons'];
+$type = $_POST['customer_type'];
 
 function generateCustomID($id)
 {
-    return 'mah' . str_pad($id, 5, '0', STR_PAD_LEFT);
+    return 'A-' . str_pad($id, 5, '0', STR_PAD_LEFT);
 }
 
 // Prepare and execute SQL statement to insert customer data
-$query_customer = "INSERT INTO customers (name, contact, email, deal_name, address, deal_price, delivery_price, start_date, persons) VALUES ('$name', '$contact', '$email', '$deal_name', '$address', '$deal_price', '$delivery_price', '$start_date', '$number_of_persons')";
+$query_customer = "INSERT INTO customers (name, contact, email, deal_name, address, deal_price, delivery_price, start_date, persons, type) VALUES ('$name', '$contact', '$email', '$deal_name', '$address', '$deal_price', '$delivery_price', '$start_date', '$number_of_persons', '$type')";
 if (mysqli_query($connection, $query_customer)) {
     // Retrieve the cust_id of the inserted customer
     $cust_id = mysqli_insert_id($connection);
@@ -44,7 +45,8 @@ if (mysqli_query($connection, $query_customer)) {
         $query_deal = "INSERT INTO customers_deals (cust_id, dish, days) VALUES ('$cust_id', '$deal_name', '$deal_days')";
         mysqli_query($connection, $query_deal);
     }
-    echo "Data inserted successfully.";
+    header("Location: ../public/customer.php");
+    exit();
 } else {
     echo "Error: " . $query_customer . "<br>" . mysqli_error($connection);
 }

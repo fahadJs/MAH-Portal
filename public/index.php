@@ -10,23 +10,24 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 require_once('../public/header.php');
+require_once('../db/db.php');
 
 ?>
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4"><?php $error ?></h1>
+    <h1 class="mt-4">Dashboard</h1>
 
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">Dashboard</li>
     </ol>
 
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-xl-3 col-md-6">
             <div class="card bg-primary text-white mb-4">
                 <div class="card-body">Biryani</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <input type="text" class="form-control" placeholder="No. of Plates">
-                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
@@ -35,7 +36,7 @@ require_once('../public/header.php');
                 <div class="card-body">Yakhni Pulao</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <input type="text" class="form-control" placeholder="No. of Plates">
-                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
@@ -44,7 +45,7 @@ require_once('../public/header.php');
                 <div class="card-body">Daal Chawal</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <input type="text" class="form-control" placeholder="No. of Plates">
-                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
@@ -53,7 +54,7 @@ require_once('../public/header.php');
                 <div class="card-body">Chicken Karahi</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <input type="text" class="form-control" placeholder="No. of Plates">
-                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
@@ -65,7 +66,7 @@ require_once('../public/header.php');
                 <div class="card-body">Chicken Qorma</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <input type="text" class="form-control" placeholder="No. of Plates">
-                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
@@ -74,7 +75,7 @@ require_once('../public/header.php');
                 <div class="card-body">Anda Chana</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <input type="text" class="form-control" placeholder="No. of Plates">
-                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
@@ -83,7 +84,7 @@ require_once('../public/header.php');
                 <div class="card-body">Mix Sabzi</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <input type="text" class="form-control" placeholder="No. of Plates">
-                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
@@ -92,13 +93,13 @@ require_once('../public/header.php');
                 <div class="card-body">Kari Pakora</div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <input type="text" class="form-control" placeholder="No. of Plates">
-                    <!-- <div class="small text-white"><i class="fas fa-angle-right"></i></div> -->
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <div class="card mb-4">
+    <!-- <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
             DataTable Example
@@ -585,7 +586,88 @@ require_once('../public/header.php');
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> -->
+
+    <?php
+    // Fetch data from customers table
+    $query = "SELECT * FROM customers";
+    $result = mysqli_query($connection, $query);
+
+    // Check if there are any customers
+    if (mysqli_num_rows($result) > 0) {
+        while ($customer = mysqli_fetch_assoc($result)) {
+            // Fetch deals for this customer from customer deals table
+            $customer_id = $customer['id'];
+            $deal_query = "SELECT * FROM customers_deals WHERE cust_id = '$customer_id'";
+            $deal_result = mysqli_query($connection, $deal_query);
+
+            echo '<div class="card mb-4">';
+            echo '<div class="card-header">' . $customer['cust_number'] . '</div>';
+            echo '<div class="card-body">';
+            echo '<h5 class="card-title">' . $customer['name'] . '</h5>';
+            echo '<p class="card-text m-0">Contact: ' . $customer['contact'] . '</p>';
+            echo '<p class="card-text m-0">Email: ' . $customer['email'] . '</p>';
+            echo '<p class="card-text m-0">Address: ' . $customer['address'] . '</p>';
+            echo '<p class="card-text">Type: ' . $customer['type'] . '</p>';
+
+            // Button to open modal
+            echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customerModal' . $customer['id'] . '">';
+            echo $customer['cust_number'] . '\'s Deals';
+            echo '</button>';
+
+            // Bootstrap Modal for customer deals
+            echo '<div class="modal fade" id="customerModal' . $customer['id'] . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">';
+            echo '<div class="modal-dialog">';
+            echo '<div class="modal-content">';
+            echo '<div class="modal-header">';
+            echo '<h5 class="modal-title" id="exampleModalLabel">' . $customer['name'] . '\'s Deals</h5>';
+            echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+            echo '</div>';
+            echo '<div class="modal-body">';
+
+            // Start table for deals
+            echo '<table class="table">';
+            echo '<thead>';
+            echo '<tr>';
+            echo '<th scope="col">Dish</th>';
+            echo '<th scope="col">Days</th>';
+            echo '<th scope="col">Status</th>';
+            echo '</tr>';
+            echo '</thead>';
+            echo '<tbody>';
+
+            // Check if there are any deals for this customer
+            if (mysqli_num_rows($deal_result) > 0) {
+                while ($deal = mysqli_fetch_assoc($deal_result)) {
+                    echo '<tr>';
+                    echo '<td>' . $deal['dish'] . '</td>';
+                    echo '<td>' . $deal['days'] . '</td>';
+                    echo '<td>' . $deal['status'] . '</td>';
+                    echo '</tr>';
+                }
+            } else {
+                // No deals found for this customer
+                echo '<tr><td colspan="3">No deals found for this customer.</td></tr>';
+            }
+
+            echo '</tbody>';
+            echo '</table>';
+            // End table for deals
+
+            echo '</div>'; // End modal body
+            echo '</div>'; // End modal content
+            echo '</div>'; // End modal dialog
+            echo '</div>'; // End modal fade
+
+            echo '</div>'; // End card body
+            echo '</div>'; // End card
+        }
+    } else {
+        // No customers found
+        echo '<div class="alert alert-danger" role="alert">No customers found.</div>';
+    }
+    ?>
+
 </div>
 
 <?php

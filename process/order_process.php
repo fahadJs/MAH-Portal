@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Bind parameters and execute the statement for each submitted order
     for ($i = 0; $i < count($dishNames); $i++) {
-        $stmt->bind_param("sss", $customerNumbers[$i], $dishNames[$i], $currentDate, $persons[$i]);
+        $stmt->bind_param("ssss", $customerNumbers[$i], $dishNames[$i], $currentDate, $persons[$i]);
         $stmt->execute();
 
         if ($dishNames[$i] == '') {
@@ -32,13 +32,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close statement
     $stmt->close();
 
-    $tomorrow = date('Y-m-d', strtotime('+1 day'));
+    $tomorrow = date('l, Y-m-d', strtotime('+1 day'));
     // Send WhatsApp message
     $message = "ORDERS FOR " . $tomorrow . ":\n\n";
     $query = "SELECT * FROM orders WHERE date = '$currentDate'";
     $result = mysqli_query($connection, $query);
     while ($row = mysqli_fetch_assoc($result)) {
-        $message .= "*".$row['cust_number'].":* " . $row['dish'] . "\n\n";
+        $message .= "*".$row['cust_number'].":* " . $row['dish'] . " - ( ".$row['persons']." )\n\n";
     }
 
     // Define the URL for sending WhatsApp message
