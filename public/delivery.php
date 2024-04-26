@@ -19,16 +19,7 @@ $result = mysqli_query($connection, $query);
 
 $customers = array();
 
-if (mysqli_num_rows($result) == 0) {
-    echo "<div class='container-fluid px-4'>";
-    echo "<h1 class='mt-4'>Deliveries</h1>";
-    echo "<ol class='breadcrumb mb-4'>";
-    echo "<li class='breadcrumb-item'><a href='index.php'>Dashboard</a></li>";
-    echo "<li class='breadcrumb-item active'>Delivery</li>";
-    echo "</ol>";
-    echo "<p>No orders for today.</p>";
-    echo "</div>";
-} else {
+if (mysqli_num_rows($result) > 0) {
     while ($dealRow = mysqli_fetch_assoc($result)) {
         $dishName = $dealRow['dish'];
         $customerDealId = $dealRow['id'];
@@ -45,16 +36,18 @@ if (mysqli_num_rows($result) == 0) {
             'type' => $type
         );
     }
+}
 ?>
 
 
-    <div class="container-fluid px-4">
-        <h1 class="mt-4">Deliveries</h1>
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Deliveries</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-            <li class="breadcrumb-item active">Delevery</li>
+            <li class="breadcrumb-item active">Delivery</li>
         </ol>
 
+    <?php if (!empty($customers)) : ?>
         <form action="../process/delivery_process.php" method="POST" class="mt-4" id="orderForm">
             <?php foreach ($customers as $customer) : ?>
                 <div class="mb-3">
@@ -102,97 +95,96 @@ if (mysqli_num_rows($result) == 0) {
             </div>
             <button type="submit" class="btn btn-primary">Submit Delivery</button>
         </form>
+    <?php endif; ?>
+
+    <hr>
+
+    <h1 class="mt-4">All Deliveries</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">All the previous deliveries - Latest on top</li>
+    </ol>
 
 
-        <hr>
+    <?php
+    // Fetch data from the delivery table ordered by date in descending order
+    $query = "SELECT * FROM delivery ORDER BY date DESC";
+    $result = mysqli_query($connection, $query);
 
-        <h1 class="mt-4">All Deliveries</h1>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item active">All the previous deliveries - Latest on top</li>
-        </ol>
+    // Check if there are any deliveries
+    if (mysqli_num_rows($result) > 0) {
+        echo '<table class="table">';
+        echo '<thead>';
+        echo '<tr>';
+        echo '<th scope="col">ID</th>';
+        echo '<th scope="col">Date</th>';
+        echo '<th scope="col">Distance</th>';
+        echo '<th scope="col">Time</th>';
+        echo '<th scope="col">Fuel Cost</th>';
+        echo '<th scope="col">Rider</th>';
+        echo '<th scope="col">Action</th>';
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tbody>';
 
-
-        <?php
-        // Fetch data from the delivery table ordered by date in descending order
-        $query = "SELECT * FROM delivery ORDER BY date DESC";
-        $result = mysqli_query($connection, $query);
-
-        // Check if there are any deliveries
-        if (mysqli_num_rows($result) > 0) {
-            echo '<table class="table">';
-            echo '<thead>';
+        // Output data of each row
+        while ($row = mysqli_fetch_assoc($result)) {
             echo '<tr>';
-            echo '<th scope="col">ID</th>';
-            echo '<th scope="col">Date</th>';
-            echo '<th scope="col">Distance</th>';
-            echo '<th scope="col">Time</th>';
-            echo '<th scope="col">Fuel Cost</th>';
-            echo '<th scope="col">Rider</th>';
-            echo '<th scope="col">Action</th>';
+            echo '<td>' . $row['id'] . '</td>';
+            echo '<td>' . $row['date'] . '</td>';
+            echo '<td>' . $row['distance'] . '</td>';
+            echo '<td>' . $row['time'] . '</td>';
+            echo '<td>' . $row['fuel_cost'] . '</td>';
+            echo '<td>' . $row['rider'] . '</td>';
+            echo '<td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryDetailsModal' . $row['id'] . '">Details</button></td>';
             echo '</tr>';
-            echo '</thead>';
-            echo '<tbody>';
 
-            // Output data of each row
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo '<tr>';
-                echo '<td>' . $row['id'] . '</td>';
-                echo '<td>' . $row['date'] . '</td>';
-                echo '<td>' . $row['distance'] . '</td>';
-                echo '<td>' . $row['time'] . '</td>';
-                echo '<td>' . $row['fuel_cost'] . '</td>';
-                echo '<td>' . $row['rider'] . '</td>';
-                echo '<td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryDetailsModal' . $row['id'] . '">Details</button></td>';
-                echo '</tr>';
+            // Modal for delivery details
+            echo '<div class="modal fade" id="deliveryDetailsModal' . $row['id'] . '" tabindex="-1" aria-labelledby="deliveryDetailsModalLabel' . $row['id'] . '" aria-hidden="true">';
+            echo '<div class="modal-dialog modal-lg">';
+            echo '<div class="modal-content">';
+            echo '<div class="modal-header">';
+            echo '<h5 class="modal-title" id="deliveryDetailsModalLabel' . $row['id'] . '">Delivery Details</h5>';
+            echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+            echo '</div>';
+            echo '<div class="modal-body">';
 
-                // Modal for delivery details
-                echo '<div class="modal fade" id="deliveryDetailsModal' . $row['id'] . '" tabindex="-1" aria-labelledby="deliveryDetailsModalLabel' . $row['id'] . '" aria-hidden="true">';
-                echo '<div class="modal-dialog modal-lg">';
-                echo '<div class="modal-content">';
-                echo '<div class="modal-header">';
-                echo '<h5 class="modal-title" id="deliveryDetailsModalLabel' . $row['id'] . '">Delivery Details</h5>';
-                echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
-                echo '</div>';
-                echo '<div class="modal-body">';
+            // Fetch delivery items for this delivery from the delivery_items table
+            $delivery_id = $row['id'];
+            $delivery_items_query = "SELECT * FROM delivery_items WHERE delivery_id = '$delivery_id'";
+            $delivery_items_result = mysqli_query($connection, $delivery_items_query);
 
-                // Fetch delivery items for this delivery from the delivery_items table
-                $delivery_id = $row['id'];
-                $delivery_items_query = "SELECT * FROM delivery_items WHERE delivery_id = '$delivery_id'";
-                $delivery_items_result = mysqli_query($connection, $delivery_items_query);
-
-                // Display delivery items
-                if (mysqli_num_rows($delivery_items_result) > 0) {
-                    echo '<h6>Delivery Items:</h6>';
-                    echo '<ul>';
-                    while ($item_row = mysqli_fetch_assoc($delivery_items_result)) {
-                        echo '<li>' . $item_row['dish'] . ' :<br><a href="' . $item_row['address'] . '" target="_blank">' . $item_row['address'] . '</a></li>';
-                    }
-                    echo '</ul>';
-                } else {
-                    echo 'No delivery items found.';
+            // Display delivery items
+            if (mysqli_num_rows($delivery_items_result) > 0) {
+                echo '<h6>Delivery Items:</h6>';
+                echo '<ul>';
+                while ($item_row = mysqli_fetch_assoc($delivery_items_result)) {
+                    echo '<li>' . $item_row['dish'] . ' :<br><a href="' . $item_row['address'] . '" target="_blank">' . $item_row['address'] . '</a></li>';
                 }
-
-                echo '</div>'; // End modal-body
-                echo '<div class="modal-footer">';
-                echo '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>';
-                echo '</div>'; // End modal-footer
-                echo '</div>'; // End modal-content
-                echo '</div>'; // End modal-dialog
-                echo '</div>'; // End modal
+                echo '</ul>';
+            } else {
+                echo 'No delivery items found.';
             }
 
-            echo '</tbody>';
-            echo '</table>';
-        } else {
-            // No deliveries found
-            echo '<div class="alert alert-danger" role="alert">No deliveries found.</div>';
+            echo '</div>'; // End modal-body
+            echo '<div class="modal-footer">';
+            echo '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>';
+            echo '</div>'; // End modal-footer
+            echo '</div>'; // End modal-content
+            echo '</div>'; // End modal-dialog
+            echo '</div>'; // End modal
         }
-        ?>
 
-    </div>
+        echo '</tbody>';
+        echo '</table>';
+    } else {
+        // No deliveries found
+        echo '<div class="alert alert-danger" role="alert">No deliveries found.</div>';
+    }
+    ?>
+
+</div>
 
 
 <?php
-}
 require_once('../public/footer.php');
 ?>

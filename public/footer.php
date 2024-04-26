@@ -2,7 +2,7 @@
             <footer class="py-4 bg-light mt-auto">
                 <div class="container-fluid px-4">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website <script>document.write(/\d{4}/.exec(Date())[0])</script></div>
+                        <div class="text-muted">Copyright &copy; MAH Admin Portal -  <script>document.write(/\d{4}/.exec(Date())[0])</script></div>
                         <!-- <div>
                             <a href="#">Privacy Policy</a>
                             &middot;

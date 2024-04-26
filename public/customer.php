@@ -58,6 +58,7 @@ require_once('../db/db.php');
                     <option selected>Choose...</option>
                     <option value="normal">Normal</option>
                     <option value="tester">Tester</option>
+                    <option value="custom">Custom</option>
                 </select>
             </div>
         </div>
@@ -130,7 +131,7 @@ require_once('../db/db.php');
 
         </div>
 
-        <button type="button" id="add_tester_field_btn" class="btn btn-secondary mt-3">Add Tester Dishes Days wise</button>
+        <button type="button" id="add_tester_field_btn" class="btn btn-secondary mt-3">Add Dishes Days wise</button>
         <div id="tester_fields" style="display: none;">
             <!-- Tester fields will be dynamically added here -->
         </div>
@@ -260,6 +261,19 @@ require_once('../db/db.php');
             clearTesterFields();
             document.getElementById('tester_fields').style.display = 'block';
             addTesterField();
+        } else if (selectedOption === 'custom') {
+            clearAll();
+            var email = document.getElementById('e');
+            var date = document.getElementById('d');
+            email.classList.remove(...email.classList);
+            email.classList.add('col-6');
+            date.classList.remove(...date.classList);
+            date.classList.add('col-6');
+            document.getElementById('add_tester_field_btn').style.display = 'block';
+            document.getElementById('deal_name_dropdown').style.display = 'none';
+            clearTesterFields();
+            document.getElementById('tester_fields').style.display = 'block';
+            addTesterField();
         }
     });
 
@@ -284,7 +298,7 @@ require_once('../db/db.php');
         input.classList.add('dynamic-field');
         input.classList.add('form-control');
         input.classList.add('mb-4');
-        input.placeholder = 'Tester';
+        input.placeholder = 'Dishes';
         testerFieldsContainer.appendChild(input);
 
         // Add hidden field

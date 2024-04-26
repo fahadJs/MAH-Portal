@@ -11,20 +11,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $customerDealIds = $_POST['customer_deal_id'];
     $customerNumbers = $_POST['customer_number'];
     $persons = $_POST['persons'];
+    $type = $_POST['customer_type'];
+    $additional = $_POST['additional'];
 
     // Prepare and execute SQL insert statements
-    $stmt = $connection->prepare("INSERT INTO orders (cust_number, dish, date, persons) VALUES (?, ?, ?, ?)");
+    $stmt = $connection->prepare("INSERT INTO orders (cust_number, dish, date, persons, additional, type) VALUES (?, ?, ?, ?, ?, ?)");
 
     // Bind parameters and execute the statement for each submitted order
     for ($i = 0; $i < count($dishNames); $i++) {
-        $stmt->bind_param("ssss", $customerNumbers[$i], $dishNames[$i], $currentDate, $persons[$i]);
-        $stmt->execute();
-
-        if ($dishNames[$i] == '') {
-            $updateStatus = "UPDATE customers_deals SET status = 'on-hold' WHERE id = '$customerDealIds[$i]'";
+        if (!empty($dishNames[$i])) {
+            $additionalValue = !empty($additional[$i]) ? $additional[$i] : '';
+            $stmt->bind_param("ssssss", $customerNumbers[$i], $dishNames[$i], $currentDate, $persons[$i], $additionalValue, $type[$i]);
+            $stmt->execute();
+            $updateStatus = "UPDATE customers_deals SET status = 'processing' WHERE id = '$customerDealIds[$i]'";
             mysqli_query($connection, $updateStatus);
         } else {
-            $updateStatus = "UPDATE customers_deals SET status = 'processing' WHERE id = '$customerDealIds[$i]'";
+            $updateStatus = "UPDATE customers_deals SET status = 'on-hold' WHERE id = '$customerDealIds[$i]'";
             mysqli_query($connection, $updateStatus);
         }
     }
@@ -38,7 +40,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $query = "SELECT * FROM orders WHERE date = '$currentDate'";
     $result = mysqli_query($connection, $query);
     while ($row = mysqli_fetch_assoc($result)) {
-        $message .= "*".$row['cust_number'].":* " . $row['dish'] . " - ( ".$row['persons']." )\n\n";
+        if (!empty($row['dish'])) {
+            $orderInfo = "*" . $row['cust_number'] . ":* \n" . $row['dish'] . " - (" . $row['persons'] . ")\n";
+            if (!empty($row['additional'])) {
+                $orderInfo .= "(" . $row['additional'] . ") \n\n";
+            } else {
+                $orderInfo .= "\n";
+            }
+            $message .= $orderInfo;
+        }
     }
 
     // Define the URL for sending WhatsApp message
@@ -61,9 +71,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check for errors
     if (curl_errno($curl)) {
         echo 'Curl error: ' . curl_error($curl);
-    } else {
-        // Print the response
-        echo $response;
     }
 
     // Close cURL session

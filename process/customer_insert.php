@@ -16,7 +16,7 @@ $type = $_POST['customer_type'];
 
 function generateCustomID($id)
 {
-    return 'A-' . str_pad($id, 5, '0', STR_PAD_LEFT);
+    return 'A-' . $id;
 }
 
 // Prepare and execute SQL statement to insert customer data

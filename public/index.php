@@ -608,12 +608,82 @@ require_once('../db/db.php');
             echo '<p class="card-text m-0">Contact: ' . $customer['contact'] . '</p>';
             echo '<p class="card-text m-0">Email: ' . $customer['email'] . '</p>';
             echo '<p class="card-text m-0">Address: ' . $customer['address'] . '</p>';
-            echo '<p class="card-text">Type: ' . $customer['type'] . '</p>';
+            echo '<p class="card-text" style="font-weight: bold;">Type: ' . $customer['type'] . '</p>';
 
             // Button to open modal
             echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customerModal' . $customer['id'] . '">';
             echo $customer['cust_number'] . '\'s Deals';
             echo '</button>';
+
+            // Button to update customer
+            // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal' . $customer['id'] . '">';
+            // echo 'Restart Subscription!';
+            // echo '</button>';
+
+            if (mysqli_num_rows($deal_result) > 0) {
+                // Count the number of rows with status pending or on-hold
+                $pending_count = 0;
+                while ($deal = mysqli_fetch_assoc($deal_result)) {
+                    if ($deal['status'] === 'pending' || $deal['status'] === 'on-hold') {
+                        $pending_count++;
+                    }
+                }
+
+                // Display subscription status based on pending count
+                if ($pending_count > 0) {
+                    if ($customer['type'] == 'tester') {
+                        // Button to launch new modal
+                        echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" onclick="redirectToIndex(' . $customer['id'] . ')" disabled>';
+                        echo 'Upgrade';
+                        echo '</button>';
+                    }
+                } else {
+                    if ($customer['type'] == 'tester') {
+                        // Button to launch new modal
+                        echo '<button style="margin-left: 20px;" type="button" class="btn btn-success onclick="redirectToIndex(' . $customer['id'] . ')"">';
+                        echo 'Upgrade';
+                        echo '</button>';
+                    }
+                }
+            } else {
+                // No deals found for this customer
+                echo '<p>No deals found for this customer.</p>';
+            }
+
+
+
+            // Button to launch new modal
+            // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newModal' . $customer['id'] . '">';
+            // echo 'Upgrade';
+            // echo '</button>';
+
+            if (mysqli_num_rows($deal_result) > 0) {
+                // Count the number of rows with status pending or on-hold
+                $pending_count = 0;
+                while ($deal = mysqli_fetch_assoc($deal_result)) {
+                    if ($deal['status'] === 'pending' || $deal['status'] === 'on-hold') {
+                        $pending_count++;
+                    }
+                }
+
+                // Display subscription status based on pending count
+                if ($pending_count > 0) {
+                    // Display the deals and the restart subscription button
+                    echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal' . $customer['id'] . '" disabled>';
+                    echo 'Restart Subscription';
+                    echo '</button>';
+                    echo '<span style="margin-left: 20px; color: green;">Subscription Active!</span>';
+                } else {
+                    // Subscription expired
+                    echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal' . $customer['id'] . '">';
+                    echo 'Restart Subscription';
+                    echo '</button>';
+                    echo '<span style="margin-left: 20px; color: red;">Subscription Expired!</span>';
+                }
+            } else {
+                // No deals found for this customer
+                echo '<p>No deals found for this customer.</p>';
+            }
 
             // Bootstrap Modal for customer deals
             echo '<div class="modal fade" id="customerModal' . $customer['id'] . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">';
@@ -659,6 +729,31 @@ require_once('../db/db.php');
             echo '</div>'; // End modal dialog
             echo '</div>'; // End modal fade
 
+
+            // Bootstrap Modal for updating customer
+            echo '<div class="modal fade" id="updateModal' . $customer['id'] . '" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">';
+            echo '<div class="modal-dialog">';
+            echo '<div class="modal-content">';
+            echo '<div class="modal-header">';
+            echo '<h5 class="modal-title" id="updateModalLabel">Restart Confirmation!</h5>';
+            echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+            echo '</div>';
+            echo '<div class="modal-body">';
+
+            // Update customer form
+            echo '<form action="../process/restart_subscription.php" method="post">';
+            echo '<div class="alert alert-warning" role="alert">';
+            echo 'Are you sure you want to restart the subscription?';
+            echo '</div>';
+            echo '<input type="hidden" name="customer_id" value="' . $customer['id'] . '">';
+            echo '<button type="submit" class="btn btn-success">Restart Subscription</button>';
+            echo '</form>';
+
+            echo '</div>'; // End modal body
+            echo '</div>'; // End modal content
+            echo '</div>'; // End modal dialog
+            echo '</div>'; // End update modal fade
+
             echo '</div>'; // End card body
             echo '</div>'; // End card
         }
@@ -669,6 +764,13 @@ require_once('../db/db.php');
     ?>
 
 </div>
+
+<script>
+    function redirectToIndex(customerId) {
+        // Redirect to index.php with the customer ID appended to the URL
+        window.location.href = '/mah-process/public/upgrade.php?customerId=' + customerId;
+    }
+</script>
 
 <?php
 require_once('../public/footer.php');
