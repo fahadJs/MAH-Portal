@@ -13,15 +13,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $persons = $_POST['persons'];
     $type = $_POST['customer_type'];
     $additional = $_POST['additional'];
+    $weekDays = $_POST['weekdays'];
 
     // Prepare and execute SQL insert statements
-    $stmt = $connection->prepare("INSERT INTO orders (cust_number, dish, date, persons, additional, type) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $connection->prepare("INSERT INTO orders (cust_number, dish, date, persons, additional, type, weekdays) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
     // Bind parameters and execute the statement for each submitted order
     for ($i = 0; $i < count($dishNames); $i++) {
         if (!empty($dishNames[$i])) {
             $additionalValue = !empty($additional[$i]) ? $additional[$i] : '';
-            $stmt->bind_param("ssssss", $customerNumbers[$i], $dishNames[$i], $currentDate, $persons[$i], $additionalValue, $type[$i]);
+            $stmt->bind_param("sssssss", $customerNumbers[$i], $dishNames[$i], $currentDate, $persons[$i], $additionalValue, $type[$i], $weekDays[$i]);
             $stmt->execute();
             $updateStatus = "UPDATE customers_deals SET status = 'processing' WHERE id = '$customerDealIds[$i]'";
             mysqli_query($connection, $updateStatus);

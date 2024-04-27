@@ -21,8 +21,9 @@ $customers = array();
 while ($row = mysqli_fetch_assoc($result)) {
     $customerId = $row['id'];
     $customerName = $row['name'];
+    $nextDay = date('l', strtotime('+1 day'));
     // Fetch pending deals for this customer
-    $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = $customerId AND status = 'pending' LIMIT 1";
+    $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND status = 'pending' AND weekdays = '$nextDay'";
     $dealResult = mysqli_query($connection, $dealQuery);
 
     if (mysqli_num_rows($dealResult) == 0) {
@@ -38,6 +39,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         $persons = $row['persons'];
         $status = $dealRow['status'];
         $type = $row['type'];
+        $weekDays = $dealRow['weekdays'];
 
         // Store customer and deal data
         $customers[] = array(
@@ -47,7 +49,8 @@ while ($row = mysqli_fetch_assoc($result)) {
             'dish' => $dishName,
             'persons' => $persons,
             'status' => $status,
-            'type' => $type
+            'type' => $type,
+            'weekdays' => $weekDays
         );
     }
 }
@@ -95,6 +98,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <input type="text" name="customer_deal_id[]" value="<?php echo $customer['id'] ?>" hidden>
                         <input type="text" name="customer_number[]" value="<?php echo $customer['number'] ?>" hidden>
                         <input type="text" name="customer_type[]" value="<?php echo $customer['type'] ?>" hidden>
+                        <input type="text" name="weekdays[]" value="<?php echo $customer['weekdays'] ?>" hidden>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -121,6 +125,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo '<th scope="col">ID</th>';
         echo '<th scope="col">Customer Number</th>';
         echo '<th scope="col">Dish</th>';
+        echo '<th scope="col">Days</th>';
         echo '<th scope="col">Date</th>';
         echo '<th scope="col">Persons</th>';
         echo '<th scope="col">Type</th>';
@@ -148,6 +153,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             echo '<td>' . $row['id'] . '</td>';
             echo '<td>' . $row['cust_number'] . '</td>';
             echo '<td>' . $row['dish'] . '</td>';
+            echo '<td>' . $row['weekdays'] . '</td>';
             echo '<td>' . $row['date'] . '</td>';
             echo '<td>' . $row['persons'] . '</td>';
             echo '<td>' . $row['type'] . '</td>';
