@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     curl_close($curl);
 
     // Redirect back to the page after insertion
-    header("Location: ../public/orders.php");
+    header("Location: ../public/orders.php?success=true");
     exit();
 }
 // } else {

@@ -56,6 +56,22 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 ?>
 
+<script>
+    // Check if the URL contains a success parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+
+    // If the success parameter is present and set to 'true', show the success alert
+    if (success === 'true') {
+        Swal.fire({
+            icon: 'success',
+            title: 'Order Sent Successfully',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    }
+</script>
+
 
 <div class="container-fluid px-4">
     <h1 class="mt-4">Orders</h1>

@@ -100,10 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check for errors
     if (curl_errno($curl)) {
         echo 'Curl error: ' . curl_error($curl);
-    } else {
-        // Print the response
-        echo $response;
-    }
+    } 
 
     // Close cURL session
     curl_close($curl);

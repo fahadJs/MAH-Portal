@@ -14,6 +14,22 @@ require_once('../db/db.php');
 
 ?>
 
+<script>
+    // Check if the URL contains a success parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+
+    // If the success parameter is present and set to 'true', show the success alert
+    if (success === 'true') {
+        Swal.fire({
+            icon: 'success',
+            title: 'Customer Upgraded Successfully',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    }
+</script>
+
 <div class="container-fluid px-4">
     <h1 class="mt-4">Dashboard</h1>
 
@@ -64,19 +80,19 @@ require_once('../db/db.php');
 
                 // Display subscription status based on pending count
                 if ($pending_count > 0) {
-                    if ($customer['type'] == 'tester') {
-                        // Button to launch new modal
-                        echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" onclick="redirectToIndex(' . $customer['id'] . ')" disabled>';
-                        echo 'Upgrade';
-                        echo '</button>';
-                    }
+                    // Button to launch new modal
+                    echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" disabled>';
+                    echo '<a style="color: white; text-decoration: none;" href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '">';
+                    echo 'Upgrade';
+                    echo '</a>';
+                    echo '</button>';
                 } else {
-                    if ($customer['type'] == 'tester') {
-                        // Button to launch new modal
-                        echo '<button style="margin-left: 20px;" type="button" class="btn btn-success onclick="redirectToIndex(' . $customer['id'] . ')"">';
-                        echo 'Upgrade';
-                        echo '</button>';
-                    }
+                    // Button to launch new modal
+                    echo '<a href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '">';
+                    echo '<button style="margin-left: 20px;" type="button" class="btn btn-success">';
+                    echo 'Upgrade';
+                    echo '</button>';
+                    echo '</a>';
                 }
             } else {
                 // No deals found for this customer
@@ -148,7 +164,7 @@ require_once('../db/db.php');
                 while ($deal = mysqli_fetch_assoc($deal_result_modal)) {
                     echo '<tr>';
                     echo '<td>' . $deal['dish'] . '</td>';
-                    echo '<td>' . $deal['days'] . '</td>';
+                    echo '<td>' . $deal['weekdays'] . '</td>';
                     echo '<td>' . $deal['status'] . '</td>';
                     echo '</tr>';
                 }
