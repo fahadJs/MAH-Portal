@@ -3,40 +3,66 @@ require_once('../db/db.php'); // Include your database connection file
 
 date_default_timezone_set('Asia/Karachi');
 
-$currentDate = date('Y-m-d');
+// $currentDate = date('Y-m-d');
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve form data
     $dishNames = $_POST['dish_name'];
     $customerDealIds = $_POST['customer_deal_id'];
     $customerNumbers = $_POST['customer_number'];
+    $persons = $_POST['persons'];
+    $type = $_POST['customer_type'];
+    $additional = $_POST['additional'];
+    $date = $_POST['date'];
 
     // Prepare and execute SQL insert statements
-    $stmt = $connection->prepare("INSERT INTO orders (cust_number, dish, date) VALUES (?, ?, ?)");
+    $stmt = $connection->prepare("INSERT INTO orders (cust_number, dish, date, persons, additional, type) VALUES (?, ?, ?, ?, ?, ?)");
+
+    // Initialize an array to store dish counts
+    $dishCounts = array();
 
     // Bind parameters and execute the statement for each submitted order
     for ($i = 0; $i < count($dishNames); $i++) {
-        $stmt->bind_param("sss", $customerNumbers[$i], $dishNames[$i], $currentDate);
-        $stmt->execute();
+        if (!empty($dishNames[$i])) {
+            // $additionalValue = !empty($additional[$i]) ? $additional[$i] : '';
+            // $stmt->bind_param("ssssss", $customerNumbers[$i], $dishNames[$i], $date[$i], $persons[$i], $additionalValue, $type[$i], $date[$i]);
+            // $stmt->execute();
+            // $updateStatus = "UPDATE customers_deals SET status = 'processing' WHERE id = '$customerDealIds[$i]'";
+            // mysqli_query($connection, $updateStatus);
 
-        if ($dishNames[$i] == '') {
-            $updateStatus = "UPDATE customers_deals SET status = 'on-hold' WHERE id = '$customerDealIds[$i]'";
-            mysqli_query($connection, $updateStatus);
+            // Count occurrences of each dish
+            if (array_key_exists($dishNames[$i], $dishCounts)) {
+                $dishCounts[$dishNames[$i]]++;
+            } else {
+                $dishCounts[$dishNames[$i]] = 1;
+            }
         } else {
-            $updateStatus = "UPDATE customers_deals SET status = 'processing' WHERE id = '$customerDealIds[$i]'";
-            mysqli_query($connection, $updateStatus);
+            // $updateStatus = "UPDATE customers_deals SET status = 'on-hold' WHERE id = '$customerDealIds[$i]'";
+            // mysqli_query($connection, $updateStatus);
         }
     }
 
     // Close statement
     $stmt->close();
 
+    $tomorrow = date('l, Y-m-d', strtotime('+1 day'));
     // Send WhatsApp message
-    $message = "ORDERS FOR " . $currentDate . ":\n\n";
+    $message = "ORDERS FOR " . $tomorrow . ":\n\n";
     $query = "SELECT * FROM orders WHERE date = '$currentDate'";
     $result = mysqli_query($connection, $query);
     while ($row = mysqli_fetch_assoc($result)) {
-        $message .= "*".$row['cust_number'].":* " . $row['dish'] . "\n\n";
+        if (!empty($row['dish'])) {
+            $orderInfo = "*" . $row['cust_number'] . ":* \n" . $row['dish'] . " - (" . $row['persons'] . ")\n";
+            if (!empty($row['additional'])) {
+                $orderInfo .= "(" . $row['additional'] . ") \n\n";
+            } else {
+                $orderInfo .= "\n";
+            }
+            $message .= $orderInfo;
+        }
+    }
+    foreach ($dishCounts as $dishName => $count) {
+        $message .= $dishName . " - " . $count . "\n";
     }
 
     // Define the URL for sending WhatsApp message
@@ -59,16 +85,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check for errors
     if (curl_errno($curl)) {
         echo 'Curl error: ' . curl_error($curl);
-    } else {
-        // Print the response
-        echo $response;
     }
 
     // Close cURL session
     curl_close($curl);
 
     // Redirect back to the page after insertion
-    header("Location: ../public/orders.php");
+    header("Location: ../public/orders.php?success=true");
     exit();
 }
 // } else {
