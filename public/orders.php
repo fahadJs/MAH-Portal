@@ -14,20 +14,20 @@ require_once('../db/db.php');
 date_default_timezone_set('Asia/Karachi');
 
 $currentDate = date('Y-m-d', strtotime('+1 day'));
-$query = "SELECT * FROM customers WHERE start_date <= '$currentDate' AND status = 'on-hold'";
+$query = "SELECT * FROM customers WHERE start_date <= '$currentDate' AND status = 'active'";
 $result = mysqli_query($connection, $query);
 
 $customers = array();
 while ($row = mysqli_fetch_assoc($result)) {
     $customerId = $row['id'];
     $customerName = $row['name'];
-    $nextDay = date('l', strtotime('+1 day'));
+    $nextDay = date('Y-m-d', strtotime('+1 day'));
     // Fetch pending deals for this customer
-    $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND status = 'pending' AND weekdays = '$nextDay'";
+    $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND status = 'pending' AND date = '$nextDay'";
     $dealResult = mysqli_query($connection, $dealQuery);
 
     if (mysqli_num_rows($dealResult) == 0) {
-        $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = $customerId AND status = 'on-hold' LIMIT 1";
+        $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND status = 'on-hold' AND date = '$nextDay'";
         $dealResult = mysqli_query($connection, $dealQuery);
     }
 
@@ -39,7 +39,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         $persons = $row['persons'];
         $status = $dealRow['status'];
         $type = $row['type'];
-        $weekDays = $dealRow['weekdays'];
+        $date = $dealRow['date'];
 
         // Store customer and deal data
         $customers[] = array(
@@ -50,7 +50,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             'persons' => $persons,
             'status' => $status,
             'type' => $type,
-            'weekdays' => $weekDays
+            'date' => $date
         );
     }
 }
@@ -90,7 +90,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                     case 'pending':
                         $statusClass = 'alert-success'; // Change class to alert-info for pending status
                         $alertMessage = 'New Dish'; // Set alert message for pending status
-                        break;
+                        break;  
                     case 'on-hold':
                         $statusClass = 'alert-warning'; // Change class to alert-info for on-hold status
                         $alertMessage = 'Pending Dish'; // No special message for on-hold status
@@ -103,6 +103,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
                 ?>
                 <div class="mb-3">
+                    <h6 class="mb-2"><?php echo $customer['date']; ?></h6>
                     <div class="input-group">
                         <span class="input-group-text"><?php echo $customer['number']; ?></span>
                         <input type="text" class="form-control" name="dish_name[]" value="<?php echo $customer['dish']; ?>" aria-label="Dish Name">
@@ -114,7 +115,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <input type="text" name="customer_deal_id[]" value="<?php echo $customer['id'] ?>" hidden>
                         <input type="text" name="customer_number[]" value="<?php echo $customer['number'] ?>" hidden>
                         <input type="text" name="customer_type[]" value="<?php echo $customer['type'] ?>" hidden>
-                        <input type="text" name="weekdays[]" value="<?php echo $customer['weekdays'] ?>" hidden>
+                        <input type="text" name="date[]" value="<?php echo $customer['date'] ?>" hidden>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -141,7 +142,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo '<th scope="col">ID</th>';
         echo '<th scope="col">Customer Number</th>';
         echo '<th scope="col">Dish</th>';
-        echo '<th scope="col">Days</th>';
+        // echo '<th scope="col">Days</th>';
         echo '<th scope="col">Date</th>';
         echo '<th scope="col">Persons</th>';
         echo '<th scope="col">Type</th>';
@@ -169,7 +170,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             echo '<td>' . $row['id'] . '</td>';
             echo '<td>' . $row['cust_number'] . '</td>';
             echo '<td>' . $row['dish'] . '</td>';
-            echo '<td>' . $row['weekdays'] . '</td>';
+            // echo '<td>' . $row['weekdays'] . '</td>';
             echo '<td>' . $row['date'] . '</td>';
             echo '<td>' . $row['persons'] . '</td>';
             echo '<td>' . $row['type'] . '</td>';

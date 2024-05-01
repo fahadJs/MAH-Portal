@@ -23,7 +23,7 @@ require_once('../db/db.php');
     if (success === 'true') {
         Swal.fire({
             icon: 'success',
-            title: 'Customer Upgraded Successfully',
+            title: 'Operation Successfully',
             showConfirmButton: false,
             timer: 2000
         });
@@ -53,11 +53,26 @@ require_once('../db/db.php');
             echo '<div class="card mb-4">';
             echo '<div class="card-header">' . $customer['cust_number'] . '</div>';
             echo '<div class="card-body">';
-            echo '<h5 class="card-title">' . $customer['name'] . '</h5>';
+            echo '<h5 class="card-title">' . $customer['name'];
+
+            if ($customer['status'] == 'active') {
+                echo ' - <span class="badge bg-success">Active</span>';
+            }
+            if ($customer['status'] == 'on-hold') {
+                echo ' - <span class="badge bg-warning">On-Hold</span>';
+            }
+            if ($customer['status'] == 'cancelled') {
+                echo ' - <span class="badge bg-danger">Cancelled</span>';
+            }
+
+            echo '</h5>';
+
             echo '<p class="card-text m-0">Contact: ' . $customer['contact'] . '</p>';
             echo '<p class="card-text m-0">Email: ' . $customer['email'] . '</p>';
             echo '<p class="card-text m-0">Address: ' . $customer['address'] . '</p>';
-            echo '<p class="card-text" style="font-weight: bold;">Type: ' . $customer['type'] . '</p>';
+            echo '<p class="card-text m-0">Agent: ' . $customer['agent'] . '</p>';
+            echo '<p class="card-text m-0" style="font-weight: bold;">Type: ' . $customer['type'] . '</p>';
+            echo '<p class="card-text">Start date: ' . $customer['start_date'] . '</p>';
 
             // Button to open modal
             echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customerModal' . $customer['id'] . '">';
@@ -100,7 +115,6 @@ require_once('../db/db.php');
             }
 
 
-
             // Button to launch new modal
             // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newModal' . $customer['id'] . '">';
             // echo 'Upgrade';
@@ -122,22 +136,76 @@ require_once('../db/db.php');
                     echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal' . $customer['id'] . '" disabled>';
                     echo 'Restart Subscription';
                     echo '</button>';
-                    echo '<span style="margin-left: 20px; color: green;">Subscription Active!</span>';
+                    // echo '<span style="margin-left: 20px; color: green;">Subscription Active!</span>';
+                    echo '<div class="alert alert-success mt-4" role="alert">
+                            Subscription Active!
+                        </div>';
                 } else {
                     // Subscription expired
                     echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal' . $customer['id'] . '">';
                     echo 'Restart Subscription';
                     echo '</button>';
-                    echo '<span style="margin-left: 20px; color: red;">Subscription Expired!</span>';
+                    // echo '<span style="margin-left: 20px; color: red;">Subscription Expired!</span>';
+                    echo '<div class="alert alert-danger mt-4" role="alert">
+                            Subscription Expired!
+                        </div>';
                 }
             } else {
                 // No deals found for this customer
                 echo '<p>No deals found for this customer.</p>';
             }
 
+            // // Bootstrap Modal for customer deals
+            // echo '<div class="modal fade" id="customerModal' . $customer['id'] . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">';
+            // echo '<div class="modal-dialog">';
+            // echo '<div class="modal-content">';
+            // echo '<div class="modal-header">';
+            // echo '<h5 class="modal-title" id="exampleModalLabel">' . $customer['name'] . '\'s Deals</h5>';
+            // echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+            // echo '</div>';
+            // echo '<div class="modal-body">';
+
+            // // Start table for deals
+            // echo '<table class="table">';
+            // echo '<thead>';
+            // echo '<tr>';
+            // echo '<th scope="col">Dish</th>';
+            // echo '<th scope="col">Days</th>';
+            // echo '<th scope="col">Status</th>';
+            // echo '</tr>';
+            // echo '</thead>';
+            // echo '<tbody>';
+
+            // // $deal_query = "SELECT * FROM customers_deals WHERE cust_id = '$customer_id'";
+            // $deal_result_modal = mysqli_query($connection, $deal_query);
+
+            // // Check if there are any deals for this customer
+            // if (mysqli_num_rows($deal_result_modal) > 0) {
+            //     while ($deal = mysqli_fetch_assoc($deal_result_modal)) {
+            //         echo '<tr>';
+            //         echo '<td>' . $deal['dish'] . '</td>';
+            //         echo '<td>' . $deal['weekdays'] . '</td>';
+            //         echo '<td>' . $deal['status'] . '</td>';
+            //         echo '</tr>';
+            //     }
+            // } else {
+            //     // No deals found for this customer
+            //     echo '<tr><td colspan="3">No deals found for this customer.</td></tr>';
+            // }
+
+            // echo '</tbody>';
+            // echo '</table>';
+            // // End table for deals
+
+            // echo '</div>'; // End modal body
+            // echo '</div>'; // End modal content
+            // echo '</div>'; // End modal dialog
+            // echo '</div>'; // End modal fade
+
+
             // Bootstrap Modal for customer deals
             echo '<div class="modal fade" id="customerModal' . $customer['id'] . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">';
-            echo '<div class="modal-dialog">';
+            echo '<div class="modal-dialog modal-dialog-scrollable modal-xl">';
             echo '<div class="modal-content">';
             echo '<div class="modal-header">';
             echo '<h5 class="modal-title" id="exampleModalLabel">' . $customer['name'] . '\'s Deals</h5>';
@@ -145,37 +213,45 @@ require_once('../db/db.php');
             echo '</div>';
             echo '<div class="modal-body">';
 
+            // Start form for submitting deal dates
+            echo '<form action="../process/deal_update.php" method="POST">';
+
             // Start table for deals
             echo '<table class="table">';
             echo '<thead>';
             echo '<tr>';
-            echo '<th scope="col">Dish</th>';
             echo '<th scope="col">Days</th>';
-            echo '<th scope="col">Status</th>';
+            echo '<th scope="col">Dish</th>';
+            echo '<th scope="col">Scheduled at</th>';
+            // echo '<th scope="col">id</th>';
+            echo '<th scope="col">Re-schedule</th>';
+            echo '<th scope="col">Item status</th>';
             echo '</tr>';
             echo '</thead>';
             echo '<tbody>';
 
-            // $deal_query = "SELECT * FROM customers_deals WHERE cust_id = '$customer_id'";
+            // Loop through each deal item and create a row with a date picker
             $deal_result_modal = mysqli_query($connection, $deal_query);
-
-            // Check if there are any deals for this customer
-            if (mysqli_num_rows($deal_result_modal) > 0) {
-                while ($deal = mysqli_fetch_assoc($deal_result_modal)) {
-                    echo '<tr>';
-                    echo '<td>' . $deal['dish'] . '</td>';
-                    echo '<td>' . $deal['weekdays'] . '</td>';
-                    echo '<td>' . $deal['status'] . '</td>';
-                    echo '</tr>';
-                }
-            } else {
-                // No deals found for this customer
-                echo '<tr><td colspan="3">No deals found for this customer.</td></tr>';
+            while ($deal = mysqli_fetch_assoc($deal_result_modal)) {
+                echo '<tr>';
+                echo '<td>' . $deal['days'] . '</td>';
+                echo '<td>' . $deal['dish'] . '</td>';
+                echo '<td>' . $deal['date'] . '</td>';
+                echo '<td hidden><input type="text" name="deal_items_id[]" class="form-control" value='. $deal['id'] .' hidden></td>';
+                echo '<td><input type="date" class="form-control" name="deal_dates[]" value='. $deal['date'] .' class="form-control" required></td>';
+                echo '<td>' . $deal['status'] . '</td>';
+                echo '</tr>';
             }
 
             echo '</tbody>';
             echo '</table>';
             // End table for deals
+
+            // Submit button
+            echo '<button type="submit" class="btn btn-primary">Submit</button>';
+
+            // End form
+            echo '</form>';
 
             echo '</div>'; // End modal body
             echo '</div>'; // End modal content

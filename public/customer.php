@@ -11,6 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once('../public/header.php');
 require_once('../db/db.php');
+
 ?>
 
 <script>
@@ -141,6 +142,22 @@ require_once('../db/db.php');
             <!-- <label for="address" class="form-label">Address</label> -->
         </div>
 
+        <div class="col-12">
+            <div class="input-group">
+                <span class="input-group-text">Agent</span>
+                <select class="form-select" id="agent" name="agent" required>
+                    <option selected>Choose...</option>
+                    <option value="fahad">Mr. Anzul</option>
+                    <option value="ashar">Ashar</option>
+                    <option value="ifrah">Ifrah</option>
+                    <option value="mahnoor">Mahnoor</option>
+                    <option value="bilal">Bilal</option>
+                    <option value="fahad">Fahad</option>
+                </select>
+            </div>
+            <!-- <label for="address" class="form-label">Address</label> -->
+        </div>
+
 
         <div id="additional_info_form" style="margin-top: -4px;">
 
@@ -248,14 +265,14 @@ require_once('../db/db.php');
             var dayColumn = document.createElement('div');
             dayColumn.classList.add('col-6'); // Bootstrap grid column size
             var dayInput = document.createElement('input');
-            dayInput.type = 'text';
-            dayInput.name = 'deal_item_weekdays[]';
+            dayInput.type = 'date';
+            dayInput.name = 'deal_item_date[]';
             dayInput.value = dealItem.weekdays;
             dayInput.classList.add('dynamic-field');
             dayInput.classList.add('form-control');
             dayInput.classList.add('mt-4');
             dayInput.placeholder = 'Enter Day';
-            dayInput.readOnly = true;
+            dayInput.required = true;
             dayColumn.appendChild(dayInput);
             row.appendChild(dayColumn);
 
@@ -379,12 +396,12 @@ require_once('../db/db.php');
         var dayDiv = document.createElement('div');
         dayDiv.classList.add('col-6'); // Bootstrap grid column size
         var dayTextarea = document.createElement('input');
-        dayTextarea.type = 'text';
-        dayTextarea.name = 'deal_item_weekdays[]';
+        dayTextarea.type = 'date';
+        dayTextarea.name = 'deal_item_date[]';
         dayTextarea.classList.add('dynamic-field');
         dayTextarea.classList.add('form-control');
         dayTextarea.classList.add('mb-4');
-        dayTextarea.placeholder = 'Enter Day';
+        // dayTextarea.placeholder = 'Enter Date';
         dayDiv.appendChild(dayTextarea);
         rowDiv.appendChild(dayDiv); // Append to the row
 
