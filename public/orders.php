@@ -22,6 +22,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $customerId = $row['id'];
     $customerName = $row['name'];
     $nextDay = date('Y-m-d', strtotime('+1 day'));
+    // $nextDay = date('Y-m-d');
     // Fetch pending deals for this customer
     $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND status = 'pending' AND date = '$nextDay'";
     $dealResult = mysqli_query($connection, $dealQuery);

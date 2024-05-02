@@ -47,6 +47,7 @@ require_once('../db/db.php');
         while ($customer = mysqli_fetch_assoc($result)) {
             // Fetch deals for this customer from customer deals table
             $customer_id = $customer['id'];
+            $cust_note = $customer['note'];
             $deal_query = "SELECT * FROM customers_deals WHERE cust_id = '$customer_id'";
             $deal_result = mysqli_query($connection, $deal_query);
 
@@ -150,6 +151,14 @@ require_once('../db/db.php');
                             Subscription Expired!
                         </div>';
                 }
+
+            echo '<form action="../process/cust_note.php" method="POST">';
+            echo '<textarea class="form-control" name="cust_note">'. $cust_note .'</textarea>';
+            echo '<input type="hidden" name="cust_id" value="'. $customer_id .'"/>';
+            echo '<button type="button" class="btn btn-success mt-3">Submit</button>';
+            echo '</form>';
+
+
             } else {
                 // No deals found for this customer
                 echo '<p>No deals found for this customer.</p>';
@@ -235,10 +244,10 @@ require_once('../db/db.php');
             while ($deal = mysqli_fetch_assoc($deal_result_modal)) {
                 echo '<tr>';
                 echo '<td>' . $deal['days'] . '</td>';
-                echo '<td>' . $deal['dish'] . '</td>';
+                echo '<td><input type="text" name="dish_names[]" class="form-control" value="'.$deal['dish'].'"/></td>';
                 echo '<td>' . $deal['date'] . '</td>';
-                echo '<td hidden><input type="text" name="deal_items_id[]" class="form-control" value='. $deal['id'] .' hidden></td>';
-                echo '<td><input type="date" class="form-control" name="deal_dates[]" value='. $deal['date'] .' class="form-control" required></td>';
+                echo '<td hidden><input type="text" name="deal_items_id[]" class="form-control" value="'. $deal['id'] .'" hidden></td>';
+                echo '<td><input type="date" class="form-control" name="deal_dates[]" value="'. $deal['date'] .'" class="form-control" required></td>';
                 echo '<td>' . $deal['status'] . '</td>';
                 echo '</tr>';
             }
@@ -282,7 +291,6 @@ require_once('../db/db.php');
             echo '</div>'; // End modal content
             echo '</div>'; // End modal dialog
             echo '</div>'; // End update modal fade
-
             echo '</div>'; // End card body
             echo '</div>'; // End card
         }

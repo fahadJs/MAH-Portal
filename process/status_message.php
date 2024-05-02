@@ -14,16 +14,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($statuses == 'dispatched') {
         $statusCode = 'Dispatched';
-        $message = "Dear *$customerName* %0a%0aYour Lunch Box having:%0a*$customerDish* %0a%0aHas been *Dispatched!*";
+        $message = "Dear *$customerName* %0a%0aYour Lunch Box having:%0a*$customerDish* %0a%0ais out for *Delivery!*";
     } elseif ($statuses == 'arrived') {
         $statusCode = 'Arrived';
-        $message = "Dear *$customerName* %0a%0aYour Lunch Box having:%0a*$customerDish* %0a%0aHas been *Arrived!*";
+        $message = "Dear *$customerName* %0a%0aThe Rider has *Arrived!* with your Lunch Box having:%0a*$customerDish* %0a%0a *Kindly collect your Food*";
     } elseif ($statuses == 'delivered') {
         $statusCode = 'Delivered';
         $message = "Dear *$customerName* %0a%0aYour Lunch Box having:%0a*$customerDish* %0a%0aHas been *Delivered!*";
     } elseif ($statuses == 'review') {
         $statusCode = 'Review';
-        $message = "Dear *$customerName* %0a%0aWe would love to hear from you!";
+        $message = "Dear *$customerName* %0a%0aHow was your food today? We would love to hear from you!";
     }
 
     // Prepare and execute SQL update statements
