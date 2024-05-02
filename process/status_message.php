@@ -9,20 +9,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $statuses = $_POST['status'];
     $customerName = $_POST['customer_name'];
     $customerDish = $_POST['customer_dish'];
+    $contact = $_POST['contact'];
     $statusCode = '';
 
     if ($statuses == 'dispatched') {
-        $statusCode = 'dispatched';
-        $message = "Dear *$customerName* \n\nYour Lunch Box having:\n*$customerDish* \nHas been *Dispatched!*";
+        $statusCode = 'Dispatched';
+        $message = "Dear *$customerName* %0a%0aYour Lunch Box having:%0a*$customerDish* %0a%0aHas been *Dispatched!*";
     } elseif ($statuses == 'arrived') {
-        $statusCode = 'arrived';
-        $message = "Dear *$customerName* \n\nYour Lunch Box having:\n*$customerDish* \nHas been *Arrived!*";
+        $statusCode = 'Arrived';
+        $message = "Dear *$customerName* %0a%0aYour Lunch Box having:%0a*$customerDish* %0a%0aHas been *Arrived!*";
     } elseif ($statuses == 'delivered') {
-        $statusCode = 'delivered';
-        $message = "Dear *$customerName* \n\nYour Lunch Box having:\n*$customerDish* \nHas been *Delivered!*";
+        $statusCode = 'Delivered';
+        $message = "Dear *$customerName* %0a%0aYour Lunch Box having:%0a*$customerDish* %0a%0aHas been *Delivered!*";
     } elseif ($statuses == 'review') {
-        $statusCode = 'review';
-        $message = "Dear *$customerName* \n\nWe would love to hear from you!";
+        $statusCode = 'Review';
+        $message = "Dear *$customerName* %0a%0aWe would love to hear from you!";
     }
 
     // Prepare and execute SQL update statements
@@ -34,51 +35,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error: " . mysqli_error($connection);
     } else {
         // Query executed successfully
-        echo "Update successful";
+        // echo "Update successful";
 
-        echo "<script>sendMessage('$message');</script>";
+
+        // Send message to specified URL
+        $url = 'https://anunzio0786.website:8443/api/send/'. $message .'/'. $contact .'';
+        $response = file_get_contents($url);
+
+        // Check if the request was successful
+        // if ($response === false) {
+        //     echo "Failed to send message";
+        // } else {
+        //     echo "Message sent successfully";
+        // }
     }
 
     // Redirect back to the page after updating
-    // header("Location: ../public/daily-status.php");
-    // exit();
+    header("Location: ../public/daily-status.php");
+    exit();
 } else {
     // If the form was not submitted via POST method, redirect to an error page or homepage
     header("Location: ../error.php");
     exit();
 }
-
-?>
-
-<script>
-    function sendMessage(message) {
-        const url = 'https://app.wabot.my/api/send';
-        const data = {
-            number: '923331233774', // Phone number to send the message to
-            type: 'text',
-            message: message,
-            instance_id: '662D19546A2F8',
-            access_token: '662d18de74f14'
-        };
-
-        fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Message sent successfully:', data);
-            })
-            .catch(error => {
-                console.error('There was a problem with the request:', error);
-            });
-    }
-</script>

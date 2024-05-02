@@ -150,6 +150,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo '<input type="hidden" name="dish_id" value="'. $customer['dishId'] .'" />';
         echo '<input type="hidden" name="customer_name" value="'. $customer['name'] .'" />';
         echo '<input type="hidden" name="customer_dish" value="'. $customer['dish'] .'" />';
+        echo '<input type="hidden" name="contact" value="'. $customer['contact'] .'" />';
         echo '<button type="submit" class="btn btn-primary">Submit</button></td>';
         // echo '<td>' . $customer['type'] . '</td>';
         // echo '<td><div class="alert ' . $statusClass . ' mb-0" role="alert">' . $row['status'] . '</div></td>';
