@@ -45,11 +45,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close statement
     $stmt->close();
 
-    $tomorrow = date('l, Y-m-d', strtotime('+1 day'));
+    $tomorrow = date('Y-m-d', strtotime('+1 day'));
+    $tomorrowDay = date('l, Y-m-d', strtotime('+1 day'));
     // $tomorrow = date('l, Y-m-d');
     // Send WhatsApp message
-    $message = "ORDERS FOR " . $tomorrow . ":\n\n";
-    $query = "SELECT * FROM orders WHERE date = '$currentDate'";
+    $message = "ORDERS FOR " . $tomorrowDay . ":\n\n";
+    $query = "SELECT * FROM orders WHERE date = '$tomorrow'";
     $result = mysqli_query($connection, $query);
     while ($row = mysqli_fetch_assoc($result)) {
         if (!empty($row['dish'])) {
@@ -62,6 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $message .= $orderInfo;
         }
     }
+    $message .= "--------------------\n";
     foreach ($dishCounts as $dishName => $count) {
         $message .= $dishName . " - " . $count . "\n";
     }

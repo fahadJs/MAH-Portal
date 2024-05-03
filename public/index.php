@@ -95,21 +95,21 @@ require_once('../db/db.php');
                 }
 
                 // Display subscription status based on pending count
-                if ($pending_count > 0) {
-                    // Button to launch new modal
-                    echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" disabled>';
-                    echo '<a style="color: white; text-decoration: none;" href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '">';
-                    echo 'Upgrade';
-                    echo '</a>';
-                    echo '</button>';
-                } else {
-                    // Button to launch new modal
-                    echo '<a href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '">';
-                    echo '<button style="margin-left: 20px;" type="button" class="btn btn-success">';
-                    echo 'Upgrade';
-                    echo '</button>';
-                    echo '</a>';
-                }
+                // if ($pending_count > 0) {
+                // Button to launch new modal
+                // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" disabled>';
+                // echo '<a style="color: white; text-decoration: none;" href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '">';
+                // echo 'Upgrade';
+                // echo '</a>';
+                // echo '</button>';
+                // } else {
+                // Button to launch new modal
+                echo '<a href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '">';
+                echo '<button style="margin-left: 20px;" type="button" class="btn btn-success">';
+                echo 'Upgrade';
+                echo '</button>';
+                echo '</a>';
+                // }
             } else {
                 // No deals found for this customer
                 echo '<p>No deals found for this customer.</p>';
@@ -152,13 +152,11 @@ require_once('../db/db.php');
                         </div>';
                 }
 
-            echo '<form action="../process/cust_note.php" method="POST">';
-            echo '<textarea class="form-control" name="cust_note">'. $cust_note .'</textarea>';
-            echo '<input type="hidden" name="cust_id" value="'. $customer_id .'"/>';
-            echo '<button type="button" class="btn btn-success mt-3">Submit</button>';
-            echo '</form>';
-
-
+                echo '<form action="../process/cust_note.php" method="POST">';
+                echo '<textarea class="form-control" name="cust_note" placeholder="' . $cust_note . '" required></textarea>';
+                echo '<input type="hidden" name="cust_id" value="' . $customer_id . '"/>';
+                echo '<button type="submit" class="btn btn-success mt-3">Submit</button>';
+                echo '</form>';
             } else {
                 // No deals found for this customer
                 echo '<p>No deals found for this customer.</p>';
@@ -244,11 +242,19 @@ require_once('../db/db.php');
             while ($deal = mysqli_fetch_assoc($deal_result_modal)) {
                 echo '<tr>';
                 echo '<td>' . $deal['days'] . '</td>';
-                echo '<td><input type="text" name="dish_names[]" class="form-control" value="'.$deal['dish'].'"/></td>';
+                echo '<td><input type="text" name="dish_names[]" class="form-control" value="' . $deal['dish'] . '"/></td>';
                 echo '<td>' . $deal['date'] . '</td>';
-                echo '<td hidden><input type="text" name="deal_items_id[]" class="form-control" value="'. $deal['id'] .'" hidden></td>';
-                echo '<td><input type="date" class="form-control" name="deal_dates[]" value="'. $deal['date'] .'" class="form-control" required></td>';
-                echo '<td>' . $deal['status'] . '</td>';
+                echo '<td hidden><input type="text" name="deal_items_id[]" class="form-control" value="' . $deal['id'] . '" hidden></td>';
+                echo '<td><input type="date" class="form-control" name="deal_dates[]" value="' . $deal['date'] . '" class="form-control" required></td>';
+                echo '<td>';
+                // echo '<h6>'. $deal['status'] . '</h6>';
+                echo '<select name="status[]" class="form-select">';
+                echo '<option selected>'. $deal['status'] . '</option>';
+                echo '<option value="pending" class="form-control">Pending</option>';
+                echo '<option value="processing" class="form-control">Processing</option>';
+                echo '<option value="on-hold" class="form-control">On-hold</option>';
+                echo '</select>';
+                echo '</td>';
                 echo '</tr>';
             }
 
@@ -291,6 +297,7 @@ require_once('../db/db.php');
             echo '</div>'; // End modal content
             echo '</div>'; // End modal dialog
             echo '</div>'; // End update modal fade
+
             echo '</div>'; // End card body
             echo '</div>'; // End card
         }

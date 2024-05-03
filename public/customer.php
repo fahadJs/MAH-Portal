@@ -71,7 +71,7 @@ require_once('../db/db.php');
             <div class="input-group">
                 <span class="input-group-text">Type</span>
                 <select class="form-select" id="customer_type" name="customer_type" required>
-                    <option selected>Choose...</option>
+                    <option>Choose...</option>
                     <option value="normal">Normal</option>
                     <option value="tester">Tester</option>
                     <option value="custom">Custom</option>

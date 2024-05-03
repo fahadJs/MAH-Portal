@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dealItemIDs = $_POST['deal_items_id'];
     $dealDates = $_POST['deal_dates'];
     $dishNames = $_POST['dish_names'];
+    $custStatus = $_POST['status'];
 
     // Loop through each deal item ID and corresponding date
     for ($i = 0; $i < count($dealItemIDs); $i++) {
@@ -15,9 +16,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $dealItemID = mysqli_real_escape_string($connection, $dealItemIDs[$i]);
         $dealDate = mysqli_real_escape_string($connection, $dealDates[$i]);
         $dishName = mysqli_real_escape_string($connection, $dishNames[$i]);
+        $status = mysqli_real_escape_string($connection, $custStatus[$i]);
 
         // Prepare and execute SQL statement to update the scheduled date
-        $updateQuery = "UPDATE customers_deals SET date = '$dealDate', status = 'pending', dish = '$dishName' WHERE id = '$dealItemID'";
+        $updateQuery = "UPDATE customers_deals SET date = '$dealDate', status = '$status', dish = '$dishName' WHERE id = '$dealItemID'";
         mysqli_query($connection, $updateQuery);
     }
 

@@ -81,9 +81,9 @@ while ($row = mysqli_fetch_assoc($result)) {
     }
 </script> -->
 
-
+<?php $currentDate = date('Y-m-d'); ?>
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Daily Status</h1>
+    <h1 class="mt-4">Daily Status - (<?php echo $currentDate; ?>)</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
         <li class="breadcrumb-item active">Daily Status for deliveries</li>
@@ -95,6 +95,51 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     // Check if there are any orders
     // if (mysqli_num_rows($customers) > 0) {
+
+    echo '<div class="d-flex">';
+
+    if (!empty($customers)) {
+        echo '<form id="reviewForm" action="../process/send_review.php" method="POST">';
+        foreach ($customers as $customer) {
+            echo '<input type="hidden" name="all_cust_contacts[]" value="' . $customer['contact'] . '" />';
+            echo '<input type="hidden" name="all_cust_deal_id[]" value="' . $customer['id'] . '" />';
+            echo '<input type="hidden" name="all_cust_number[]" value="' . $customer['number'] . '" />';
+            echo '<input type="hidden" name="all_cust_name[]" value="' . $customer['name'] . '" />';
+        }
+        echo '<button onclick="confirmReview()" type="button" class="btn btn-success mb-4">Send <span style="font-weight: bold;">REVIEW</span> message to all</button></td>';
+        echo '</form>';
+    }
+
+    if (!empty($customers)) {
+        echo '<form id="dispatchForm" action="../process/send_dispatch.php" method="POST">';
+        foreach ($customers as $customer) {
+            echo '<input type="hidden" name="all_cust_contacts[]" value="' . $customer['contact'] . '" />';
+            echo '<input type="hidden" name="all_cust_deal_id[]" value="' . $customer['id'] . '" />';
+            echo '<input type="hidden" name="all_cust_number[]" value="' . $customer['number'] . '" />';
+            echo '<input type="hidden" name="all_cust_name[]" value="' . $customer['name'] . '" />';
+            echo '<input type="hidden" name="all_cust_dish[]" value="' . $customer['dish'] . '" />';
+        }
+        echo '<button onclick="confirmDispatch()" type="button" class="btn btn-primary mb-4" style="margin-left: 30px;">Send <span style="font-weight: bold;">DISPATCHED</span> message to all</button></td>';
+        echo '</form>';
+    }
+
+    echo '</div>';
+
+    ?>
+    <script>
+        function confirmReview() {
+            if (confirm("Are you sure you want to send review messages to all customers?")) {
+                document.getElementById("reviewForm").submit();
+            }
+        }
+
+        function confirmDispatch() {
+            if (confirm("Are you sure you want to send dispatched messages to all customers?")) {
+                document.getElementById("dispatchForm").submit();
+            }
+        }
+    </script>
+    <?php
 
     echo '<table class="table">';
     echo '<thead>';
@@ -112,6 +157,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '</tr>';
     echo '</thead>';
     echo '<tbody>';
+
 
     // Output data of each row
     foreach ($customers as $customer) {
@@ -137,7 +183,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo '<td>' . $customer['dish'] . '</td>';
         echo '<td>' . $customer['address'] . '</td>';
         echo '<td>';
-        echo '<h6>'. $customer['currentStatus'] .'</h6>';
+        echo '<h6>' . $customer['currentStatus'] . '</h6>';
         echo '<select name="status" class="form-select">';
         echo '<option selected>Choose...</option>';
         echo '<option value="dispatched">Dispatched</option>';
@@ -146,11 +192,11 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo '<option value="review">Review</option>';
         echo '</select>';
         echo '</td>';
-        echo '<td><input type="hidden" name="customer_id" value="'. $customer['number'] .'" />';
-        echo '<input type="hidden" name="dish_id" value="'. $customer['dishId'] .'" />';
-        echo '<input type="hidden" name="customer_name" value="'. $customer['name'] .'" />';
-        echo '<input type="hidden" name="customer_dish" value="'. $customer['dish'] .'" />';
-        echo '<input type="hidden" name="contact" value="'. $customer['contact'] .'" />';
+        echo '<td><input type="hidden" name="customer_id" value="' . $customer['number'] . '" />';
+        echo '<input type="hidden" name="dish_id" value="' . $customer['dishId'] . '" />';
+        echo '<input type="hidden" name="customer_name" value="' . $customer['name'] . '" />';
+        echo '<input type="hidden" name="customer_dish" value="' . $customer['dish'] . '" />';
+        echo '<input type="hidden" name="contact" value="' . $customer['contact'] . '" />';
         echo '<button type="submit" class="btn btn-primary">Submit</button></td>';
         // echo '<td>' . $customer['type'] . '</td>';
         // echo '<td><div class="alert ' . $statusClass . ' mb-0" role="alert">' . $row['status'] . '</div></td>';
