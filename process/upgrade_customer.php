@@ -14,7 +14,7 @@ $start_date = $_POST['start_date'];
 $deal_name = $_POST['deal_name'];
 $number_of_persons = $_POST['number_of_persons'];
 $type = $_POST['customer_type'];
-$deal_item_weekdays = $_POST['deal_item_weekdays'];
+$deal_item_date = $_POST['deal_item_date'];
 
 // function generateCustomID($id)
 // {
@@ -50,10 +50,10 @@ $deal_item_weekdays = $_POST['deal_item_weekdays'];
         $deal_name = $deal_item_names[$i - 1];
         $deal_days = $_POST['deal_item_days_' . $i];
         $deal_item_days[] = $deal_days; // Store the days in the array
-        $deal_weekdays = $deal_item_weekdays[$i - 1];
+        $deal_date = $deal_item_date[$i - 1];
 
         // Prepare and execute SQL statement to insert deal details
-        $query_deal = "INSERT INTO customers_deals (cust_id, dish, days, weekdays) VALUES ('$cust_id', '$deal_name', '$deal_days', '$deal_weekdays')";
+        $query_deal = "INSERT INTO customers_deals (cust_id, dish, days, date) VALUES ('$cust_id', '$deal_name', '$deal_days', '$deal_date')";
         mysqli_query($connection, $query_deal);
     }
     header("Location: ../public/index.php?success=true");

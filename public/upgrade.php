@@ -248,14 +248,14 @@ if (isset($_GET['cust_id'])) {
             var dayColumn = document.createElement('div');
             dayColumn.classList.add('col-6'); // Bootstrap grid column size
             var dayInput = document.createElement('input');
-            dayInput.type = 'text';
-            dayInput.name = 'deal_item_weekdays[]';
+            dayInput.type = 'date';
+            dayInput.name = 'deal_item_date[]';
             dayInput.value = dealItem.weekdays;
             dayInput.classList.add('dynamic-field');
             dayInput.classList.add('form-control');
             dayInput.classList.add('mt-4');
             dayInput.placeholder = 'Enter Day';
-            dayInput.readOnly = true;
+            // dayInput.readOnly = true;
             dayColumn.appendChild(dayInput);
             row.appendChild(dayColumn);
 
@@ -379,8 +379,8 @@ if (isset($_GET['cust_id'])) {
         var dayDiv = document.createElement('div');
         dayDiv.classList.add('col-6'); // Bootstrap grid column size
         var dayTextarea = document.createElement('input');
-        dayTextarea.type = 'text';
-        dayTextarea.name = 'deal_item_weekdays[]';
+        dayTextarea.type = 'date';
+        dayTextarea.name = 'deal_item_date[]';
         dayTextarea.classList.add('dynamic-field');
         dayTextarea.classList.add('form-control');
         dayTextarea.classList.add('mb-4');

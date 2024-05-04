@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = mysqli_query($connection, $query);
     while ($row = mysqli_fetch_assoc($result)) {
         if (!empty($row['dish'])) {
-            $orderInfo = "*" . $row['cust_number'] . ":* \n" . $row['dish'] . " - (" . $row['persons'] . ")\n";
+            $orderInfo = "*" . $row['cust_number'] . ":* \n" . $row['dish'] . " - (" . $row['persons'] . " - Person)\n";
             if (!empty($row['additional'])) {
                 $orderInfo .= "(" . $row['additional'] . ") \n\n";
             } else {
@@ -64,33 +64,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     $message .= "--------------------\n";
-    foreach ($dishCounts as $dishName => $count) {
-        $message .= $dishName . " - " . $count . "\n";
-    }
+    // foreach ($dishCounts as $dishName => $count) {
+    //     $message .= $dishName . " - " . $count . "\n";
+    // }
 
-    // Define the URL for sending WhatsApp message
-    $url = 'https://dash3.wabot.my/api/sendgroupmsg.php?group_id=120363197741531655@g.us&type=text&message=' . urlencode($message) . '&instance_id=6545CDEB533AA&access_token=0f0a543efcc5e2c2bca83b88f21acdc1';
+    // // Define the URL for sending WhatsApp message
+    // $url = 'https://dash3.wabot.my/api/sendgroupmsg.php?group_id=120363197741531655@g.us&type=text&message=' . urlencode($message) . '&instance_id=6545CDEB533AA&access_token=0f0a543efcc5e2c2bca83b88f21acdc1';
 
-    // Initialize cURL session
+    // // Initialize cURL session
+    // $curl = curl_init();
+
+    // // Set cURL options
+    // curl_setopt_array($curl, array(
+    //     CURLOPT_URL => $url, // Set the URL
+    //     CURLOPT_RETURNTRANSFER => true, // Return response as a string
+    //     CURLOPT_FOLLOWLOCATION => true, // Follow redirects
+    //     CURLOPT_SSL_VERIFYPEER => true, // Disable SSL verification (not recommended in production)
+    // ));
+
+    // // Execute cURL request
+    // $response = curl_exec($curl);
+
+    // // Check for errors
+    // if (curl_errno($curl)) {
+    //     echo 'Curl error: ' . curl_error($curl);
+    // }
+
+    // // Close cURL session
+    // curl_close($curl);
+
+
     $curl = curl_init();
 
-    // Set cURL options
+    $message = rawurlencode($message);
+    $contact = '923152368494';
+
     curl_setopt_array($curl, array(
-        CURLOPT_URL => $url, // Set the URL
-        CURLOPT_RETURNTRANSFER => true, // Return response as a string
-        CURLOPT_FOLLOWLOCATION => true, // Follow redirects
-        CURLOPT_SSL_VERIFYPEER => false, // Disable SSL verification (not recommended in production)
+        CURLOPT_URL => 'https://anunzio0786.website:8443/api/send/' . $message . '/' . urlencode($contact),
+        CURLOPT_RETURNTRANSFER => true, // Return the response instead of outputting it
+        CURLOPT_SSL_VERIFYHOST => true, // Disable SSL host verification
+        CURLOPT_SSL_VERIFYPEER => false, // Disable SSL peer verification
     ));
 
     // Execute cURL request
     $response = curl_exec($curl);
-
-    // Check for errors
-    if (curl_errno($curl)) {
-        echo 'Curl error: ' . curl_error($curl);
-    }
-
-    // Close cURL session
     curl_close($curl);
 
     // Redirect back to the page after insertion

@@ -34,27 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Handle query error
         echo "Error: " . mysqli_error($connection);
     } else {
-        // Query executed successfully
-        // echo "Update successful";
-
-
-        // Send message to specified URL
-        // $url = 'https://anunzio0786.website:8443/api/send/'. $message .'/'. $contact .'';
-        // $response = file_get_contents($url);
-
-        // Check if the request was successful
-        // if ($response === false) {
-        //     echo "Failed to send message";
-        // } else {
-        //     echo "Message sent successfully";
-        // }
-
-        // Initialize cURL session
         $curl = curl_init();
 
         $message = rawurlencode($message);
-
-        // Set cURL options
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://anunzio0786.website:8443/api/send/' . $message . '/' . urlencode($contact),
             CURLOPT_RETURNTRANSFER => true, // Return the response instead of outputting it
@@ -64,18 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Execute cURL request
         $response = curl_exec($curl);
-
-        // Check for errors
-        // if ($response === false) {
-        //     // cURL error occurred
-        //     $error = curl_error($curl);
-        //     echo "cURL error: " . $error;
-        // } else {
-        //     // No cURL error, handle the response as needed
-        //     echo "Response: " . $response;
-        // }
-
-        // Close cURL session
         curl_close($curl);
     }
 
