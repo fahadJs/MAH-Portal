@@ -22,14 +22,15 @@ while ($row = mysqli_fetch_assoc($result)) {
     $customerId = $row['id'];
     $customerName = $row['name'];
     $nextDay = date('Y-m-d', strtotime('+1 day'));
+    // $nextDay = date('Y-m-d');
     // Fetch pending deals for this customer
-    $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND status = 'pending' AND date = '$nextDay'";
+    $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND date = '$nextDay'";
     $dealResult = mysqli_query($connection, $dealQuery);
 
-    if (mysqli_num_rows($dealResult) == 0) {
-        $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND status = 'on-hold' AND date = '$nextDay'";
-        $dealResult = mysqli_query($connection, $dealQuery);
-    }
+    // if (mysqli_num_rows($dealResult) == 0) {
+    //     $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND date = '$nextDay'";
+    //     $dealResult = mysqli_query($connection, $dealQuery);
+    // }
 
     if (mysqli_num_rows($dealResult) > 0) {
         $dealRow = mysqli_fetch_assoc($dealResult);
@@ -83,25 +84,25 @@ while ($row = mysqli_fetch_assoc($result)) {
     <?php if (!empty($customers)) : ?>
         <form action="../process/order_process.php" method="POST" class="mt-4" id="orderForm">
             <?php foreach ($customers as $customer) : ?>
-                <?php
+                <!-- <?php
 
-                $statusClass = '';
-                switch ($customer['status']) {
-                    case 'pending':
-                        $statusClass = 'alert-success'; // Change class to alert-info for pending status
-                        $alertMessage = 'New Dish'; // Set alert message for pending status
-                        break;  
-                    case 'on-hold':
-                        $statusClass = 'alert-warning'; // Change class to alert-info for on-hold status
-                        $alertMessage = 'Pending Dish'; // No special message for on-hold status
-                        break;
-                    default:
-                        $statusClass = 'alert-secondary'; // Default class for other statuses
-                        $alertMessage = ''; // No special message for other statuses
-                        break;
-                }
+                // $statusClass = '';
+                // switch ($customer['status']) {
+                //     case 'pending':
+                //         $statusClass = 'alert-success'; // Change class to alert-info for pending status
+                //         $alertMessage = 'New Dish'; // Set alert message for pending status
+                //         break;  
+                //     case 'on-hold':
+                //         $statusClass = 'alert-warning'; // Change class to alert-info for on-hold status
+                //         $alertMessage = 'Pending Dish'; // No special message for on-hold status
+                //         break;
+                //     default:
+                //         $statusClass = 'alert-secondary'; // Default class for other statuses
+                //         $alertMessage = ''; // No special message for other statuses
+                //         break;
+                // }
 
-                ?>
+                ?> -->
                 <div class="mb-3">
                     <h6 class="mb-2"><?php echo $customer['date']; ?></h6>
                     <div class="input-group">
@@ -111,7 +112,6 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <input type="text" class="form-control" name="persons[]" value="<?php echo $customer['persons']; ?>" aria-label="Persons" readonly>
                         <span class="input-group-text">Additional</span>
                         <textarea class="form-control" name="additional[]"></textarea>
-                        <div class="alert <?php echo $statusClass; ?> mb-0" role="alert"><?php echo $alertMessage; ?></div>
                         <input type="text" name="customer_deal_id[]" value="<?php echo $customer['id'] ?>" hidden>
                         <input type="text" name="customer_number[]" value="<?php echo $customer['number'] ?>" hidden>
                         <input type="text" name="customer_type[]" value="<?php echo $customer['type'] ?>" hidden>
