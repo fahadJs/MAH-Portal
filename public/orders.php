@@ -22,6 +22,12 @@ while ($row = mysqli_fetch_assoc($result)) {
     $customerId = $row['id'];
     $customerName = $row['name'];
     $nextDay = date('Y-m-d', strtotime('+1 day'));
+
+    if($_SERVER["REQUEST_METHOD"] == "POST"){
+        if(isset($_POST['date'])){
+            $nextDay = $_POST['date'];
+        }
+    }
     // $nextDay = date('Y-m-d');
     // Fetch pending deals for this customer
     $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND date = '$nextDay'";
@@ -81,6 +87,11 @@ while ($row = mysqli_fetch_assoc($result)) {
         <li class="breadcrumb-item active">Orders</li>
     </ol>
 
+    <form method="POST" action="#" class="d-flex">
+        <input type="date" class="form-control mb-0 m-2" name="date" value="<?php echo $nextDay;?>" style="width: fit-content;" required/>
+        <button type="submit" class="btn btn-success mb-0 m-2">Search</button>
+    </form>
+
     <?php if (!empty($customers)) : ?>
         <form action="../process/order_process.php" method="POST" class="mt-4" id="orderForm">
             <?php foreach ($customers as $customer) : ?>
@@ -104,7 +115,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
                 ?> -->
                 <div class="mb-3">
-                    <h6 class="mb-2"><?php echo $customer['date']; ?></h6>
+                    <h6 class="mb-2"><?php echo $customer['name']; ?> - <?php echo $customer['date']; ?></h6>
                     <div class="input-group">
                         <span class="input-group-text"><?php echo $customer['number']; ?></span>
                         <input type="text" class="form-control" name="dish_name[]" value="<?php echo $customer['dish']; ?>" aria-label="Dish Name">
