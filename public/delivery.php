@@ -13,8 +13,8 @@ require_once('../db/db.php');
 
 date_default_timezone_set('Asia/Karachi');
 
-$currentDate = date('Y-m-d');
-$query = "SELECT * FROM orders WHERE date <= '$currentDate' AND status = 'pending'";
+$currentDate = date('Y-m-d', strtotime('+1 day'));
+$query = "SELECT * FROM orders WHERE date = '$currentDate' AND status = 'pending'";
 $result = mysqli_query($connection, $query);
 
 $customers = array();
@@ -42,60 +42,136 @@ if (mysqli_num_rows($result) > 0) {
 
 <div class="container-fluid px-4">
     <h1 class="mt-4">Deliveries</h1>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-            <li class="breadcrumb-item active">Delivery</li>
-        </ol>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+        <li class="breadcrumb-item active">Delivery</li>
+    </ol>
 
-    <?php if (!empty($customers)) : ?>
-        <form action="../process/delivery_process.php" method="POST" class="mt-4" id="orderForm">
-            <?php foreach ($customers as $customer) : ?>
-                <div class="mb-3">
-                    <p class="m-0"><?php echo $customer['type']; ?></p>
-                    <div class="input-group">
-                        <span class="input-group-text"><?php echo $customer['number']; ?></span>
-                        <input type="text" class="form-control" name="dish_name[]" value="<?php echo $customer['dish']; ?>" aria-label="Dish Name" readonly>
-                        <span class="input-group-text">Persons</span>
-                        <input type="number" class="form-control" name="persons[]" value="<?php echo $customer['persons']; ?>" aria-label="Persons" readonly>
-                        <textarea class="form-control" name="address[]" rows="3" placeholder="Delivery Address" aria-label="Delivery Address"></textarea>
-                        <input type="text" name="customer_deal_id[]" value="<?php echo $customer['id'] ?>" hidden>
-                        <input type="text" name="customer_number[]" value="<?php echo $customer['number'] ?>" hidden>
-                    </div>
+    <div class="d-flex">
+        <?php foreach ($customers as $customer) : ?>
+            <div class="alert alert-success mb-0 m-2"><?php echo $customer['number']; ?></div>
+        <?php endforeach; ?>
+    </div>
+
+    <form method="POST" action="../process//delivery_process.php" class="mt-4" id="deliveryForm">
+        <!-- Container for dynamically generated rows -->
+        <div id="deliveryRows">
+            <!-- Default row -->
+            <div class="deliveryRow">
+                <div class="input-group">
+                    <span class="input-group-text m-2">Starting</span>
+                    <input type="text" name="starting[]" class="form-control m-2" />
+                    <!-- Button to add starting fields for this row -->
+                    <!-- <button type="button" onclick="addStartingField(this)" class="btn btn-secondary m-2">Add Starting Field</button> -->
                 </div>
-            <?php endforeach; ?>
-
-            <div class="row">
-                <div class="col-3 mb-3">
-                    <div class="input-group">
-                        <span class="input-group-text">Total Distance</span>
-                        <input type="text" class="form-control" name="distance" aria-label="Total Distance" required>
-                    </div>
+                <div class="input-group">
+                    <span class="input-group-text m-2">Ending</span>
+                    <input type="text" name="ending[]" class="form-control m-2" />
+                    <!-- <button type="button" onclick="addEndingField(this)" class="btn btn-secondary m-2">Add Ending Field</button> -->
                 </div>
-
-                <div class="col-3 mb-3">
-                    <div class="input-group">
-                        <span class="input-group-text">Total Time</span>
-                        <input type="text" class="form-control" name="time" aria-label="Total Time" required>
-                    </div>
-                </div>
-
-                <div class="col-3 mb-3">
-                    <div class="input-group">
-                        <span class="input-group-text">Fuel Cost</span>
-                        <input type="number" class="form-control" name="fuel_cost" aria-label="Fuel Cost" required>
-                    </div>
-                </div>
-
-                <div class="col-3 mb-3">
-                    <div class="input-group">
-                        <span class="input-group-text">Delivery Rider</span>
-                        <input type="text" class="form-control" name="rider" aria-label="Delivery Rider" required>
-                    </div>
+                <div class="input-group">
+                    <span class="input-group-text m-2">Route</span>
+                    <textarea name="route[]" class="form-control m-2"></textarea>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Submit Delivery</button>
-        </form>
-    <?php endif; ?>
+            <hr class="m-3" />
+        </div>
+
+        <div class="row">
+            <div class="col-3 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text">Total Distance</span>
+                    <input type="text" class="form-control" name="distance" aria-label="Total Distance" required>
+                </div>
+            </div>
+
+            <div class="col-3 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text">Total Time</span>
+                    <input type="text" class="form-control" name="time" aria-label="Total Time" required>
+                </div>
+            </div>
+
+            <div class="col-3 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text">Fuel Cost</span>
+                    <input type="number" class="form-control" name="fuel_cost" aria-label="Fuel Cost" required>
+                </div>
+            </div>
+
+            <div class="col-3 mb-3">
+                <div class="input-group">
+                    <span class="input-group-text">Delivery Rider</span>
+                    <input type="text" class="form-control" name="rider" aria-label="Delivery Rider" required>
+                </div>
+            </div>
+        </div>
+        <!-- Button to add a new row -->
+        <div class="d-flex">
+            <button type="button" onclick="addDeliveryRow()" class="btn btn-secondary m-2">Add More Routes</button>
+
+            <button type="submit" class="btn btn-success m-2">Submit Delivery</button>
+        </div>
+    </form>
+
+    <script>
+        function addDeliveryRow() {
+            // Create a new row
+            var newRow = document.createElement("div");
+            newRow.className = "deliveryRow";
+            newRow.innerHTML = `
+            <div class="input-group">
+                <span class="input-group-text m-2">Starting</span>
+                <input type="text" name="starting[]" class="form-control m-2"/>
+                <!-- Button to add starting fields for this row -->
+            
+            </div>
+            <div class="input-group">
+                <span class="input-group-text m-2">Ending</span>
+                <input type="text" name="ending[]" class="form-control m-2"/>
+                
+            </div>
+            <div class="input-group">
+                <span class="input-group-text m-2">Route</span>
+                <textarea name="route[]" class="form-control m-2"></textarea>
+            </div>
+            <hr class="m-3"/>
+        </div>
+    `;
+
+            // Append the new row to the container
+            var deliveryRows = document.getElementById("deliveryRows");
+            deliveryRows.appendChild(newRow);
+        }
+
+        function addStartingField(button) {
+            // Get the parent row of the button
+            var row = button.parentNode;
+
+            // Create a new starting field
+            var startingField = document.createElement("input");
+            startingField.type = "text";
+            startingField.name = "starting[]";
+            startingField.className = "form-control m-2";
+
+            // Append the starting field to the parent row
+            row.insertBefore(startingField, button);
+        }
+
+        function addEndingField(button) {
+            // Get the parent row of the button
+            var row = button.parentNode;
+
+            // Create a new starting field
+            var endingField = document.createElement("input");
+            endingField.type = "text";
+            endingField.name = "ending[]";
+            endingField.className = "form-control m-2";
+
+            // Append the starting field to the parent row
+            row.insertBefore(endingField, button);
+        }
+    </script>
 
     <hr>
 
