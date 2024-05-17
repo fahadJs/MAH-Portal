@@ -60,13 +60,23 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Manage Orders
                         </a>
+
+                        <a class="nav-link" href="orders_dinner.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Manage Dinner Orders
+                        </a>
+
                         <a class="nav-link" href="delivery.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Manage Deliveries
                         </a>
                         <a class="nav-link" href="daily-status.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Update Center
+                            Lunch Update Center
+                        </a>
+                        <a class="nav-link" href="daily_dinner_status.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Dinner Update Center
                         </a>
                         <!-- <div class="sb-sidenav-menu-heading">Interface</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">

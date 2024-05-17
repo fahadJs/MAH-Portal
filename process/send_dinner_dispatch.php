@@ -22,10 +22,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $custDish = mysqli_real_escape_string($connection, $customerDish[$i]);
 
         // Prepare and execute SQL statement to update the scheduled date
-        $updateQuery = "UPDATE orders SET update_status = 'Dispatched' WHERE id = '$custDealId'";
+        $updateQuery = "UPDATE orders_dinner SET update_status = 'Dispatched' WHERE id = '$custDealId'";
         mysqli_query($connection, $updateQuery);
 
-        $message = "Dear *$custName* \n\nYour Lunch Box having:\n*$custDish* \n\nis out for *Delivery!*";
+        $message = "Dear *$custName* \n\nYour Dinner Box having:\n*$custDish* \n\nis out for *Delivery!*";
 
         $curl = curl_init();
 
