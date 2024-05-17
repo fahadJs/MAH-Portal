@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date = $_POST['date'];
 
     // Prepare and execute SQL insert statements
-    $stmt = $connection->prepare("INSERT INTO orders (cust_number, dish, date, persons, additional, type) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $connection->prepare("INSERT INTO orders_dinner (cust_number, dish, date, persons, additional, type) VALUES (?, ?, ?, ?, ?, ?)");
 
     // Initialize an array to store dish counts
     $dishCounts = array();
@@ -49,8 +49,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tomorrowDay = date('l, Y-m-d', strtotime('+1 day'));
     // $tomorrow = date('l, Y-m-d');
     // Send WhatsApp message
-    $message = "LUNCH ORDERS FOR " . $tomorrowDay . ":\n\n";
-    $query = "SELECT * FROM orders WHERE date = '$tomorrow'";
+    $message = "DINNER ORDERS FOR " . $tomorrowDay . ":\n\n";
+    $query = "SELECT * FROM orders_dinner WHERE date = '$tomorrow'";
     $result = mysqli_query($connection, $query);
     while ($row = mysqli_fetch_assoc($result)) {
         if (!empty($row['dish'])) {
@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Redirect back to the page after insertion
     // header("Location: ../public/orders.php?success=true");
-    header("Location: ../process/order_count.php");
+    header("Location: ../process/order_count_dinner.php");
     exit();
 }
 // } else {
