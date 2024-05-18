@@ -81,10 +81,10 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Orders</h1>
+    <h1 class="mt-4">Orders for Lunch</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-        <li class="breadcrumb-item active">Orders</li>
+        <li class="breadcrumb-item active">Orders for Lunch</li>
     </ol>
 
     <form method="POST" action="#" class="d-flex">
@@ -136,9 +136,9 @@ while ($row = mysqli_fetch_assoc($result)) {
     <?php endif; ?>
     <hr>
 
-    <h1 class="mt-4">All Orders</h1>
+    <h1 class="mt-4">All Lunch Orders</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">All the previous orders - Latest on top</li>
+        <li class="breadcrumb-item active">All the previous lunch orders - Latest on top</li>
     </ol>
     <?php
     // Fetch data from orders table

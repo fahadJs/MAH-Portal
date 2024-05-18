@@ -23,6 +23,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $customerNum = $row['cust_number'];
     $dishName = $row['dish'];
     $dishId = $row['id'];
+    $persons = $row['persons'];
     $currentStatus = $row['update_status'];
     $nextDay = date('Y-m-d', strtotime('+1 day'));
     // Fetch pending deals for this customer
@@ -52,6 +53,7 @@ while ($row = mysqli_fetch_assoc($result)) {
             'name' => $customerName,
             'number' => $customerNum,
             'dish' => $dishName,
+            'persons' => $persons,
             'contact' => $contact,
             'address' => $address,
             'dishId' => $dishId,
@@ -103,6 +105,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         foreach ($customers as $customer) {
             echo '<input type="hidden" name="all_cust_contacts[]" value="' . $customer['contact'] . '" />';
             echo '<input type="hidden" name="all_cust_deal_id[]" value="' . $customer['id'] . '" />';
+            echo '<input type="hidden" name="persons[]" value="' . $customer['persons'] . '" />';
             echo '<input type="hidden" name="all_cust_number[]" value="' . $customer['number'] . '" />';
             echo '<input type="hidden" name="all_cust_name[]" value="' . $customer['name'] . '" />';
         }
@@ -115,6 +118,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         foreach ($customers as $customer) {
             echo '<input type="hidden" name="all_cust_contacts[]" value="' . $customer['contact'] . '" />';
             echo '<input type="hidden" name="all_cust_deal_id[]" value="' . $customer['id'] . '" />';
+            echo '<input type="hidden" name="persons[]" value="' . $customer['persons'] . '" />';
             echo '<input type="hidden" name="all_cust_number[]" value="' . $customer['number'] . '" />';
             echo '<input type="hidden" name="all_cust_name[]" value="' . $customer['name'] . '" />';
             echo '<input type="hidden" name="all_cust_dish[]" value="' . $customer['dish'] . '" />';
@@ -194,6 +198,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo '</td>';
         echo '<td><input type="hidden" name="customer_id" value="' . $customer['number'] . '" />';
         echo '<input type="hidden" name="dish_id" value="' . $customer['dishId'] . '" />';
+        echo '<input type="hidden" name="persons" value="' . $customer['persons'] . '" />';
         echo '<input type="hidden" name="customer_name" value="' . $customer['name'] . '" />';
         echo '<input type="hidden" name="customer_dish" value="' . $customer['dish'] . '" />';
         echo '<input type="hidden" name="contact" value="' . $customer['contact'] . '" />';

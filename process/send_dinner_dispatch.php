@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $customerNumber = $_POST['all_cust_number'];
     $customerName = $_POST['all_cust_name'];
     $customerDish = $_POST['all_cust_dish'];
+    $customerPersons = $_POST['persons'];
 
 
     // Loop through each deal item ID and corresponding date
@@ -20,12 +21,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $custNumber = mysqli_real_escape_string($connection, $customerNumber[$i]);
         $custName = mysqli_real_escape_string($connection, $customerName[$i]);
         $custDish = mysqli_real_escape_string($connection, $customerDish[$i]);
+        $custPersons = mysqli_real_escape_string($connection, $customerPersons[$i]);
+
+        if($custPersons > 1){
+            $packets = "$custPersons Packets";
+            $helping_verb = "are";
+        } else {
+            $packets = "$custPersons Packet";
+            $helping_verb = "is";
+        }
 
         // Prepare and execute SQL statement to update the scheduled date
         $updateQuery = "UPDATE orders_dinner SET update_status = 'Dispatched' WHERE id = '$custDealId'";
         mysqli_query($connection, $updateQuery);
 
-        $message = "Dear *$custName* \n\nYour Dinner Box having:\n*$custDish* \n\nis out for *Delivery!*";
+        $message = "Dear *$custName* \n\nYour *$packets* having:\n*$custDish* \n\n$helping_verb out for *Delivery!*";
 
         $curl = curl_init();
 

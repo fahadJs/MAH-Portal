@@ -12,9 +12,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $updateQuery = "UPDATE customers SET note = '$note' WHERE id = '$customerId'";
     mysqli_query($connection, $updateQuery);
 
+    echo $customerId;
+    echo $note;
+
     // Redirect back to the previous page or to a success page
-    header("Location: ../public/index.php?success=true");
-    exit();
+    // header("Location: ../public/index.php?success=true");
+    // exit();
 } else {
     // If the form is not submitted, redirect back to the previous page
     header("Location: ../public/index.php");

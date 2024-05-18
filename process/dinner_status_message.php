@@ -10,17 +10,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $customerName = $_POST['customer_name'];
     $customerDish = $_POST['customer_dish'];
     $contact = $_POST['contact'];
+    $persons = $_POST['persons'];
     $statusCode = '';
+
+    if($persons > 1){
+        $packets = "$persons Packets";
+        $helping_verb = "are";
+    } else {
+        $packets = "$persons Packet";
+        $helping_verb = "is";
+    }
 
     if ($statuses == 'dispatched') {
         $statusCode = 'Dispatched';
-        $message = "Dear *$customerName* \n\nYour Dinner Box having:\n*$customerDish* \n\nis out for *Delivery!*";
+        $message = "Dear *$customerName* \n\nYour *$packets* having:\n*$customerDish* \n\n$helping_verb out for *Delivery!*";
     } elseif ($statuses == 'arrived') {
         $statusCode = 'Arrived';
-        $message = "Dear *$customerName* \n\nThe Rider has *Arrived!* with your Dinner Box having:\n*$customerDish* \n\n*Kindly collect your Food!*";
+        $message = "Dear *$customerName* \n\nThe Rider has *Arrived!* with your *$packets* having:\n*$customerDish* \n\n*Kindly collect your Food!*";
     } elseif ($statuses == 'delivered') {
         $statusCode = 'Delivered';
-        $message = "Dear *$customerName* \n\nYour Dinner Box having:\n*$customerDish* \n\nHas been *Delivered!*";
+        $message = "Dear *$customerName* \n\nYour *$packets* having:\n*$customerDish* \n\nHas been *Delivered!*";
     } elseif ($statuses == 'review') {
         $statusCode = 'Review';
         $message = "Dear *$customerName* \n\nHow was your food today? We would love to hear from you!";
