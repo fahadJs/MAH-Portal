@@ -47,18 +47,20 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">Core</div>
+                        <!-- <div class="sb-sidenav-menu-heading">Core</div> -->
                         <a class="nav-link" href="index.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
+                        <hr class="m-0">
                         <a class="nav-link" href="customer.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Manage Customer
                         </a>
+                        <hr class="m-0">
                         <a class="nav-link" href="orders.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Manage Orders
+                            Manage Lunch Orders
                         </a>
 
                         <a class="nav-link" href="orders_dinner.php">
@@ -66,18 +68,27 @@
                             Manage Dinner Orders
                         </a>
 
+                        <hr class="m-0">
                         <a class="nav-link" href="delivery.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Manage Deliveries
                         </a>
+                        <hr class="m-0">
                         <a class="nav-link" href="daily-status.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Lunch Update Center
                         </a>
+
                         <a class="nav-link" href="daily_dinner_status.php">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dinner Update Center
                         </a>
+                        <hr class="m-0">
+                        <a class="nav-link" href="rider_ledger.php">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Riders Ledger
+                        </a>
+                        <hr class="m-0">
                         <!-- <div class="sb-sidenav-menu-heading">Interface</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>

@@ -1,5 +1,4 @@
 <?php
-
 // Start session
 session_start();
 
@@ -162,11 +161,11 @@ require_once('../db/db.php');
             //             </div>';
             //     }
 
-            //     echo '<form action="../process/cust_note.php" method="POST">';
-            //     echo '<textarea class="form-control" name="cust_note" placeholder="' . $cust_note . '" required></textarea>';
-            //     echo '<input type="hidden" name="cust_id" value="' . $customer_id . '"/>';
-            //     echo '<button type="submit" class="btn btn-success mt-3">Submit</button>';
-            //     echo '</form>';
+                echo '<form action="../process/cust_note.php" method="POST" class="mt-4">';
+                echo '<textarea class="form-control" name="cust_note" placeholder="' . $cust_note . '" required></textarea>';
+                echo '<input type="hidden" name="cust_id" value="' . $customer_id . '"/>';
+                echo '<button type="submit" class="btn btn-success mt-3">Submit</button>';
+                echo '</form>';
             // } else {
             //     // No deals found for this customer
             //     echo '<p>No deals found for this customer.</p>';
@@ -259,7 +258,7 @@ require_once('../db/db.php');
                 echo '<td>';
                 // echo '<h6>'. $deal['status'] . '</h6>';
                 echo '<select name="status[]" class="form-select">';
-                echo '<option selected>' . $deal['status'] . '</option>';
+                echo '<option selected hidden>' . $deal['status'] . '</option>';
                 echo '<option value="pending" class="form-control">Pending</option>';
                 echo '<option value="processing" class="form-control">Processing</option>';
                 echo '<option value="on-hold" class="form-control">On-hold</option>';
@@ -296,7 +295,7 @@ require_once('../db/db.php');
             echo '<div class="modal-body">';
 
             // Start form for submitting deal dates
-            echo '<form action="../process/deal_update.php" method="POST">';
+            echo '<form action="../process/deal_dinner_update.php" method="POST">';
 
             // Start table for deals
             echo '<table class="table">';
@@ -325,7 +324,7 @@ require_once('../db/db.php');
                 echo '<td>';
                 // echo '<h6>'. $deal['status'] . '</h6>';
                 echo '<select name="status[]" class="form-select">';
-                echo '<option selected>' . $deal1['status'] . '</option>';
+                echo '<option selected hidden>' . $deal1['status'] . '</option>';
                 echo '<option value="pending" class="form-control">Pending</option>';
                 echo '<option value="processing" class="form-control">Processing</option>';
                 echo '<option value="on-hold" class="form-control">On-hold</option>';
