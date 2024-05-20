@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "Dear *$customerName* \n\nThe Rider has *Arrived!* with your *$persons Packets* having:\n*$customerDish* \n\n*Kindly collect your Food!*";
     } elseif ($statuses == 'delivered') {
         $statusCode = 'Delivered';
-        $message = "Dear *$customerName* \n\nYour *$pac* having:\n*$customerDish* \n\nHas been *Delivered!*";
+        $message = "Dear *$customerName* \n\nYour *$packets* having:\n*$customerDish* \n\nHas been *Delivered!*";
     } elseif ($statuses == 'review') {
         $statusCode = 'Review';
         $message = "Dear *$customerName* \n\nHow was your food today? We would love to hear from you!";

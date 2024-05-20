@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $additionalValue = !empty($additional[$i]) ? $additional[$i] : '';
             $stmt->bind_param("ssssss", $customerNumbers[$i], $dishNames[$i], $date[$i], $persons[$i], $additionalValue, $type[$i]);
             $stmt->execute();
-            $updateStatus = "UPDATE customers_deals SET status = 'processing' WHERE id = '$customerDealIds[$i]'";
+            $updateStatus = "UPDATE customers_dinner_deals SET status = 'processing' WHERE id = '$customerDealIds[$i]'";
             mysqli_query($connection, $updateStatus);
 
             // Count occurrences of each dish
@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $dishCounts[$dishNames[$i]] = 1;
             }
         } else {
-            $updateStatus = "UPDATE customers_deals SET status = 'on-hold' WHERE id = '$customerDealIds[$i]'";
+            $updateStatus = "UPDATE customers_dinner_deals SET status = 'on-hold' WHERE id = '$customerDealIds[$i]'";
             mysqli_query($connection, $updateStatus);
         }
     }
