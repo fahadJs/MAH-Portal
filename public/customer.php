@@ -145,14 +145,15 @@ require_once('../db/db.php');
         <div class="col-12">
             <div class="input-group">
                 <span class="input-group-text">Agent</span>
-                <select class="form-select" id="agent" name="agent" required>
-                    <option selected>Choose...</option>
-                    <option value="fahad">Mr. Anzul</option>
-                    <option value="ashar">Ashar</option>
-                    <option value="ifrah">Ifrah</option>
-                    <option value="mahnoor">Mahnoor</option>
-                    <option value="bilal">Bilal</option>
-                    <option value="fahad">Fahad</option>
+                <select class="form-select form-control" id="agent" name="agent" required>
+                    <?php
+                    // Retrieve data from database and populate dropdown
+                    $query = "SELECT * FROM agent";
+                    $result = mysqli_query($connection, $query);
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<option value='" . $row['name'] . "'>" . $row['name'] . "</option>";
+                    }
+                    ?>
                 </select>
             </div>
             <!-- <label for="address" class="form-label">Address</label> -->
