@@ -110,11 +110,11 @@ $currentDate = date('Y-m-d', strtotime('+1 day'));
 
     <h1 class="mt-4">All Records</h1>
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">All the previous records - Latest on top</li>
+        <li class="breadcrumb-item active">All the previous records</li>
     </ol>
     <?php
     // Fetch data from orders table
-    $query = "SELECT * FROM riders_ledger ORDER BY date DESC";
+    $query = "SELECT * FROM riders_ledger";
     $result = mysqli_query($connection, $query);
 
     // Check if there are any orders

@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-if (isset($_SESSION['ip_address'])) {
+if (!isset($_SESSION['ip_address'])) {
     $ip = $_SESSION['ip_address'];
 }
 
@@ -34,16 +34,10 @@ require_once('../db/db.php');
 </script>
 
 <div class="container-fluid px-4">
-    <?php
-    $sql = "SELECT COUNT(id) AS count from customers";
-    $res = mysqli_query($connection, $sql);
-    $row = mysqli_fetch_assoc($res);
-    $count = $row['count'];
-    ?>
-    <h1 class="mt-4">Dashboard (<?php echo $count; ?>)</h1>
+    <h1 class="mt-4">Dashboard</h1>
 
     <?php
-    echo $ip;
+        echo $ip;
     ?>
 
     <ol class="breadcrumb mb-4">
@@ -175,11 +169,11 @@ require_once('../db/db.php');
             //             </div>';
             //     }
 
-            echo '<form action="../process/cust_note.php" method="POST" class="mt-4">';
-            echo '<textarea class="form-control" name="cust_note" placeholder="' . $cust_note . '" required></textarea>';
-            echo '<input type="hidden" name="cust_id" value="' . $customer_id . '"/>';
-            echo '<button type="submit" class="btn btn-success mt-3">Submit</button>';
-            echo '</form>';
+                echo '<form action="../process/cust_note.php" method="POST" class="mt-4">';
+                echo '<textarea class="form-control" name="cust_note" placeholder="' . $cust_note . '" required></textarea>';
+                echo '<input type="hidden" name="cust_id" value="' . $customer_id . '"/>';
+                echo '<button type="submit" class="btn btn-success mt-3">Submit</button>';
+                echo '</form>';
             // } else {
             //     // No deals found for this customer
             //     echo '<p>No deals found for this customer.</p>';
@@ -297,7 +291,7 @@ require_once('../db/db.php');
             echo '</div>'; // End modal fade
 
 
-
+            
             // Bootstrap Modal for customer DINNER deals
             echo '<div class="modal fade" id="customerModalDinner' . $customer['id'] . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">';
             echo '<div class="modal-dialog modal-dialog-scrollable modal-xl">';

@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Execute the statement
     if ($stmt->execute()) {
         // Redirect if successful
-        header("Location: ../process/rider_ledger.php");
+        header("Location: ../public/rider_ledger.php");
         exit();
     } else {
         echo "Error: " . $stmt->error;
