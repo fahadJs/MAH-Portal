@@ -21,54 +21,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+$sql = "SELECT COUNT(id) AS count from follow_up_cust";
+$res = mysqli_query($connection, $sql);
+$row = mysqli_fetch_assoc($res);
+$count = $row['count'];
 
-// $query = "SELECT * FROM customers WHERE start_date <= '$currentDate' AND status = 'active'";
-// $result = mysqli_query($connection, $query);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['date'])) {
+        $provided_date = $_POST['date'];
+        $query = "SELECT COUNT(DISTINCT fc.id) AS count
+        FROM follow_up_cust fc
+        JOIN follow_up_remarks fr
+        ON fc.id = fr.follow_up_id
+        WHERE fc.id IN (
+            SELECT follow_up_id
+            FROM follow_up_remarks
+            GROUP BY follow_up_id
+            HAVING MAX(date) = ?
+        )";
 
-// $customers = array();
-// while ($row = mysqli_fetch_assoc($result)) {
-//     $customerId = $row['id'];
-//     $customerName = $row['name'];
-//     $nextDay = date('Y-m-d', strtotime('+1 day'));
+        $stmt = $connection->prepare($query);
 
-//     if($_SERVER["REQUEST_METHOD"] == "POST"){
-//         if(isset($_POST['date'])){
-//             $nextDay = $_POST['date'];
-//         }
-//     }
-//     // $nextDay = date('Y-m-d');
-//     // Fetch pending deals for this customer
-//     $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND date = '$nextDay'";
-//     $dealResult = mysqli_query($connection, $dealQuery);
+        // Bind the parameter
+        $stmt->bind_param('s', $provided_date);
 
-//     // if (mysqli_num_rows($dealResult) == 0) {
-//     //     $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND date = '$nextDay'";
-//     //     $dealResult = mysqli_query($connection, $dealQuery);
-//     // }
+        // Execute the query
+        $stmt->execute();
 
-//     if (mysqli_num_rows($dealResult) > 0) {
-//         $dealRow = mysqli_fetch_assoc($dealResult);
-//         $dishName = $dealRow['dish'];
-//         $customerDealId = $dealRow['id'];
-//         $customerNumber = $row['cust_number'];
-//         $persons = $row['persons'];
-//         $status = $dealRow['status'];
-//         $type = $row['type'];
-//         $date = $dealRow['date'];
+        // Get the result
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $count = $row['count'];
+    } elseif (isset($_POST['contact'])) {
+        $searchContact = $_POST['contact'];
+        $query = "
+            SELECT COUNT(DISTINCT fc.id) AS count
+            FROM follow_up_cust fc
+            JOIN follow_up_remarks fr
+            ON fc.id = fr.follow_up_id
+            WHERE fc.contact LIKE ?
+        ";
 
-//         // Store customer and deal data
-//         $customers[] = array(
-//             'id' => $customerDealId,
-//             'name' => $customerName,
-//             'number' => $customerNumber,
-//             'dish' => $dishName,
-//             'persons' => $persons,
-//             'status' => $status,
-//             'type' => $type,
-//             'date' => $date
-//         );
-//     }
-// }
+        $stmt = $connection->prepare($query);
+        $likeSearchContact = '%' . $searchContact . '%';
+        $stmt->bind_param('s', $likeSearchContact);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $count = $row['count'];
+
+    }
+}
+
 ?>
 
 <script>
@@ -116,31 +120,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
     <hr>
 
-    <?php
-    $sql = "SELECT COUNT(id) AS count from follow_up_cust";
-    $res = mysqli_query($connection, $sql);
-    $row = mysqli_fetch_assoc($res);
-    $count = $row['count'];
-    ?>
     <h1 class="mt-4">All Records (<?php echo $count; ?>)</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item active">All the previous records</li>
     </ol>
-    <div class="d-flex">
-        <form method="POST" action="#" class="d-flex">
-            <input type="date" class="form-control mb-0 m-2" value="<?php echo $currentDate; ?>" name="date" style="width: fit-content;" required />
-            <button type="submit" class="btn btn-success mb-0 m-2">Search</button>
-        </form>
-        <a href="../public/follow_up.php"><button type="submit" class="btn btn-warning mb-0 m-2">Reset</button></a>
+    <div class="d-flex justify-content-between">
+        <div class="d-flex">
+            <form method="POST" action="#" class="d-flex">
+                <input type="date" class="form-control mb-0 m-2" value="<?php echo $currentDate; ?>" name="date" style="width: fit-content;" required />
+                <button type="submit" class="btn btn-success mb-0 m-2">Search</button>
+            </form>
+            <a href="../public/follow_up.php"><button type="submit" class="btn btn-warning mb-0 m-2">Reset</button></a>
+        </div>
+        <div class="d-flex">
+            <form method="POST" action="#" class="d-flex">
+                <input type="text" class="form-control mb-0 m-2" name="contact" required placeholder="Search by Contact" />
+                <button type="submit" class="btn btn-success mb-0 m-2">Search</button>
+            </form>
+        </div>
     </div>
     <?php
-    // Fetch data from orders table
-    // $query = "SELECT * FROM follow_up_cust fc JOIN follow_up_remarks fr ON fc.id = fr.follow_up_id";
-    // $result = mysqli_query($connection, $query);
 
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST['date'])) {
+            // Get the total number of records for pagination
+
             $provided_date = $_POST['date'];
             $query = "
                 SELECT fc.*, fr.*
@@ -178,6 +183,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         'customer' => [
                             'id' => $row['id'],
                             'name' => $row['name'],
+                            'contact' => $row['contact'],
+                            'address' => $row['address'],
+                            'agent' => $row['agent']
                         ],
                         'remarks' => []
                     ];
@@ -195,6 +203,90 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="card-body row">
                             <div class="col-6">
                                 <h5 class="card-title">Customer: <?php echo htmlspecialchars($info['customer']['name']); ?></h5>
+                                <p class="card-text mb-1"><strong>Contact:</strong> <?php echo htmlspecialchars($info['customer']['contact']); ?></p>
+                                <p class="card-text mb-1"><strong>Address:</strong> <?php echo htmlspecialchars($info['customer']['address']); ?></p>
+                                <p class="card-text mb-1"><strong>Agent:</strong> <?php echo htmlspecialchars($info['customer']['agent']); ?></p>
+                                <hr>
+                                <div class="remarks">
+                                    <?php foreach ($info['remarks'] as $remark) : ?>
+                                        <p class="card-text"><strong><?php echo htmlspecialchars($remark['remark_date']); ?>:</strong> <?php echo htmlspecialchars($remark['remark']); ?></p>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <form method="post" action="../process/follow-up-remark-process.php">
+                                    <div class="form-group">
+                                        <label for="remark">Add Remark</label>
+                                        <textarea name="remark" class="form-control mt-2" rows="3" required></textarea>
+                                    </div>
+                                    <input type="hidden" name="follow_up_id" value="<?php echo $follow_up_id; ?>">
+                                    <button type="submit" class="btn btn-success btn-block mt-4">Add Remark</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php
+
+            // Fetch the records
+            // while ($row = $result->fetch_assoc()) {
+            //     // Process each row
+            //     echo "<pre>";
+            //     print_r($row);
+            //     echo "</pre>";
+            // }
+
+            // Close the statement
+            $stmt->close();
+        } elseif (isset($_POST['contact'])) {
+            $searchContact = $_POST['contact'];
+            $query = "
+                SELECT fc.*, fr.*
+                FROM follow_up_cust fc
+                JOIN follow_up_remarks fr
+                ON fc.id = fr.follow_up_id
+                WHERE fc.contact LIKE ?
+            ";
+
+            $stmt = $connection->prepare($query);
+            $likeSearchContact = '%' . $searchContact . '%';
+            $stmt->bind_param('s', $likeSearchContact);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            $data = [];
+
+            while ($row = $result->fetch_assoc()) {
+                $follow_up_id = $row['follow_up_id'];
+                if (!isset($data[$follow_up_id])) {
+                    $data[$follow_up_id] = [
+                        'customer' => [
+                            'id' => $row['id'],
+                            'name' => $row['name'],
+                            'contact' => $row['contact'],
+                            'address' => $row['address'],
+                            'agent' => $row['agent']
+                        ],
+                        'remarks' => []
+                    ];
+                }
+                $data[$follow_up_id]['remarks'][] = [
+                    'remark_date' => $row['date'],
+                    'remark' => $row['remarks']
+                ];
+            }
+        ?>
+
+            <?php foreach ($data as $follow_up_id => $info) : ?>
+                <div class="customer mt-4">
+                    <div class="card">
+                        <div class="card-body row">
+                            <div class="col-6">
+                                <h5 class="card-title">Customer: <?php echo htmlspecialchars($info['customer']['name']); ?></h5>
+                                <p class="card-text mb-1"><strong>Contact:</strong> <?php echo htmlspecialchars($info['customer']['contact']); ?></p>
+                                <p class="card-text mb-1"><strong>Address:</strong> <?php echo htmlspecialchars($info['customer']['address']); ?></p>
+                                <p class="card-text mb-1"><strong>Agent:</strong> <?php echo htmlspecialchars($info['customer']['agent']); ?></p>
                                 <hr>
                                 <div class="remarks">
                                     <?php foreach ($info['remarks'] as $remark) : ?>
@@ -217,18 +309,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             <?php endforeach; ?>
 
-
         <?php
-
-            // Fetch the records
-            // while ($row = $result->fetch_assoc()) {
-            //     // Process each row
-            //     echo "<pre>";
-            //     print_r($row);
-            //     echo "</pre>";
-            // }
-
-            // Close the statement
             $stmt->close();
         }
     } else {
@@ -263,6 +344,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'customer' => [
                         'id' => $row['id'],
                         'name' => $row['name'],
+                        'contact' => $row['contact'],
+                        'address' => $row['address'],
+                        'agent' => $row['agent']
                     ],
                     'remarks' => []
                 ];
@@ -280,6 +364,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="card-body row">
                         <div class="col-6">
                             <h5 class="card-title">Customer: <?php echo htmlspecialchars($info['customer']['name']); ?></h5>
+                            <p class="card-text mb-1"><strong>Contact:</strong> <?php echo htmlspecialchars($info['customer']['contact']); ?></p>
+                            <p class="card-text mb-1"><strong>Address:</strong> <?php echo htmlspecialchars($info['customer']['address']); ?></p>
+                            <p class="card-text mb-1"><strong>Agent:</strong> <?php echo htmlspecialchars($info['customer']['agent']); ?></p>
                             <hr>
                             <div class="remarks">
                                 <?php foreach ($info['remarks'] as $remark) : ?>
@@ -300,7 +387,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
             </div>
-        <?php endforeach; ?>    
+        <?php endforeach; ?>
 
     <?php
 
@@ -316,56 +403,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
     }
 
-    // Check if there are any orders
-    // if (mysqli_num_rows($result) > 0) {
-    //     echo '<table class="table">';
-    //     echo '<thead>';
-    //     echo '<tr>';
-    //     echo '<th scope="col">ID</th>';
-    //     echo '<th scope="col">Rider Name</th>';
-    //     echo '<th scope="col">Reason</th>';
-    //     // echo '<th scope="col">Days</th>';
-    //     echo '<th scope="col">Amount</th>';
-    //     echo '<th scope="col">Date</th>';
-    //     echo '<th scope="col">Type</th>';
-    //     // echo '<th scope="col">Status</th>';
-    //     echo '</tr>';
-    //     echo '</thead>';
-    //     echo '<tbody>';
-
-    //     // Output data of each row
-    //     while ($row = mysqli_fetch_assoc($result)) {
-    //         // $statusClass = '';
-    //         // switch ($row['status']) {
-    //         //     case 'pending':
-    //         //         $statusClass = 'alert-warning';
-    //         //         break;
-    //         //     case 'delivered':
-    //         //         $statusClass = 'alert-success';
-    //         //         break;
-    //         //     default:
-    //         //         $statusClass = 'alert-secondary';
-    //         //         break;
-    //         // }
-
-    //         echo '<tr>';
-    //         echo '<td>' . $row['id'] . '</td>';
-    //         echo '<td>' . $row['name'] . '</td>';
-    //         echo '<td>' . $row['reason'] . '</td>';
-    //         // echo '<td>' . $row['weekdays'] . '</td>';
-    //         echo '<td>' . $row['amount'] . '</td>';
-    //         echo '<td>' . $row['date'] . '</td>';
-    //         echo '<td>' . $row['type'] . '</td>';
-    //         // echo '<td><div class="alert ' . $statusClass . ' mb-0" role="alert">' . $row['status'] . '</div></td>';
-    //         echo '</tr>';
-    //     }
-
-    //     echo '</tbody>';
-    //     echo '</table>';
-    // } else {
-    //     // No orders found
-    //     echo '<div class="alert alert-danger" role="alert">No Record found.</div>';
-    // }
     ?>
 
 </div>

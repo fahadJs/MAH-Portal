@@ -15,6 +15,32 @@ if (isset($_SESSION['ip_address'])) {
 require_once('../public/header.php');
 require_once('../db/db.php');
 
+// $sql = "SELECT COUNT(id) AS count from customers";
+// $res = mysqli_query($connection, $sql);
+// $row = mysqli_fetch_assoc($res);
+// $count = $row['count'];
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Check if search by ID form is submitted
+    if (isset($_POST['search_by_id'])) {
+        // Sanitize user input
+        $search_id = mysqli_real_escape_string($connection, $_POST['search_by_id']);
+        $query = "SELECT COUNT(id) as count FROM customers WHERE cust_number = '$search_id'";
+    }
+    // Check if search by name form is submitted
+    else if (isset($_POST['search_by_name'])) {
+        // Sanitize user input
+        $search_name = mysqli_real_escape_string($connection, $_POST['search_by_name']);
+        $query = "SELECT COUNT(id) as count FROM customers WHERE name LIKE '%$search_name%'";
+    }
+} else {
+    // If not a POST request, fetch all customers
+    $query = "SELECT COUNT(id) as count FROM customers";
+}
+
+$result = mysqli_query($connection, $query);
+$row = mysqli_fetch_assoc($result);
+$count = $row['count'];
 ?>
 
 <script>
@@ -35,25 +61,62 @@ require_once('../db/db.php');
 
 <div class="container-fluid px-4">
     <?php
-    $sql = "SELECT COUNT(id) AS count from customers";
-    $res = mysqli_query($connection, $sql);
-    $row = mysqli_fetch_assoc($res);
-    $count = $row['count'];
+
     ?>
-    <h1 class="mt-4">Dashboard (<?php echo $count; ?>)</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="mt-4">Dashboard (<?php echo $count; ?>)</h1>
+
+            <?php
+            echo $ip;
+            ?>
+
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Dashboard</li>
+            </ol>
+
+        </div>
+        <div>
+            <div class="d-flex">
+                <form method="POST" action="#" class="d-flex">
+                    <input type="text" class="form-control mb-0 m-2" name="search_by_name" required placeholder="Search by Name" />
+                    <button type="submit" class="btn btn-success mb-0 m-2">Search</button>
+                </form>
+            </div>
+
+            <div class="d-flex">
+                <form method="POST" action="#" class="d-flex">
+                    <input type="text" class="form-control mb-0 m-2" name="search_by_id" required placeholder="Search by ID eg. A-1" />
+                    <button type="submit" class="btn btn-success mb-0 m-2">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <?php
-    echo $ip;
-    ?>
 
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Dashboard</li>
-    </ol>
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Check if search by ID form is submitted
+        if (isset($_POST['search_by_id'])) {
+            // Sanitize user input
+            $search_id = mysqli_real_escape_string($connection, $_POST['search_by_id']);
+            $query = "SELECT * FROM customers WHERE cust_number = '$search_id'";
+        }
+        // Check if search by name form is submitted
+        else if (isset($_POST['search_by_name'])) {
+            // Sanitize user input
+            $search_name = mysqli_real_escape_string($connection, $_POST['search_by_name']);
+            $query = "SELECT * FROM customers WHERE name LIKE '%$search_name%'";
+        }
+    } else {
+        // If not a POST request, fetch all customers
+        $query = "SELECT * FROM customers";
+    }
 
-    <?php
-    // Fetch data from customers table
-    $query = "SELECT * FROM customers";
     $result = mysqli_query($connection, $query);
+    // Fetch data from customers table
+    // $query = "SELECT * FROM customers";
+    // $result = mysqli_query($connection, $query);
 
     // Check if there are any customers
     if (mysqli_num_rows($result) > 0) {
@@ -90,7 +153,7 @@ require_once('../db/db.php');
 
             // Button to open modal
             echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customerModal' . $customer['id'] . '">';
-            echo $customer['cust_number'] . '\'s Deals';
+            echo $customer['cust_number'] . '\'s Lunch Deals';
             echo '</button>';
 
             // Button to open Dinner modal
@@ -238,10 +301,27 @@ require_once('../db/db.php');
             echo '<div class="modal-dialog modal-dialog-scrollable modal-xl">';
             echo '<div class="modal-content">';
             echo '<div class="modal-header">';
-            echo '<h5 class="modal-title" id="exampleModalLabel">' . $customer['name'] . '\'s Deals</h5>';
+            echo '<h5 class="modal-title" id="exampleModalLabel">' . $customer['name'] . '\'s Lunch Deals</h5>';
             echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
             echo '</div>';
             echo '<div class="modal-body">';
+
+            $lunch_count = "SELECT COUNT(CASE WHEN status = 'pending' THEN 1 END) AS Pending_Count,
+            COUNT(CASE WHEN status = 'processing' THEN 1 END) AS Processing_Count,
+            COUNT(CASE WHEN status = 'on-hold' THEN 1 END) AS On_Hold_Count FROM customers_deals WHERE cust_id = '$customer_id'";
+            $lunch_count_res = mysqli_query($connection, $lunch_count);
+
+            if ($lunch_count_res) {
+                $row = mysqli_fetch_assoc($lunch_count_res);
+                echo '<div class="d-flex align-items-center justify-content-around">';
+                echo '<p class="mb-1">Pending: <strong>' . $row['Pending_Count'] . '</strong></p>';
+                echo '<p class="mb-1">Processing: <strong>' . $row['Processing_Count'] . '</strong></p>';
+                echo '<p class="mb-1">On-Hold: <strong>' . $row['On_Hold_Count'] . '</strong></p>';
+                echo '</div>';
+                echo '<hr>';
+            } else {
+                echo 'Query failed: ' . mysqli_error($connection);
+            }
 
             // Start form for submitting deal dates
             echo '<form action="../process/deal_update.php" method="POST">';
@@ -307,6 +387,23 @@ require_once('../db/db.php');
             echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
             echo '</div>';
             echo '<div class="modal-body">';
+
+            $dinner_count = "SELECT COUNT(CASE WHEN status = 'pending' THEN 1 END) AS Pending_Count,
+            COUNT(CASE WHEN status = 'processing' THEN 1 END) AS Processing_Count,
+            COUNT(CASE WHEN status = 'on-hold' THEN 1 END) AS On_Hold_Count FROM customers_dinner_deals WHERE cust_id = '$customer_id'";
+            $dinner_count_res = mysqli_query($connection, $dinner_count);
+
+            if ($dinner_count_res) {
+                $row = mysqli_fetch_assoc($dinner_count_res);
+                echo '<div class="d-flex align-items-center justify-content-around">';
+                echo '<p class="mb-1">Pending: <strong>' . $row['Pending_Count'] . '</strong></p>';
+                echo '<p class="mb-1">Processing: <strong>' . $row['Processing_Count'] . '</strong></p>';
+                echo '<p class="mb-1">On-Hold: <strong>' . $row['On_Hold_Count'] . '</strong></p>';
+                echo '</div>';
+                echo '<hr>';
+            } else {
+                echo 'Query failed: ' . mysqli_error($connection);
+            }
 
             // Start form for submitting deal dates
             echo '<form action="../process/deal_dinner_update.php" method="POST">';
@@ -394,6 +491,7 @@ require_once('../db/db.php');
         // No customers found
         echo '<div class="alert alert-danger" role="alert">No customers found.</div>';
     }
+
     ?>
 
 </div>
