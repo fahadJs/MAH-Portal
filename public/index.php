@@ -306,7 +306,7 @@ $count = $row['count'];
             echo '</div>';
             echo '<div class="modal-body">';
 
-            $lunch_count = "SELECT COUNT(CASE WHEN status = 'pending' THEN 1 END) AS Pending_Count,
+            $lunch_count = "SELECT MAX(date) AS Max_Date, COUNT(CASE WHEN status = 'pending' THEN 1 END) AS Pending_Count,
             COUNT(CASE WHEN status = 'processing' THEN 1 END) AS Processing_Count,
             COUNT(CASE WHEN status = 'on-hold' THEN 1 END) AS On_Hold_Count FROM customers_deals WHERE cust_id = '$customer_id'";
             $lunch_count_res = mysqli_query($connection, $lunch_count);
@@ -317,6 +317,7 @@ $count = $row['count'];
                 echo '<p class="mb-1">Pending: <strong>' . $row['Pending_Count'] . '</strong></p>';
                 echo '<p class="mb-1">Processing: <strong>' . $row['Processing_Count'] . '</strong></p>';
                 echo '<p class="mb-1">On-Hold: <strong>' . $row['On_Hold_Count'] . '</strong></p>';
+                echo '<p class="mb-1">Deal Epiry: <strong>' . $row['Max_Date'] . '</strong></p>';
                 echo '</div>';
                 echo '<hr>';
             } else {
@@ -388,7 +389,7 @@ $count = $row['count'];
             echo '</div>';
             echo '<div class="modal-body">';
 
-            $dinner_count = "SELECT COUNT(CASE WHEN status = 'pending' THEN 1 END) AS Pending_Count,
+            $dinner_count = "SELECT MAX(date) AS Max_Date, COUNT(CASE WHEN status = 'pending' THEN 1 END) AS Pending_Count,
             COUNT(CASE WHEN status = 'processing' THEN 1 END) AS Processing_Count,
             COUNT(CASE WHEN status = 'on-hold' THEN 1 END) AS On_Hold_Count FROM customers_dinner_deals WHERE cust_id = '$customer_id'";
             $dinner_count_res = mysqli_query($connection, $dinner_count);
@@ -399,6 +400,7 @@ $count = $row['count'];
                 echo '<p class="mb-1">Pending: <strong>' . $row['Pending_Count'] . '</strong></p>';
                 echo '<p class="mb-1">Processing: <strong>' . $row['Processing_Count'] . '</strong></p>';
                 echo '<p class="mb-1">On-Hold: <strong>' . $row['On_Hold_Count'] . '</strong></p>';
+                echo '<p class="mb-1">Deal Epiry: <strong>' . $row['Max_Date'] . '</strong></p>';
                 echo '</div>';
                 echo '<hr>';
             } else {
