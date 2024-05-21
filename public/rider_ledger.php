@@ -14,53 +14,23 @@ require_once('../db/db.php');
 date_default_timezone_set('Asia/Karachi');
 
 $currentDate = date('Y-m-d', strtotime('+1 day'));
-// $query = "SELECT * FROM customers WHERE start_date <= '$currentDate' AND status = 'active'";
-// $result = mysqli_query($connection, $query);
 
-// $customers = array();
-// while ($row = mysqli_fetch_assoc($result)) {
-//     $customerId = $row['id'];
-//     $customerName = $row['name'];
-//     $nextDay = date('Y-m-d', strtotime('+1 day'));
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Check if search by name form is submitted
+    if (isset($_POST['search_by_name'])) {
+        // Sanitize user input
+        $search_name = mysqli_real_escape_string($connection, $_POST['search_by_name']);
+        $query = "SELECT COUNT(id) as count FROM riders_ledger WHERE name LIKE '%$search_name%'";
+    }
+} else {
+    // If not a POST request, fetch all customers
+    $query = "SELECT COUNT(id) as count FROM riders_ledger";
+}
 
-//     if($_SERVER["REQUEST_METHOD"] == "POST"){
-//         if(isset($_POST['date'])){
-//             $nextDay = $_POST['date'];
-//         }
-//     }
-//     // $nextDay = date('Y-m-d');
-//     // Fetch pending deals for this customer
-//     $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND date = '$nextDay'";
-//     $dealResult = mysqli_query($connection, $dealQuery);
+$result = mysqli_query($connection, $query);
+$row = mysqli_fetch_assoc($result);
+$count = $row['count'];
 
-//     // if (mysqli_num_rows($dealResult) == 0) {
-//     //     $dealQuery = "SELECT * FROM customers_deals WHERE cust_id = '$customerId' AND date = '$nextDay'";
-//     //     $dealResult = mysqli_query($connection, $dealQuery);
-//     // }
-
-//     if (mysqli_num_rows($dealResult) > 0) {
-//         $dealRow = mysqli_fetch_assoc($dealResult);
-//         $dishName = $dealRow['dish'];
-//         $customerDealId = $dealRow['id'];
-//         $customerNumber = $row['cust_number'];
-//         $persons = $row['persons'];
-//         $status = $dealRow['status'];
-//         $type = $row['type'];
-//         $date = $dealRow['date'];
-
-//         // Store customer and deal data
-//         $customers[] = array(
-//             'id' => $customerDealId,
-//             'name' => $customerName,
-//             'number' => $customerNumber,
-//             'dish' => $dishName,
-//             'persons' => $persons,
-//             'status' => $status,
-//             'type' => $type,
-//             'date' => $date
-//         );
-//     }
-// }
 ?>
 
 <script>
@@ -89,7 +59,7 @@ $currentDate = date('Y-m-d', strtotime('+1 day'));
 
     <form method="POST" action="../process/rider_ledger_process.php" class="d-flex">
         <!-- <input type="text" class="form-control mb-0 m-2" name="name" required placeholder="Rider Name"/> -->
-        <select class="form-select form-control mb-0 m-2" name="name">
+        <select class="form-select form-control mb-0 m-2" name="search_by_name">
             <option hidden>Select Rider</option>
             <?php
             // Retrieve data from database and populate dropdown
@@ -108,14 +78,48 @@ $currentDate = date('Y-m-d', strtotime('+1 day'));
     </form>
     <hr>
 
-    <h1 class="mt-4">All Records</h1>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">All the previous records</li>
-    </ol>
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <h1 class="mt-4">All Records (<?php echo $count; ?>)</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">All the previous records</li>
+            </ol>
+        </div>
+        <div class="d-flex">
+            <form method="POST" action="#" class="d-flex">
+                <select class="form-select form-control mb-0 m-2" name="search_by_name">
+                    <option hidden>Select Rider</option>
+                    <?php
+                    // Retrieve data from database and populate dropdown
+                    $query1 = "SELECT * FROM riders";
+                    $result1 = mysqli_query($connection, $query1);
+                    while ($row = mysqli_fetch_assoc($result1)) {
+                        echo "<option value='" . $row['name'] . "'>" . $row['name'] . "</option>";
+                    }
+                    ?>
+                </select>
+                <button type="submit" class="btn btn-success mb-0 m-2">Search</button>
+            </form>
+        </div>
+    </div>
     <?php
-    // Fetch data from orders table
-    $query = "SELECT * FROM riders_ledger";
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Check if search by name form is submitted
+        if (isset($_POST['search_by_name'])) {
+            // Sanitize user input
+            $search_name = mysqli_real_escape_string($connection, $_POST['search_by_name']);
+            $query = "SELECT * FROM riders_ledger WHERE name LIKE '%$search_name%'";
+        }
+    } else {
+        // If not a POST request, fetch all customers
+        $query = "SELECT * FROM riders_ledger";
+    }
+
     $result = mysqli_query($connection, $query);
+    // Fetch data from orders table
+    // $query = "SELECT * FROM riders_ledger";
+    // $result = mysqli_query($connection, $query);
 
     // Check if there are any orders
     if (mysqli_num_rows($result) > 0) {
