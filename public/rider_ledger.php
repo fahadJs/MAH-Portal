@@ -59,7 +59,7 @@ $count = $row['count'];
 
     <form method="POST" action="../process/rider_ledger_process.php" class="d-flex">
         <!-- <input type="text" class="form-control mb-0 m-2" name="name" required placeholder="Rider Name"/> -->
-        <select class="form-select form-control mb-0 m-2" name="search_by_name">
+        <select class="form-select form-control mb-0 m-2" name="name">
             <option hidden>Select Rider</option>
             <?php
             // Retrieve data from database and populate dropdown
