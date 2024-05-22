@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://anunzio0786.website:8443/api/send/' . $message . '/' . urlencode($contact),
             CURLOPT_RETURNTRANSFER => true, // Return the response instead of outputting it
-            CURLOPT_SSL_VERIFYHOST => true, // Disable SSL host verification
+            CURLOPT_SSL_VERIFYHOST => false, // Disable SSL host verification
             CURLOPT_SSL_VERIFYPEER => false, // Disable SSL peer verification
         ));
 
