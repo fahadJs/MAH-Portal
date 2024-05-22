@@ -23,13 +23,13 @@ if (isset($_GET['cust_id'])) {
 ?>
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Add Dinner Deal</h1>
+    <h1 class="mt-4">Add BreakFast Deal</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-        <li class="breadcrumb-item active">Customers Dinner</li>
+        <li class="breadcrumb-item active">Customers BreakFast</li>
     </ol>
 
-    <form class="row g-3 mb-4" action="../process/dinner_deal_customer.php" method="POST">
+    <form class="row g-3 mb-4" action="../process/breakfast_deal_customer.php" method="POST">
         <ul class="mb-0">
             <li>Current deal: <span style="font-weight: bold;"><?php echo $custDetails['deal_name']?></span></li>
             <li>Deal price: <span style="font-weight: bold;"><?php echo $custDetails['deal_price']?></span></li>

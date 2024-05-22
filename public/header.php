@@ -49,50 +49,58 @@
                     <div class="nav">
                         <!-- <div class="sb-sidenav-menu-heading">Core</div> -->
                         <a class="nav-link" href="index.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"></div>
                             Dashboard
                         </a>
                         <hr class="m-0">
                         <a class="nav-link" href="customer.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"></div>
                             Manage Customer
                         </a>
                         <hr class="m-0">
+                        <a class="nav-link" href="orders_breakfast.php">
+                            <div class="sb-nav-link-icon"></div>
+                            Manage BreakFast Orders
+                        </a>
                         <a class="nav-link" href="orders.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"></div>
                             Manage Lunch Orders
                         </a>
 
                         <a class="nav-link" href="orders_dinner.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"></div>
                             Manage Dinner Orders
                         </a>
 
                         <hr class="m-0">
                         <a class="nav-link" href="delivery.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"></div>
                             Manage Deliveries
                         </a>
                         <hr class="m-0">
+                        <a class="nav-link" href="daily_breakfast_status.php">
+                            <div class="sb-nav-link-icon"></div>
+                            BreakFast Update Center
+                        </a>
                         <a class="nav-link" href="daily-status.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"></div>
                             Lunch Update Center
                         </a>
 
                         <a class="nav-link" href="daily_dinner_status.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"></div>
                             Dinner Update Center
                         </a>
                         <hr class="m-0">
                         <a class="nav-link" href="rider_ledger.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"></div>
                             Riders Ledger
                         </a>
                         <hr class="m-0">
 
                         <hr class="m-0">
                         <a class="nav-link" href="follow_up.php">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            <div class="sb-nav-link-icon"></div>
                             Follow Up Section
                         </a>
                         <hr class="m-0">

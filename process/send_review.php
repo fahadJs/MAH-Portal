@@ -54,10 +54,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Redirect back to the previous page or to a success page
-    header("Location: ../public/daily-status.php");
+    header("Location: ../public/index.php");
     exit();
 } else {
     // If the form is not submitted, redirect back to the previous page
-    header("Location: ../public/daily-status.php");
+    header("Location: ../public/index.php");
     exit();
 }

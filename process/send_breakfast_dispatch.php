@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Prepare and execute SQL statement to update the scheduled date
-        $updateQuery = "UPDATE orders_dinner SET update_status = 'Dispatched' WHERE id = '$custDealId'";
+        $updateQuery = "UPDATE orders_breakfast SET update_status = 'Dispatched' WHERE id = '$custDealId'";
         mysqli_query($connection, $updateQuery);
 
         $message = "Dear *$custName* \n\nYour *$packets* having:\n*$custDish* \n\n$helping_verb out for *Delivery!*";
@@ -67,10 +67,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Redirect back to the previous page or to a success page
-    header("Location: ../public/daily_dinner_status.php");
+    header("Location: ../public/daily_breakfast_status.php");
     exit();
 } else {
     // If the form is not submitted, redirect back to the previous page
-    header("Location: ../public/daily_dinner_status.php");
+    header("Location: ../public/daily_breakfast_status.php");
     exit();
 }

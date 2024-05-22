@@ -152,13 +152,18 @@ $count = $row['count'];
             echo '<p class="card-text">Start date: ' . $customer['start_date'] . '</p>';
 
             // Button to open modal
-            echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customerModal' . $customer['id'] . '">';
-            echo $customer['cust_number'] . '\'s Lunch Deals';
+            echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customerModalBreakfast' . $customer['id'] . '">';
+            echo 'BreakFast Deal';
+            echo '</button>';
+            
+            // Button to open modal
+            echo '<button type="button" style="margin-left: 20px;" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#customerModal' . $customer['id'] . '">';
+            echo 'Lunch Deal';
             echo '</button>';
 
             // Button to open Dinner modal
-            echo '<button type="button" style="margin-left: 20px;" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#customerModalDinner' . $customer['id'] . '">';
-            echo $customer['cust_number'] . '\'s Dinner Deals';
+            echo '<button type="button" style="margin-left: 20px;" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#customerModalDinner' . $customer['id'] . '">';
+            echo 'Dinner Deal';
             echo '</button>';
             // Button to update customer
             // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal' . $customer['id'] . '">';
@@ -195,12 +200,17 @@ $count = $row['count'];
                 echo '<p>No deals found for this customer.</p>';
             }
 
-            echo '<a href="/mah-portal/public/dinner_deal.php?cust_id=' . $customer['id'] . '">';
-            echo '<button style="margin-left: 20px;" type="button" class="btn btn-warning">';
-            echo 'Add Dinner Deal';
+            echo '<a href="/mah-portal/public/breakfast_deal.php?cust_id=' . $customer['id'] . '">';
+            echo '<button style="margin-left: 20px;" type="button" class="btn btn-primary">';
+            echo 'Add Breakfast';
             echo '</button>';
             echo '</a>';
 
+            echo '<a href="/mah-portal/public/dinner_deal.php?cust_id=' . $customer['id'] . '">';
+            echo '<button style="margin-left: 20px;" type="button" class="btn btn-secondary">';
+            echo 'Add Dinner';
+            echo '</button>';
+            echo '</a>';
 
             // Button to launch new modal
             // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newModal' . $customer['id'] . '">';
@@ -438,6 +448,88 @@ $count = $row['count'];
                 // echo '<h6>'. $deal['status'] . '</h6>';
                 echo '<select name="status[]" class="form-select">';
                 echo '<option selected hidden>' . $deal1['status'] . '</option>';
+                echo '<option value="pending" class="form-control">Pending</option>';
+                echo '<option value="processing" class="form-control">Processing</option>';
+                echo '<option value="on-hold" class="form-control">On-hold</option>';
+                echo '</select>';
+                echo '</td>';
+                echo '</tr>';
+            }
+
+            echo '</tbody>';
+            echo '</table>';
+            // End table for deals
+
+            // Submit button
+            echo '<button type="submit" class="btn btn-primary">Submit</button>';
+
+            // End form
+            echo '</form>';
+
+            echo '</div>'; // End modal body
+            echo '</div>'; // End modal content
+            echo '</div>'; // End modal dialog
+            echo '</div>'; // End modal fade
+
+            // Bootstrap Modal for customer BREAKFAST deals
+            echo '<div class="modal fade" id="customerModalBreakfast' . $customer['id'] . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">';
+            echo '<div class="modal-dialog modal-dialog-scrollable modal-xl">';
+            echo '<div class="modal-content">';
+            echo '<div class="modal-header">';
+            echo '<h5 class="modal-title" id="exampleModalLabel">' . $customer['name'] . '\'s Dinner Deals</h5>';
+            echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+            echo '</div>';
+            echo '<div class="modal-body">';
+
+            $breakfast_count = "SELECT MAX(date) AS Max_Date, COUNT(CASE WHEN status = 'pending' THEN 1 END) AS Pending_Count,
+            COUNT(CASE WHEN status = 'processing' THEN 1 END) AS Processing_Count,
+            COUNT(CASE WHEN status = 'on-hold' THEN 1 END) AS On_Hold_Count FROM customers_breakfast_deals WHERE cust_id = '$customer_id'";
+            $breakfast_count_res = mysqli_query($connection, $breakfast_count);
+
+            if ($breakfast_count_res) {
+                $row = mysqli_fetch_assoc($breakfast_count_res);
+                echo '<div class="d-flex align-items-center justify-content-around">';
+                echo '<p class="mb-1">Pending: <strong>' . $row['Pending_Count'] . '</strong></p>';
+                echo '<p class="mb-1">Processing: <strong>' . $row['Processing_Count'] . '</strong></p>';
+                echo '<p class="mb-1">On-Hold: <strong>' . $row['On_Hold_Count'] . '</strong></p>';
+                echo '<p class="mb-1">Deal Epiry: <strong>' . $row['Max_Date'] . '</strong></p>';
+                echo '</div>';
+                echo '<hr>';
+            } else {
+                echo 'Query failed: ' . mysqli_error($connection);
+            }
+
+            // Start form for submitting deal dates
+            echo '<form action="../process/deal_breakfast_update.php" method="POST">';
+
+            // Start table for deals
+            echo '<table class="table">';
+            echo '<thead>';
+            echo '<tr>';
+            echo '<th scope="col">Days</th>';
+            echo '<th scope="col">Dish</th>';
+            echo '<th scope="col">Scheduled at</th>';
+            // echo '<th scope="col">id</th>';
+            echo '<th scope="col">Re-schedule</th>';
+            echo '<th scope="col">Item status</th>';
+            echo '</tr>';
+            echo '</thead>';
+            echo '<tbody>';
+
+            // Loop through each deal item and create a row with a date picker
+            $deal_query_breakfast = "SELECT * FROM customers_breakfast_deals WHERE cust_id = '$customer_id'";
+            $deal_result_modal_breakfast = mysqli_query($connection, $deal_query_breakfast);
+            while ($deal2 = mysqli_fetch_assoc($deal_result_modal_breakfast)) {
+                echo '<tr>';
+                echo '<td>' . $deal2['days'] . '</td>';
+                echo '<td><input type="text" name="dish_names[]" class="form-control" value="' . $deal2['dish'] . '"/></td>';
+                echo '<td>' . $deal2['date'] . '</td>';
+                echo '<td hidden><input type="text" name="deal_items_id[]" class="form-control" value="' . $deal2['id'] . '" hidden></td>';
+                echo '<td><input type="date" class="form-control" name="deal_dates[]" value="' . $deal2['date'] . '" class="form-control" required></td>';
+                echo '<td>';
+                // echo '<h6>'. $deal['status'] . '</h6>';
+                echo '<select name="status[]" class="form-select">';
+                echo '<option selected hidden>' . $deal2['status'] . '</option>';
                 echo '<option value="pending" class="form-control">Pending</option>';
                 echo '<option value="processing" class="form-control">Processing</option>';
                 echo '<option value="on-hold" class="form-control">On-hold</option>';
