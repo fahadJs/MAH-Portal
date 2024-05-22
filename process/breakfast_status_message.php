@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Prepare and execute SQL update statements
-    $query = "UPDATE orders_dinner SET update_status = '$statusCode' WHERE cust_number = '$customerIds' AND id = '$dishIds'";
+    $query = "UPDATE orders_breakfast SET update_status = '$statusCode' WHERE cust_number = '$customerIds' AND id = '$dishIds'";
     $queryResult = mysqli_query($connection, $query);
 
     if (!$queryResult) {
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Redirect back to the page after updating
-    header("Location: ../public/daily_dinner_status.php");
+    header("Location: ../public/daily_breakfast_status.php");
     exit();
 } else {
     // If the form was not submitted via POST method, redirect to an error page or homepage
