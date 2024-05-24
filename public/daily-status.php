@@ -85,10 +85,10 @@ while ($row = mysqli_fetch_assoc($result)) {
 
 <?php $currentDate = date('Y-m-d'); ?>
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Daily Status - (<?php echo $currentDate; ?>)</h1>
+    <h1 class="mt-4">Daily Lunch Status - (<?php echo $currentDate; ?>)</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-        <li class="breadcrumb-item active">Daily Status for deliveries</li>
+        <li class="breadcrumb-item active">Daily Lunch Status for deliveries</li>
     </ol>
     <?php
     // Fetch data from orders table

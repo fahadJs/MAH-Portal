@@ -1,5 +1,11 @@
 <?php
 require_once('../db/db.php');
+require_once('../config/constant.php');
+$api_uri = API_URL;
+
+if (empty($api_uri)) {
+    die('Error: API_URL is empty.');
+}
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -35,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Initialize cURL handle
         $curl = curl_init();
-        $api_url = 'http://127.0.2.2:3000/api/follow/pdf/' . rawurlencode($name) . '/' . rawurlencode($contact) . '/' . rawurlencode($agent);
+        $api_url = $api_uri . '/api/follow/pdf/' . rawurlencode($name) . '/' . rawurlencode($contact) . '/' . rawurlencode($agent);
 
         // Set cURL options for asynchronous request
         curl_setopt_array($curl, [
@@ -47,7 +53,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]);
 
         // Execute cURL request asynchronously
-        curl_exec($curl);
+        $response = curl_exec($curl);
+        // Check for cURL errors
+        if (curl_errno($curl)) {
+            echo 'cURL error: ' . curl_error($curl);
+        } else {
+            // Optionally, handle the API response
+            if ($response === false) {
+                echo 'API call failed: ' . curl_error($curl);
+            } else {
+                echo 'API call succeeded: ' . $response;
+            }
+        }
         curl_close($curl);
 
         // Redirect to avoid form resubmission
@@ -65,4 +82,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 }
-?>

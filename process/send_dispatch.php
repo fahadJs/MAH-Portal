@@ -1,6 +1,12 @@
 <?php
 // Include database connection
 require_once('../db/db.php');
+require_once('../config/constant.php');
+$api_uri = API_URL;
+
+if (empty($api_uri)) {
+    die('Error: API_URL is empty.');
+}
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -23,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $custDish = mysqli_real_escape_string($connection, $customerDish[$i]);
         $custPersons = mysqli_real_escape_string($connection, $customerPersons[$i]);
 
-        if($custPersons > 1){
+        if ($custPersons > 1) {
             $packets = "$custPersons Packets";
             $helping_verb = "are";
         } else {
@@ -43,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Set cURL options
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://anunzio0786.website:8443/api/send/' . $message . '/' . urlencode($custContact),
+            CURLOPT_URL => $api_uri . '/api/send/' . $message . '/' . urlencode($custContact),
             CURLOPT_RETURNTRANSFER => true, // Return the response instead of outputting it
             CURLOPT_SSL_VERIFYHOST => false, // Disable SSL host verification
             CURLOPT_SSL_VERIFYPEER => false, // Disable SSL peer verification
@@ -52,15 +58,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Execute cURL request
         $response = curl_exec($curl);
 
-        // Check for errors
-        // if ($response === false) {
-        //     // cURL error occurred
-        //     $error = curl_error($curl);
-        //     echo "cURL error: " . $error;
-        // } else {
-        //     // No cURL error, handle the response as needed
-        //     echo "Response: " . $response;
-        // }
+        // Check for cURL errors
+        if (curl_errno($curl)) {
+            echo 'cURL error: ' . curl_error($curl);
+        } else {
+            // Optionally, handle the API response
+            if ($response === false) {
+                echo 'API call failed: ' . curl_error($curl);
+            } else {
+                echo 'API call succeeded: ' . $response;
+            }
+        }
 
         // Close cURL session
         curl_close($curl);
