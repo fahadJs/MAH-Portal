@@ -19,10 +19,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $connection->begin_transaction();
 
     try {
+        // Fetch the last inserted record
+        $select_query = "SELECT id, assigned_agent FROM follow_up_cust ORDER BY id DESC LIMIT 1";
+        $result = $connection->query($select_query);
+        $last_record = $result->fetch_assoc();
+
+        if ($last_record) {
+            $last_assigned_agent = $last_record['assigned_agent'];
+
+            // Determine the assigned agent for the new record
+            $new_assigned_agent = ($last_assigned_agent === 'ifrah') ? 'anum' : 'ifrah';
+        } else {
+            // If there is no previous record, set the default assigned agent
+            $new_assigned_agent = 'ifrah'; // Default assigned agent if no records exist
+        }
+
         // Insert customer details into the database
-        $insert_query = "INSERT INTO follow_up_cust (name, contact, address, agent) VALUES (?, ?, ?, ?)";
+        $insert_query = "INSERT INTO follow_up_cust (name, contact, address, agent, assigned_agent) VALUES (?, ?, ?, ?, ?)";
         $stmt = $connection->prepare($insert_query);
-        $stmt->bind_param('ssss', $name, $contact, $address, $agent);
+        $stmt->bind_param('sssss', $name, $contact, $address, $agent, $new_assigned_agent);
         $stmt->execute();
         $inserted_id = $stmt->insert_id;
         $stmt->close();
