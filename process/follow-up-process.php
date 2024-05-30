@@ -19,19 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $connection->begin_transaction();
 
     try {
-        // Fetch the last inserted record
-        $select_query = "SELECT id, assigned_agent FROM follow_up_cust ORDER BY id DESC LIMIT 1";
-        $result = $connection->query($select_query);
-        $last_record = $result->fetch_assoc();
 
-        if ($last_record) {
-            $last_assigned_agent = $last_record['assigned_agent'];
+        if ($agent == 'Anzu' || $agent == 'anzu') {
+            // Fetch the last inserted record
+            $select_query = "SELECT id, assigned_agent, agent FROM follow_up_cust WHERE LOWER(agent) = 'anzu' ORDER BY id DESC LIMIT 1";
+            $result = $connection->query($select_query);
+            $last_record = $result->fetch_assoc();
 
-            // Determine the assigned agent for the new record
-            $new_assigned_agent = ($last_assigned_agent === 'ifrah') ? 'anum' : 'ifrah';
+            if ($last_record) {
+                $last_assigned_agent = $last_record['assigned_agent'];
+                $new_assigned_agent = ($last_assigned_agent === 'Ifrah' || $last_assigned_agent === 'ifrah') ? 'Anum' : 'Ifrah';
+            }
         } else {
-            // If there is no previous record, set the default assigned agent
-            $new_assigned_agent = 'ifrah'; // Default assigned agent if no records exist
+            $new_assigned_agent = $agent;
         }
 
         // Insert customer details into the database
