@@ -130,6 +130,12 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '</div>';
 
     ?>
+    <hr>
+    <div class="d-flex justify-content-end">
+        <button id="sendMessageBulkArrived" class="btn btn-warning">Send <strong>BULK ARRIVED</strong> message</button>
+        <button id="sendMessageBulkDelivered" class="btn btn-warning" style="margin-left: 30px;">Send <strong>BULK DELIVERED</strong> message</button>
+    </div>
+    <hr>
     <script>
         function confirmReview() {
             if (confirm("Are you sure you want to send review messages to all customers?")) {
@@ -148,6 +154,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '<table class="table">';
     echo '<thead>';
     echo '<tr>';
+    echo '<th scope="col"></th>';
     echo '<th scope="col">Number</th>';
     echo '<th scope="col">Name</th>';
     echo '<th scope="col">Contact</th>';
@@ -203,6 +210,13 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo '<input type="hidden" name="customer_dish" value="' . $customer['dish'] . '" />';
         echo '<input type="hidden" name="contact" value="' . $customer['contact'] . '" />';
         echo '<button type="submit" class="btn btn-primary">Submit</button></td>';
+
+        echo '<td><input type="hidden" name="sel_customer_id[]" value="' . $customer['number'] . '" />';
+        echo '<input type="hidden" name="sel_dish_id[]" value="' . $customer['dishId'] . '" />';
+        echo '<input type="hidden" name="sel_persons[]" value="' . $customer['persons'] . '" />';
+        echo '<input type="hidden" name="sel_customer_name[]" value="' . $customer['name'] . '" />';
+        echo '<input type="hidden" name="sel_customer_dish[]" value="' . $customer['dish'] . '" />';
+        echo '<input type="hidden" name="sel_contact[]" value="' . $customer['contact'] . '" /></td>';
         // echo '<td>' . $customer['type'] . '</td>';
         // echo '<td><div class="alert ' . $statusClass . ' mb-0" role="alert">' . $row['status'] . '</div></td>';
         echo '</tr>';
@@ -212,6 +226,101 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '</tbody>';
     echo '</table>';
     ?>
+
+<script>
+        // document.getElementById('selectAll').addEventListener('change', function() {
+        //     var checkboxes = document.querySelectorAll('.customer-checkbox');
+        //     for (var checkbox of checkboxes) {
+        //         checkbox.checked = this.checked;
+        //     }
+        // });
+
+        document.getElementById('sendMessageBulkArrived').addEventListener('click', function() {
+            var form = document.getElementById('customerForm');
+            var selectedCustomers = document.querySelectorAll('.customer-checkbox:checked');
+
+            if (selectedCustomers.length === 0) {
+                alert('Please select at least one customer.');
+                return;
+            }
+
+            // Create a form element to submit selected customers
+            var submitForm = document.createElement('form');
+            submitForm.action = '../process/send_bulk_dinner_arrived.php'; // Change to your desired URL
+            submitForm.method = 'POST';
+
+            // Append selected customer information to the form
+            selectedCustomers.forEach(function(checkbox) {
+                var row = checkbox.closest('tr');
+                var customerId = row.querySelector('input[name="sel_customer_id[]"]').value;
+                var dishId = row.querySelector('input[name="sel_dish_id[]"]').value;
+                var persons = row.querySelector('input[name="sel_persons[]"]').value;
+                var customerName = row.querySelector('input[name="sel_customer_name[]"]').value;
+                var customerDish = row.querySelector('input[name="sel_customer_dish[]"]').value;
+                var contact = row.querySelector('input[name="sel_contact[]"]').value;
+
+                // var status = row.querySelector('select[name="status[]"]').value;
+
+                submitForm.appendChild(createHiddenInput('customer_id[]', customerId));
+                submitForm.appendChild(createHiddenInput('dish_id[]', dishId));
+                submitForm.appendChild(createHiddenInput('persons[]', persons));
+                submitForm.appendChild(createHiddenInput('customer_name[]', customerName));
+                submitForm.appendChild(createHiddenInput('customer_dish[]', customerDish));
+                submitForm.appendChild(createHiddenInput('contact[]', contact));
+                // submitForm.appendChild(createHiddenInput('status[]', status));
+            });
+
+            document.body.appendChild(submitForm);
+            submitForm.submit();
+        });
+
+        document.getElementById('sendMessageBulkDelivered').addEventListener('click', function() {
+            var form = document.getElementById('customerForm');
+            var selectedCustomers = document.querySelectorAll('.customer-checkbox:checked');
+
+            if (selectedCustomers.length === 0) {
+                alert('Please select at least one customer.');
+                return;
+            }
+
+            // Create a form element to submit selected customers
+            var submitForm = document.createElement('form');
+            submitForm.action = '../process/send_bulk_dinner_delivered.php'; // Change to your desired URL
+            submitForm.method = 'POST';
+
+            // Append selected customer information to the form
+            selectedCustomers.forEach(function(checkbox) {
+                var row = checkbox.closest('tr');
+                var customerId = row.querySelector('input[name="sel_customer_id[]"]').value;
+                var dishId = row.querySelector('input[name="sel_dish_id[]"]').value;
+                var persons = row.querySelector('input[name="sel_persons[]"]').value;
+                var customerName = row.querySelector('input[name="sel_customer_name[]"]').value;
+                var customerDish = row.querySelector('input[name="sel_customer_dish[]"]').value;
+                var contact = row.querySelector('input[name="sel_contact[]"]').value;
+
+                // var status = row.querySelector('select[name="status[]"]').value;
+
+                submitForm.appendChild(createHiddenInput('customer_id[]', customerId));
+                submitForm.appendChild(createHiddenInput('dish_id[]', dishId));
+                submitForm.appendChild(createHiddenInput('persons[]', persons));
+                submitForm.appendChild(createHiddenInput('customer_name[]', customerName));
+                submitForm.appendChild(createHiddenInput('customer_dish[]', customerDish));
+                submitForm.appendChild(createHiddenInput('contact[]', contact));
+                // submitForm.appendChild(createHiddenInput('status[]', status));
+            });
+
+            document.body.appendChild(submitForm);
+            submitForm.submit();
+        });
+
+        function createHiddenInput(name, value) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = value;
+            return input;
+        }
+    </script>
 
 </div>
 
