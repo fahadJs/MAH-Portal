@@ -187,6 +187,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
         echo '<form action="../process/dinner_status_message.php" method="POST">';
         echo '<tr>';
+        echo '<td><input type="checkbox" name="customers[]" value="' . $customer['number'] . '" class="customer-checkbox" /></td>';
         echo '<td>' . $customer['number'] . '</td>';
         echo '<td>' . $customer['name'] . '</td>';
         echo '<td>' . $customer['contact'] . '</td>';
