@@ -92,6 +92,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             window.location.href = '../public/follow_up.php';
         }, 2000);
     }
+
+    if (success === 'false') {
+        const message = urlParams.get('error');
+        Swal.fire({
+            icon: 'error',
+            title: message,
+            showConfirmButton: false,
+            timer: 2000,
+        });
+        setTimeout(function() {
+            window.location.href = '../public/follow_up.php';
+        }, 2000);
+    }
 </script>
 
 <div class="container-fluid px-4">

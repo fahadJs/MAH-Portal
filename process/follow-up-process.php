@@ -19,26 +19,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $connection->begin_transaction();
 
     try {
-
-        if ($agent == 'Anzu' || $agent == 'anzu') {
-            // Fetch the last inserted record
+        // Check if the agent is Anzu
+        if (strtolower($agent) == 'anzu') {
+            // Fetch the last inserted record for Anzu
             $select_query = "SELECT id, assigned_agent, agent FROM follow_up_cust WHERE LOWER(agent) = 'anzu' ORDER BY id DESC LIMIT 1";
             $result = $connection->query($select_query);
-            $last_record = $result->fetch_assoc();
+            if (!$result) {
+                throw new Exception("Select query failed: " . $connection->error);
+            }
 
+            $last_record = $result->fetch_assoc();
             if ($last_record) {
                 $last_assigned_agent = $last_record['assigned_agent'];
-                $new_assigned_agent = ($last_assigned_agent === 'Ifrah' || $last_assigned_agent === 'ifrah') ? 'Anum' : 'Ifrah';
+                $new_assigned_agent = (strtolower($last_assigned_agent) === 'ifrah') ? 'Anum' : 'Ifrah';
+            } else {
+                $new_assigned_agent = 'Ifrah'; // Default to Ifrah if no previous record found
             }
         } else {
             $new_assigned_agent = $agent;
         }
 
+        // Check for existing contact
+        $checkExisting = "SELECT * FROM follow_up_cust WHERE contact = '$contact'";
+        $existRes = mysqli_query($connection, $checkExisting);
+        if (!$existRes) {
+            throw new Exception("Check existing query failed: " . $connection->error);
+        }
+
+        if (mysqli_num_rows($existRes) > 0) {
+            header("Location: ../public/follow_up.php?success=false&error=duplicate+found");
+            exit();
+        }
+
         // Insert customer details into the database
         $insert_query = "INSERT INTO follow_up_cust (name, contact, address, agent, assigned_agent) VALUES (?, ?, ?, ?, ?)";
         $stmt = $connection->prepare($insert_query);
+        if (!$stmt) {
+            throw new Exception("Prepare statement failed: " . $connection->error);
+        }
+
         $stmt->bind_param('sssss', $name, $contact, $address, $agent, $new_assigned_agent);
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            throw new Exception("Execute statement failed: " . $stmt->error);
+        }
+
         $inserted_id = $stmt->insert_id;
         $stmt->close();
 
@@ -46,9 +70,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $remark_date = date('Y-m-d'); // Use current date for new remarks
         $insert_query = "INSERT INTO follow_up_remarks (follow_up_id, date, remarks) VALUES (?, ?, ?)";
         $stmt = $connection->prepare($insert_query);
+        if (!$stmt) {
+            throw new Exception("Prepare statement failed: " . $connection->error);
+        }
+
         $default_remark = 'No Remarks yet!';
         $stmt->bind_param('sss', $inserted_id, $remark_date, $default_remark);
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            throw new Exception("Execute statement failed: " . $stmt->error);
+        }
+
         $stmt->close();
 
         // Commit the transaction
@@ -71,13 +102,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $response = curl_exec($curl);
         // Check for cURL errors
         if (curl_errno($curl)) {
-            echo 'cURL error: ' . curl_error($curl);
+            error_log('cURL error: ' . curl_error($curl));
         } else {
             // Optionally, handle the API response
             if ($response === false) {
-                echo 'API call failed: ' . curl_error($curl);
+                error_log('API call failed: ' . curl_error($curl));
             } else {
-                echo 'API call succeeded: ' . $response;
+                error_log('API call succeeded: ' . $response);
             }
         }
         curl_close($curl);
