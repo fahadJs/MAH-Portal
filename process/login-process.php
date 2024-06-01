@@ -50,7 +50,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
                 // $_SESSION['name'] = $row['name'];
 
-                $_SESSION['user_id'] = $row['id'];
+                $_SESSION['admin_user_id'] = $row['id'];
 
                 // Get the user's IP address
                 if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
