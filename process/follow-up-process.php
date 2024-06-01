@@ -40,16 +40,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         // Check for existing contact
-        $checkExisting = "SELECT * FROM follow_up_cust WHERE contact = '$contact'";
-        $existRes = mysqli_query($connection, $checkExisting);
-        if (!$existRes) {
-            throw new Exception("Check existing query failed: " . $connection->error);
-        }
+        // $checkExisting = "SELECT * FROM follow_up_cust WHERE contact = '$contact'";
+        // $existRes = mysqli_query($connection, $checkExisting);
+        // if (!$existRes) {
+        //     throw new Exception("Check existing query failed: " . $connection->error);
+        // }
 
-        if (mysqli_num_rows($existRes) > 0) {
-            header("Location: ../public/follow_up.php?success=false&error=duplicate+found");
-            exit();
-        }
+        // if (mysqli_num_rows($existRes) > 0) {
+        //     header("Location: ../public/follow_up.php?success=false&error=duplicate+found");
+        //     exit();
+        // }
 
         // Insert customer details into the database
         $insert_query = "INSERT INTO follow_up_cust (name, contact, address, agent, assigned_agent) VALUES (?, ?, ?, ?, ?)";
