@@ -19,6 +19,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $connection->begin_transaction();
 
     try {
+        // Check for existing contact
+        $checkExisting = "SELECT * FROM follow_up_cust WHERE contact = '$contact'";
+        $existRes = mysqli_query($connection, $checkExisting);
+        if (!$existRes) {
+            throw new Exception("Check existing query failed: " . $connection->error);
+        }
+
+        if (mysqli_num_rows($existRes) > 0) {
+            header("Location: ../public/follow_up.php?success=false&error=duplicate+found");
+            exit();
+        }
+
         // Check if the agent is Anzu
         if (strtolower($agent) == 'anzu') {
             // Fetch the last inserted record for Anzu
@@ -31,25 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $last_record = $result->fetch_assoc();
             if ($last_record) {
                 $last_assigned_agent = $last_record['assigned_agent'];
-                $new_assigned_agent = (strtolower($last_assigned_agent) === 'ifrah') ? 'Anum' : 'Ifrah';
+                $new_assigned_agent = ($last_assigned_agent == 'ifrah' || $last_assigned_agent == 'Ifrah') ? 'Anum' : 'Ifrah';
             } else {
                 $new_assigned_agent = 'Ifrah'; // Default to Ifrah if no previous record found
             }
         } else {
             $new_assigned_agent = $agent;
         }
-
-        // Check for existing contact
-        // $checkExisting = "SELECT * FROM follow_up_cust WHERE contact = '$contact'";
-        // $existRes = mysqli_query($connection, $checkExisting);
-        // if (!$existRes) {
-        //     throw new Exception("Check existing query failed: " . $connection->error);
-        // }
-
-        // if (mysqli_num_rows($existRes) > 0) {
-        //     header("Location: ../public/follow_up.php?success=false&error=duplicate+found");
-        //     exit();
-        // }
 
         // Insert customer details into the database
         $insert_query = "INSERT INTO follow_up_cust (name, contact, address, agent, assigned_agent) VALUES (?, ?, ?, ?, ?)";
