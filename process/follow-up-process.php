@@ -44,8 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($last_record) {
                 $last_assigned_agent = $last_record['assigned_agent'];
                 $new_assigned_agent = ($last_assigned_agent == 'ifrah' || $last_assigned_agent == 'Ifrah') ? 'Anum' : 'Ifrah';
-            } else {
-                $new_assigned_agent = 'Ifrah'; // Default to Ifrah if no previous record found
             }
         } else {
             $new_assigned_agent = $agent;
