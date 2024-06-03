@@ -42,7 +42,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
             $row = mysqli_fetch_assoc($result);
 
-            if ($row['username'] === 'root' && $row['password'] === 'root') {
+            if ($row['username'] === 'root') {
 
                 // echo "Logged in!";
 
@@ -92,7 +92,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 header("Location: ../public/index.php");
 
                 exit();
-            } else if ($row['username'] === 'profile' && $row['password'] === 'profile') {
+            } else if ($row['username'] === 'profile') {
 
                 // echo "Logged in!";
 
@@ -140,11 +140,6 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 $_SESSION['ip_address'] = $ip_address;
 
                 header("Location: /mah-portal-profile/public/index.php");
-
-                exit();
-            } else {
-
-                header("Location: ../public/login.php?error=Incorect User name or password");
 
                 exit();
             }
