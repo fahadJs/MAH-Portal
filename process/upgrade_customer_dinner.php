@@ -33,20 +33,13 @@ $deal_item_date = $_POST['deal_item_date'];
     // $update_query = "UPDATE customers SET cust_number = '$customID' WHERE id = $cust_id";
     // mysqli_query($connection, $update_query);
 
-    $custNumQuery = "SELECT cust_number FROM customers WHERE id = '$cust_id'";
-    $custNumRes = mysqli_query($connection, $custNumQuery);
-
-    if (mysqli_num_rows($custNumRes) > 0) {
-        $row = mysqli_fetch_assoc($custNumRes);
-        $cust_number = $row['cust_number'];
-    }
-
-    $update_query = "INSERT INTO customers_dinner (cust_id, cust_number, name, contact, email, deal_name, address,  deal_price, delivery_price, start_date, persons, type) VALUES ('$cust_id', '$cust_number', '$name', '$contact', '$email', '$deal_name', '$address', '$deal_price', '$delivery_price', '$start_date', '$number_of_persons', '$type');
-    ";
+    $update_query = "UPDATE customers_dinner SET deal_name = '$deal_name', deal_price = '$deal_price', delivery_price = '$delivery_price', start_date = '$start_date', persons = '$number_of_persons', type = '$type' WHERE cust_id = $cust_id";
     mysqli_query($connection, $update_query);
 
-    // $remove_query = "DELETE FROM customers_deals WHERE cust_id = $cust_id";
-    // mysqli_query($connection, $remove_query);
+
+
+    $remove_query = "DELETE FROM customers_dinner_deals WHERE cust_id = $cust_id";
+    mysqli_query($connection, $remove_query);
 
     // Retrieve additional form data for deal items
     $deal_item_names = $_POST['deal_item_name'];

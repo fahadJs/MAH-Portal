@@ -41,8 +41,7 @@ $deal_item_date = $_POST['deal_item_date'];
         $cust_number = $row['cust_number'];
     }
 
-    $update_query = "INSERT INTO customers_dinner (cust_id, cust_number, name, contact, email, deal_name, address,  deal_price, delivery_price, start_date, persons, type) VALUES ('$cust_id', '$cust_number', '$name', '$contact', '$email', '$deal_name', '$address', '$deal_price', '$delivery_price', '$start_date', '$number_of_persons', '$type');
-    ";
+    $update_query = "UPDATE customers SET deal_name = '$deal_name', deal_price = '$deal_price', delivery_price = '$delivery_price', start_date = '$start_date', persons = '$number_of_persons', type = '$type' WHERE id = '$cust_id'";
     mysqli_query($connection, $update_query);
 
     // $remove_query = "DELETE FROM customers_deals WHERE cust_id = $cust_id";
@@ -60,7 +59,7 @@ $deal_item_date = $_POST['deal_item_date'];
         $deal_date = $deal_item_date[$i - 1];
 
         // Prepare and execute SQL statement to insert deal details
-        $query_deal = "INSERT INTO customers_dinner_deals (cust_id, dish, days, date) VALUES ('$cust_id', '$deal_name', '$deal_days', '$deal_date')";
+        $query_deal = "INSERT INTO customers_deals (cust_id, dish, days, date) VALUES ('$cust_id', '$deal_name', '$deal_days', '$deal_date')";
         mysqli_query($connection, $query_deal);
     }
     header("Location: ../public/index.php?success=true#cust$cust_id");
