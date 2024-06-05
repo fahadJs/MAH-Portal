@@ -30,12 +30,12 @@ if (isset($_GET['cust_id'])) {
     </ol>
 
     <form class="row g-3 mb-4" action="../process/breakfast_deal_customer.php" method="POST">
-        <ul class="mb-0">
+        <!-- <ul class="mb-0">
             <li>Current deal: <span style="font-weight: bold;"><?php echo $custDetails['deal_name']?></span></li>
             <li>Deal price: <span style="font-weight: bold;"><?php echo $custDetails['deal_price']?></span></li>
             <li>Delivery price: <span style="font-weight: bold;"><?php echo $custDetails['delivery_price']?></span></li>
             <li>Customer type: <span style="font-weight: bold;"><?php echo $custDetails['type']?></span></li>
-        </ul>
+        </ul> -->
         <!-- <div id="loader" style="display: none; color: green">Fetching please wait...</div> -->
         <div id="loader" style="display: none;" class="alert alert-primary" role="alert">
             Fetching please wait ...

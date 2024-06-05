@@ -47,6 +47,7 @@ $count = $row['count'];
     // Check if the URL contains a success parameter
     const urlParams = new URLSearchParams(window.location.search);
     const success = urlParams.get('success');
+    const hashId = window.location.hash;
 
     // If the success parameter is present and set to 'true', show the success alert
     if (success === 'true') {
@@ -56,6 +57,9 @@ $count = $row['count'];
             showConfirmButton: false,
             timer: 2000
         });
+        setTimeout(function() {
+            window.location.href = '../public/index.php'+hashId;
+        }, 2000);
     }
 </script>
 
@@ -127,9 +131,10 @@ $count = $row['count'];
             $deal_query = "SELECT * FROM customers_deals WHERE cust_id = '$customer_id'";
             $deal_result = mysqli_query($connection, $deal_query);
 
-            echo '<div class="card mb-4">';
+            echo '<div class="card mb-4" id=cust' . $customer['id'] . '>';
             echo '<div class="card-header">' . $customer['cust_number'] . '</div>';
             echo '<div class="card-body">';
+            echo '<div class="d-flex align-items-center justify-content-between">';
             echo '<h5 class="card-title">' . $customer['name'];
 
             if ($customer['status'] == 'active') {
@@ -143,74 +148,329 @@ $count = $row['count'];
             }
 
             echo '</h5>';
+            echo '<div class="d-flex ">';
+            ?>
+
+            <!-- <form action="../process/cancel.php" method="POST">
+                <input type="hidden" value="<?php echo $customer_id;?>"/>
+                <button class="btn btn-danger">Cancel</button>
+            </form>
+
+            <form action="../process/pause.php" method="POST" style="margin-left: 10px;">
+                <input type="hidden" value="<?php echo $customer_id;?>"/>
+                <button class="btn btn-warning">Pause</button>
+            </form>
+
+            <form action="../process/resume.php" method="POST" style="margin-left: 10px;">
+                <input type="hidden" value="<?php echo $customer_id;?>"/>
+                <button class="btn btn-success">Resume</button>
+            </form> -->
+
+            <?php
+            echo '</div>';
+            echo '</div>';
 
             echo '<p class="card-text m-0">Contact: ' . $customer['contact'] . '</p>';
             echo '<p class="card-text m-0">Email: ' . $customer['email'] . '</p>';
             echo '<p class="card-text m-0">Address: ' . $customer['address'] . '</p>';
-            echo '<p class="card-text m-0">Agent: ' . $customer['agent'] . '</p>';
-            echo '<p class="card-text m-0" style="font-weight: bold;">Type: ' . $customer['type'] . '</p>';
-            echo '<p class="card-text">Start date: ' . $customer['start_date'] . '</p>';
+            echo '<p class="card-text">Agent: ' . $customer['agent'] . '</p>';
+            // echo '<p class="card-text m-0" style="font-weight: bold;">Type: ' . $customer['type'] . '</p>';
+            // echo '<p class="card-text">Start date: ' . $customer['start_date'] . '</p>';
+
+            echo '<div class="d-flex">';
+
+            echo '<div class="card flex-fill">';
+            echo '<div class="card-header">Breakfast</div>';
+            echo '<div class="card-body">';
+            echo '<div class="d-flex flex-column">';
+            // Button to open modal
+
+            echo '<button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#customerModalBreakfast' . $customer['id'] . '">';
+            echo 'Deal';
+            echo '</button>';
+
+            // Query the database to check for records
+            $query_bf = "SELECT COUNT(id) AS record_count FROM customers_breakfast_deals WHERE cust_id = $customer_id";
+            $result_bf = $connection->query($query_bf);
+
+            // Fetch the result
+            $row_bf = $result_bf->fetch_assoc();
+            $record_count_bf = $row_bf['record_count'];
+
+            // Determine button states
+            $add_button_disabled_bf = $record_count_bf > 0;
+            $upgrade_button_disabled_bf = $record_count_bf == 0;
+
+            // Output the "Add" button conditionally
+            if ($add_button_disabled_bf) {
+                echo '<div class="w-100 mt-2">';
+                echo '<button type="button" class="btn btn-primary w-100" disabled>';
+                echo 'Add';
+                echo '</button>';
+                echo '</div>';
+            } else {
+                echo '<a href="../public/breakfast_deal.php?cust_id=' . $customer_id . '" class="w-100 mt-2">';
+                echo '<button type="button" class="btn btn-primary w-100">';
+                echo 'Add';
+                echo '</button>';
+                echo '</a>';
+            }
+
+            // Output the "Upgrade" button conditionally
+            if ($upgrade_button_disabled_bf) {
+                echo '<div class="w-100 mt-2">';
+                echo '<button type="button" class="btn btn-success w-100" disabled>';
+                echo 'Upgrade';
+                echo '</button>';
+                echo '</div>';
+            } else {
+                echo '<a href="/mah-portal/public/upgrade_breakfast.php?cust_id=' . $customer_id . '" class="w-100 mt-2">';
+                echo '<button type="button" class="btn btn-success w-100">';
+                echo 'Upgrade';
+                echo '</button>';
+                echo '</a>';
+            }
+
+            // echo '<a href="/mah-portal/public/breakfast_deal.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
+            // echo '<button type="button" class="btn btn-primary w-100">';
+            // echo 'Add';
+            // echo '</button>';
+            // echo '</a>';
+
+            // echo '<a href="/mah-portal/public/upgrade_breakfast.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
+            // echo '<button type="button" class="btn btn-success w-100">';
+            // echo 'Upgrade';
+            // echo '</button>';
+            // echo '</a>';
+
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+
+
+            echo '<div class="card flex-fill" style="margin-left:20px;">';
+            echo '<div class="card-header">Lunch</div>';
+            echo '<div class="card-body">';
+            echo '<div class="d-flex flex-column">';
+            // Button to open modal
+
+            echo '<button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#customerModal' . $customer['id'] . '">';
+            echo 'Deal';
+            echo '</button>';
+
+            // Query the database to check for records
+            $query_l = "SELECT COUNT(id) AS record_count FROM customers_deals WHERE cust_id = $customer_id";
+            $result_l = $connection->query($query_l);
+
+            // Fetch the result
+            $row_l = $result_l->fetch_assoc();
+            $record_count_l = $row_l['record_count'];
+
+            // Determine button states
+            $add_button_disabled_l = $record_count_l > 0;
+            $upgrade_button_disabled_l = $record_count_l == 0;
+
+            // Output the "Add" button conditionally
+            if ($add_button_disabled_l) {
+                echo '<div class="w-100 mt-2">';
+                echo '<button type="button" class="btn btn-primary w-100" disabled>';
+                echo 'Add';
+                echo '</button>';
+                echo '</div>';
+            } else {
+                echo '<a href="../public/lunch_deal.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
+                echo '<button type="button" class="btn btn-primary w-100">';
+                echo 'Add';
+                echo '</button>';
+                echo '</a>';
+            }
+
+            // Output the "Upgrade" button conditionally
+            if ($upgrade_button_disabled_l) {
+                echo '<div class="w-100 mt-2">';
+                echo '<button type="button" class="btn btn-success w-100" disabled>';
+                echo 'Upgrade';
+                echo '</button>';
+                echo '</div>';
+            } else {
+                echo '<a href="../public/upgrade.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
+                echo '<button type="button" class="btn btn-success w-100">';
+                echo 'Upgrade';
+                echo '</button>';
+                echo '</a>';
+            }
+
+            // echo '<a href="/mah-portal/public/lunch_deal.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
+            // echo '<button type="button" class="btn btn-primary w-100">';
+            // echo 'Add';
+            // echo '</button>';
+            // echo '</a>';
+
+            // echo '<a href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
+            // echo '<button type="button" class="btn btn-success w-100">';
+            // echo 'Upgrade';
+            // echo '</button>';
+            // echo '</a>';
+
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+
+
+            echo '<div class="card flex-fill" style="margin-left:20px;">';
+            echo '<div class="card-header">Dinner</div>';
+            echo '<div class="card-body">';
+            echo '<div class="d-flex flex-column">';
+            // Button to open modal
+
+            echo '<button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#customerModalDinner' . $customer['id'] . '">';
+            echo 'Deal';
+            echo '</button>';
+
+            // Query the database to check for records
+            $query_d = "SELECT COUNT(id) AS record_count FROM customers_dinner_deals WHERE cust_id = $customer_id";
+            $result_d = $connection->query($query_d);
+
+            // Fetch the result
+            $row_d = $result_d->fetch_assoc();
+            $record_count_d = $row_d['record_count'];
+
+            // Determine button states
+            $add_button_disabled_d = $record_count_d > 0;
+            $upgrade_button_disabled_d = $record_count_d == 0;
+
+            // Output the "Add" button conditionally
+            if ($add_button_disabled_d) {
+                echo '<div class="w-100 mt-2">';
+                echo '<button type="button" class="btn btn-primary w-100" disabled>';
+                echo 'Add';
+                echo '</button>';
+                echo '</div>';
+            } else {
+                echo '<a href="../public/dinner_deal.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
+                echo '<button type="button" class="btn btn-primary w-100">';
+                echo 'Add';
+                echo '</button>';
+                echo '</a>';
+            }
+
+            // Output the "Upgrade" button conditionally
+            if ($upgrade_button_disabled_d) {
+                echo '<div class="w-100 mt-2">';
+                echo '<button type="button" class="btn btn-success w-100" disabled>';
+                echo 'Upgrade';
+                echo '</button>';
+                echo '</div>';
+            } else {
+                echo '<a href="../public/upgrade_dinner.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
+                echo '<button type="button" class="btn btn-success w-100">';
+                echo 'Upgrade';
+                echo '</button>';
+                echo '</a>';
+            }
+
+            // echo '<a href="/mah-portal/public/dinner_deal.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
+            // echo '<button type="button" class="btn btn-primary w-100">';
+            // echo 'Add';
+            // echo '</button>';
+            // echo '</a>';
+
+            // echo '<a href="/mah-portal/public/upgrade_dinner.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
+            // echo '<button type="button" class="btn btn-success w-100">';
+            // echo 'Upgrade';
+            // echo '</button>';
+            // echo '</a>';
+
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+
+
+            // echo '<div class="card flex-fill" style="margin-left:20px;">';
+            // echo '<div class="card-header">Diet</div>';
+            // echo '<div class="card-body">';
+            // echo '<div class="d-flex flex-column">';
+            // // Button to open modal
+
+            // echo '<button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#customerModalDiet' . $customer['id'] . '">';
+            // echo 'Deal';
+            // echo '</button>';
+
+            // echo '<a href="/mah-portal/public/diet_deal.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
+            // echo '<button type="button" class="btn btn-primary w-100">';
+            // echo 'Add';
+            // echo '</button>';
+            // echo '</a>';
+
+            // echo '<a href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
+            // echo '<button type="button" class="btn btn-success w-100">';
+            // echo 'Upgrade';
+            // echo '</button>';
+            // echo '</a>';
+
+            // echo '</div>';
+            // echo '</div>';
+            // echo '</div>';
+
+
 
             // Button to open modal
-            echo '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customerModalBreakfast' . $customer['id'] . '">';
-            echo 'BreakFast Deal';
-            echo '</button>';
-            
-            // Button to open modal
-            echo '<button type="button" style="margin-left: 20px;" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#customerModal' . $customer['id'] . '">';
-            echo 'Lunch Deal';
-            echo '</button>';
+            // echo '<button type="button" style="margin-left: 20px;" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#customerModal' . $customer['id'] . '">';
+            // echo 'Lunch Deal';
+            // echo '</button>';
 
-            // Button to open Dinner modal
-            echo '<button type="button" style="margin-left: 20px;" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#customerModalDinner' . $customer['id'] . '">';
-            echo 'Dinner Deal';
-            echo '</button>';
+            // // Button to open Dinner modal
+            // echo '<button type="button" style="margin-left: 20px;" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#customerModalDinner' . $customer['id'] . '">';
+            // echo 'Dinner Deal';
+            // echo '</button>';
+
+            // echo '<a href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '">';
+            // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success">';
+            // echo 'Upgrade';
+            // echo '</button>';
+            // echo '</a>';
+
+            // echo '<a href="/mah-portal/public/dinner_deal.php?cust_id=' . $customer['id'] . '">';
+            // echo '<button style="margin-left: 20px;" type="button" class="btn btn-secondary">';
+            // echo 'Add Dinner';
+            // echo '</button>';
+            // echo '</a>';
+
+            echo '</div>';
+
             // Button to update customer
             // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal' . $customer['id'] . '">';
             // echo 'Restart Subscription!';
             // echo '</button>';
 
-            if (mysqli_num_rows($deal_result) > 0) {
-                // Count the number of rows with status pending or on-hold
-                $pending_count = 0;
-                while ($deal = mysqli_fetch_assoc($deal_result)) {
-                    if ($deal['status'] === 'pending' || $deal['status'] === 'on-hold') {
-                        $pending_count++;
-                    }
-                }
 
-                // Display subscription status based on pending count
-                // if ($pending_count > 0) {
-                // Button to launch new modal
-                // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" disabled>';
-                // echo '<a style="color: white; text-decoration: none;" href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '">';
-                // echo 'Upgrade';
-                // echo '</a>';
-                // echo '</button>';
-                // } else {
-                // Button to launch new modal
-                echo '<a href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '">';
-                echo '<button style="margin-left: 20px;" type="button" class="btn btn-success">';
-                echo 'Upgrade';
-                echo '</button>';
-                echo '</a>';
-                // }
-            } else {
-                // No deals found for this customer
-                echo '<p>No deals found for this customer.</p>';
-            }
 
-            echo '<a href="/mah-portal/public/breakfast_deal.php?cust_id=' . $customer['id'] . '">';
-            echo '<button style="margin-left: 20px;" type="button" class="btn btn-primary">';
-            echo 'Add Breakfast';
-            echo '</button>';
-            echo '</a>';
+            // if (mysqli_num_rows($deal_result) > 0) {
+            //     // Count the number of rows with status pending or on-hold
+            //     $pending_count = 0;
+            //     while ($deal = mysqli_fetch_assoc($deal_result)) {
+            //         if ($deal['status'] === 'pending' || $deal['status'] === 'on-hold') {
+            //             $pending_count++;
+            //         }
+            //     }
 
-            echo '<a href="/mah-portal/public/dinner_deal.php?cust_id=' . $customer['id'] . '">';
-            echo '<button style="margin-left: 20px;" type="button" class="btn btn-secondary">';
-            echo 'Add Dinner';
-            echo '</button>';
-            echo '</a>';
+            //     // Display subscription status based on pending count
+            //     // if ($pending_count > 0) {
+            //     // Button to launch new modal
+            //     // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" disabled>';
+            //     // echo '<a style="color: white; text-decoration: none;" href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '">';
+            //     // echo 'Upgrade';
+            //     // echo '</a>';
+            //     // echo '</button>';
+            //     // } else {
+            //     // Button to launch new modal
+
+            //     // }
+            // } else {
+            //     // No deals found for this customer
+            //     echo '<p>No deals found for this customer.</p>';
+            // }
+
 
             // Button to launch new modal
             // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newModal' . $customer['id'] . '">';
@@ -476,7 +736,7 @@ $count = $row['count'];
             echo '<div class="modal-dialog modal-dialog-scrollable modal-xl">';
             echo '<div class="modal-content">';
             echo '<div class="modal-header">';
-            echo '<h5 class="modal-title" id="exampleModalLabel">' . $customer['name'] . '\'s Dinner Deals</h5>';
+            echo '<h5 class="modal-title" id="exampleModalLabel">' . $customer['name'] . '\'s BreakFast Deals</h5>';
             echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
             echo '</div>';
             echo '<div class="modal-body">';

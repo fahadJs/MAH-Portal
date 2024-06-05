@@ -63,7 +63,7 @@ $deal_item_date = $_POST['deal_item_date'];
         $query_deal = "INSERT INTO customers_breakfast_deals (cust_id, dish, days, date) VALUES ('$cust_id', '$deal_name', '$deal_days', '$deal_date')";
         mysqli_query($connection, $query_deal);
     }
-    header("Location: ../public/index.php?success=true");
+    header("Location: ../public/index.php?success=true#cust$cust_id");
     exit();
 // } else {
 //     echo "Error: " . $query_customer . "<br>" . mysqli_error($connection);

@@ -58,16 +58,14 @@ require_once('../db/db.php');
             </div>
             <!-- <label for="contact" class="form-label">Contact</label> -->
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
             <div class="input-group">
                 <span class="input-group-text">Start Date</span>
-                <!-- <label for="name" class="form-label">Name</label> -->
                 <input type="date" class="form-control" id="start_date" name="start_date" required>
             </div>
-            <!-- <label for="start_date" class="form-label">Start Date</label> -->
-        </div>
+        </div> -->
 
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
             <div class="input-group">
                 <span class="input-group-text">Type</span>
                 <select class="form-select" id="customer_type" name="customer_type" required>
@@ -77,12 +75,11 @@ require_once('../db/db.php');
                     <option value="custom">Custom</option>
                 </select>
             </div>
-        </div>
+        </div> -->
 
-        <div class="col-md-4" id="deal_name_dropdown">
+        <!-- <div class="col-md-4" id="deal_name_dropdown">
             <div class="input-group">
                 <span class="input-group-text">Deal</span>
-                <!-- <label for="name" class="form-label">Name</label> -->
                 <select class="form-select" id="deal_id" name="deal_name" required>
                     <option selected>Choose...</option>
                     <?php
@@ -95,54 +92,42 @@ require_once('../db/db.php');
                     ?>
                 </select>
             </div>
-            <!-- <label for="deal_name" class="form-label">Choose Deal</label> -->
+        </div> -->
 
-        </div>
-
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
             <div class="input-group">
                 <span class="input-group-text">Deal Price</span>
-                <!-- <label for="name" class="form-label">Name</label> -->
                 <input type="number" class="form-control" id="deal_price" name="deal_price" required>
             </div>
-            <!-- <label for="deal_price" class="form-label">Price</label> -->
         </div>
 
         <div class="col-md-4">
             <div class="input-group">
                 <span class="input-group-text">Number of Persons</span>
-                <!-- <label for="name" class="form-label">Name</label> -->
                 <input type="number" class="form-control" id="number_of_persons" name="number_of_persons" min="1" required>
             </div>
-            <!-- <label for="number_of_persons" class="form-label">Number of Persons</label> -->
-        </div>
+        </div> -->
 
-        <div class="col-6" id="e">
+        <div class="col-md-4" id="e">
             <div class="input-group">
                 <span class="input-group-text">Email</span>
-                <!-- <label for="name" class="form-label">Name</label> -->
                 <input type="text" class="form-control" id="email" name="email" required>
             </div>
-            <!-- <label for="email" class="form-label">Email</label> -->
         </div>
-        <div class="col-md-6" id="d">
+        <!-- <div class="col-md-6" id="d">
             <div class="input-group">
                 <span class="input-group-text">Delivery Price</span>
-                <!-- <label for="name" class="form-label">Name</label> -->
                 <input type="number" class="form-control" id="delivery_price" name="delivery_price" required>
             </div>
-            <!-- <label for="delivery_price" class="form-label">Delivery Price</label> -->
-        </div>
-        <div class="col-12">
+        </div> -->
+        <div class="col-md-6">
             <div class="input-group">
                 <span class="input-group-text">Address</span>
-                <!-- <label for="name" class="form-label">Name</label> -->
                 <input type="text" class="form-control" id="address" name="address" required>
             </div>
-            <!-- <label for="address" class="form-label">Address</label> -->
         </div>
 
-        <div class="col-12">
+        <div class="col-md-6">
             <div class="input-group">
                 <span class="input-group-text">Agent</span>
                 <select class="form-select form-control" id="agent" name="agent" required>
@@ -156,18 +141,16 @@ require_once('../db/db.php');
                     ?>
                 </select>
             </div>
-            <!-- <label for="address" class="form-label">Address</label> -->
         </div>
 
 
-        <div id="additional_info_form" style="margin-top: -4px;">
+        <!-- <div id="additional_info_form" style="margin-top: -4px;">
 
-        </div>
+        </div> -->
 
-        <button type="button" id="add_tester_field_btn" class="btn btn-secondary mt-3 mb-3">Add Dishes Days wise</button>
+        <!-- <button type="button" id="add_tester_field_btn" class="btn btn-secondary mt-3 mb-3">Add Dishes Days wise</button>
         <div id="tester_fields" class="row" style="display: none;">
-            <!-- Tester fields will be dynamically added here -->
-        </div>
+        </div> -->
 
         <div class="col-12">
             <button type="submit" class="btn btn-primary">Submit</button>

@@ -15,7 +15,7 @@ if (!isset($_SESSION['admin_user_id'])) {
 if (isset($_GET['cust_id'])) {
     $cust_id = $_GET['cust_id'];
 
-    $customerQuery = "SELECT * FROM customers WHERE id = $cust_id";
+    $customerQuery = "SELECT * FROM customers_dinner WHERE cust_id = $cust_id";
     $custDetailsResult = mysqli_query($connection, $customerQuery);
 
     $custDetails = mysqli_fetch_assoc($custDetailsResult);
@@ -24,13 +24,13 @@ if (isset($_GET['cust_id'])) {
 
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Upgrade Customer Lunch Deal</h1>
+    <h1 class="mt-4">Upgrade Customer Dinner Deal</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-        <li class="breadcrumb-item active">Customers Lunch Upgrade</li>
+        <li class="breadcrumb-item active">Customers Dinner Upgrade</li>
     </ol>
 
-    <form class="row g-3 mb-4" action="../process/upgrade_customer.php" method="POST">
+    <form class="row g-3 mb-4" action="../process/upgrade_customer_dinner.php" method="POST">
         <ul class="mb-0">
             <li>Current deal: <span style="font-weight: bold;"><?php echo $custDetails['deal_name']?></span></li>
             <li>Deal price: <span style="font-weight: bold;"><?php echo $custDetails['deal_price']?></span></li>

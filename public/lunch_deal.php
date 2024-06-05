@@ -22,21 +22,20 @@ if (isset($_GET['cust_id'])) {
 }
 ?>
 
-
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Upgrade Customer Lunch Deal</h1>
+    <h1 class="mt-4">Add Lunch Deal</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-        <li class="breadcrumb-item active">Customers Lunch Upgrade</li>
+        <li class="breadcrumb-item active">Customers Lunch</li>
     </ol>
 
-    <form class="row g-3 mb-4" action="../process/upgrade_customer.php" method="POST">
-        <ul class="mb-0">
+    <form class="row g-3 mb-4" action="../process/lunch_deal_customer.php" method="POST">
+        <!-- <ul class="mb-0">
             <li>Current deal: <span style="font-weight: bold;"><?php echo $custDetails['deal_name']?></span></li>
             <li>Deal price: <span style="font-weight: bold;"><?php echo $custDetails['deal_price']?></span></li>
             <li>Delivery price: <span style="font-weight: bold;"><?php echo $custDetails['delivery_price']?></span></li>
             <li>Customer type: <span style="font-weight: bold;"><?php echo $custDetails['type']?></span></li>
-        </ul>
+        </ul> -->
         <!-- <div id="loader" style="display: none; color: green">Fetching please wait...</div> -->
         <div id="loader" style="display: none;" class="alert alert-primary" role="alert">
             Fetching please wait ...
