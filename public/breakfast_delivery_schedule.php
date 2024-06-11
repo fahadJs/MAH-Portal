@@ -14,7 +14,7 @@ require_once('../db/db.php');
 date_default_timezone_set('Asia/Karachi');
 
 $currentDate = date('Y-m-d', strtotime('+1 day'));
-$query = "SELECT * FROM customers_breakfast WHERE status = 'active'";
+$query = "SELECT * FROM customers WHERE status = 'active'";
 $result = mysqli_query($connection, $query);
 
 $customers = array();
