@@ -96,14 +96,36 @@
                             <div class="sb-nav-link-icon"></div>
                             Riders Ledger
                         </a>
-                        <hr class="m-0">
 
                         <hr class="m-0">
                         <a class="nav-link" href="follow_up.php">
                             <div class="sb-nav-link-icon"></div>
                             Follow Up Section
                         </a>
+                        <!-- <hr class="m-0">
+                        <a class="nav-link" href="raw_material.php">
+                            <div class="sb-nav-link-icon"></div>
+                            Raw Materials
+                        </a>
+                        <a class="nav-link" href="raw_material_ledger.php">
+                            <div class="sb-nav-link-icon"></div>
+                            Raw Materials Ledger
+                        </a> -->
                         <hr class="m-0">
+                        <a class="nav-link" href="delivery_schedule.php">
+                            <div class="sb-nav-link-icon"></div>
+                            Breakfast Delivery Schedule
+                        </a>
+                        <a class="nav-link" href="breakfast_delivery_schedule.php">
+                            <div class="sb-nav-link-icon"></div>
+                            Lunch Delivery Schedule
+                        </a>
+                        <a class="nav-link" href="dinner_delivery_schedule.php">
+                            <div class="sb-nav-link-icon"></div>
+                            Dinner Delivery Schedule
+                        </a>
+                        <hr class="m-0">
+                        
                         <!-- <div class="sb-sidenav-menu-heading">Interface</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>

@@ -58,7 +58,7 @@ $count = $row['count'];
             timer: 2000
         });
         setTimeout(function() {
-            window.location.href = '../public/index.php'+hashId;
+            window.location.href = '../public/index.php' + hashId;
         }, 2000);
     }
 </script>
@@ -137,36 +137,50 @@ $count = $row['count'];
             echo '<div class="d-flex align-items-center justify-content-between">';
             echo '<h5 class="card-title">' . $customer['name'];
 
-            if ($customer['status'] == 'active') {
+            $state = $customer['status'];
+
+            if ($state == 'active') {
                 echo ' - <span class="badge bg-success">Active</span>';
             }
-            if ($customer['status'] == 'on-hold') {
+            if ($state == 'on-hold') {
                 echo ' - <span class="badge bg-warning">On-Hold</span>';
             }
-            if ($customer['status'] == 'cancelled') {
+            if ($state == 'cancelled') {
                 echo ' - <span class="badge bg-danger">Cancelled</span>';
             }
 
             echo '</h5>';
             echo '<div class="d-flex ">';
-            ?>
 
-            <!-- <form action="../process/cancel.php" method="POST">
-                <input type="hidden" value="<?php echo $customer_id;?>"/>
-                <button class="btn btn-danger">Cancel</button>
-            </form>
+            
 
-            <form action="../process/pause.php" method="POST" style="margin-left: 10px;">
-                <input type="hidden" value="<?php echo $customer_id;?>"/>
-                <button class="btn btn-warning">Pause</button>
-            </form>
+            // echo '<form action="../process/cancel.php" method="POST">';
+            // echo '<input type="hidden" name="customer_id" value="' . $customer_id . '"/>';
+            // if ($state == 'active' || $state == 'on-hold') {
+            //     echo '<button class="btn btn-danger">Cancel</button>';
+            // } else {
+            //     echo '<button class="btn btn-danger" disabled>Cancel</button>';
+            // }
+            // echo '</form>';
 
-            <form action="../process/resume.php" method="POST" style="margin-left: 10px;">
-                <input type="hidden" value="<?php echo $customer_id;?>"/>
-                <button class="btn btn-success">Resume</button>
-            </form> -->
+            echo '<form action="../process/pause.php" method="POST" style="margin-left: 10px;">';
+            echo '<input type="hidden" name="customer_id" value="' . $customer_id . '"/>';
+            if ($state == 'active') {
+                echo '<button class="btn btn-warning">Pause</button>';
+            } else {
+                echo '<button class="btn btn-warning" disabled>Pause</button>';
+            }
+            echo '</form>';
 
-            <?php
+            echo '<form action="../process/resume.php" method="POST" style="margin-left: 10px;">';
+            echo '<input type="hidden" name="customer_id" value="' . $customer_id . '"/>';
+            if ($state == 'on-hold') {
+                echo '<button class="btn btn-success">Resume</button>';
+            } else {
+                echo '<button class="btn btn-success" disabled>Resume</button>';
+            }
+            echo '</form>';
+
             echo '</div>';
             echo '</div>';
 
