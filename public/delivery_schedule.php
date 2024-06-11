@@ -200,7 +200,7 @@ while ($row = mysqli_fetch_assoc($result)) {
         <p><strong>Ungrouped customers!</strong></p>
         <form action="../process/lunch_delivery_groups_process.php" method="POST" id="orderForm" onsubmit="return validateForm()">
             <input type="hidden" name="date" value="<?php echo $nextDay; ?>" />
-            <div class="btn-group mt-0 m-2" role="group" aria-label="Basic checkbox toggle button group">
+            <div class="btn-group mt-0 m-2 flex-wrap" role="group" aria-label="Basic checkbox toggle button group">
                 <?php foreach ($customers as $customer) : ?>
                     <input type="checkbox" class="btn-check" id="<?php echo $customer['number'] ?>" name="selected_customers[]" value="<?php echo $customer['number'] ?>" autocomplete="off">
                     <label class="btn btn-outline-success" for="<?php echo $customer['number'] ?>"><?php echo $customer['number'] ?></label>
@@ -299,83 +299,75 @@ while ($row = mysqli_fetch_assoc($result)) {
         <li class="breadcrumb-item active">Date Delivery Schedule</li>
     </ol>
     <hr>
-    <?php
-    if ($_SERVER["REQUEST_METHOD"] == "POST" || isset($_GET["date"])) {
-        if (isset($_POST['date']) || isset($_GET["date"])) {
-    ?>
-            <?php if (!empty($customersSchedule)) : ?>
-                <p><strong>Un-scheduled customers!</strong></p>
-                <div class="btn-group mt-0 m-2" role="group" aria-label="Basic checkbox toggle button group">
-                    <?php foreach ($customersSchedule as $customer) : ?>
-                        <div class="alert alert-success mb-0 p-2" style="margin-right:10px;"><?php echo $customer['number']; ?></div>
-                    <?php endforeach; ?>
-                </div>
-                <hr>
-                <form action="../process/delivery_schedule_process.php" method="POST" class="mt-4" id="orderForm">
-                    <input type="hidden" name="date" value="<?php echo $nextDay ?>">
-                    <select class="form-select form-control mb-3" name="rider_name" required>
-                        <?php
-                        $query = "SELECT * FROM riders";
-                        $result = mysqli_query($connection, $query);
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<option value='" . $row['id'] . "'>" . $row['name'] . "</option>";
-                        }
-                        ?>
+    <?php if (!empty($customersSchedule)) : ?>
+        <p><strong>Un-scheduled customers!</strong></p>
+        <div class="btn-group mt-0 m-2 flex-wrap" role="group" aria-label="Basic checkbox toggle button group">
+            <?php foreach ($customersSchedule as $customer) : ?>
+                <div class="alert alert-success mb-0 p-2" style="margin-right:10px;"><?php echo $customer['number']; ?></div>
+            <?php endforeach; ?>
+        </div>
+        <hr>
+        <form action="../process/delivery_schedule_process.php" method="POST" class="mt-4" id="orderForm">
+            <input type="hidden" name="date" value="<?php echo $nextDay ?>">
+            <select class="form-select form-control mb-3" name="rider_name" required>
+                <?php
+                $query = "SELECT * FROM riders";
+                $result = mysqli_query($connection, $query);
+                while ($row = mysqli_fetch_assoc($result)) {
+                    echo "<option value='" . $row['id'] . "'>" . $row['name'] . "</option>";
+                }
+                ?>
+            </select>
+            <div class="mb-3">
+                <div class="input-group mb-3">
+                    <input type="hidden" class="sequence-input" name="sequence[]" value="1">
+                    <span class="input-group-text sequence-number">1</span>
+                    <span class="input-group-text">Customer</span>
+                    <select class="form-select form-control customer-number" name="cust_number[]" required>
+                        <option hidden>Select</option>
+                        <?php foreach ($customersSchedule as $customer) : ?>
+                            <option value="<?php echo $customer['number'] ?>"><?php echo $customer['number'] ?></option>
+                        <?php endforeach ?>
                     </select>
-                    <div class="mb-3">
-                        <div class="input-group mb-3">
-                            <input type="hidden" class="sequence-input" name="sequence[]" value="1">
-                            <span class="input-group-text sequence-number">1</span>
-                            <span class="input-group-text">Customer</span>
-                            <select class="form-select form-control customer-number" name="cust_number[]" required>
-                                <option hidden>Select</option>
-                                <?php foreach ($customersSchedule as $customer) : ?>
-                                    <option value="<?php echo $customer['number'] ?>"><?php echo $customer['number'] ?></option>
-                                <?php endforeach ?>
-                            </select>
 
-                            <span class="input-group-text">Coordinates</span>
-                            <input type="text" class="form-control customer-location" name="location[]" readonly required>
+                    <span class="input-group-text">Coordinates</span>
+                    <input type="text" class="form-control customer-location" name="location[]" readonly required>
 
-                            <button class="btn btn-danger btn-remove">Remove</button>
-                            <button class="btn btn-success btn-add">Add New</button>
-                        </div>
-                    </div>
+                    <button class="btn btn-danger btn-remove">Remove</button>
+                    <button class="btn btn-success btn-add">Add New</button>
+                </div>
+            </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <div class="input-group">
-                                <span class="input-group-text">Total Distance</span>
-                                <input type="decimal" name="distance" class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group">
-                                <span class="input-group-text">Rider Cost</span>
-                                <input type="number" name="cost" class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group">
-                                <span class="input-group-text">Total Time</span>
-                                <input type="text" name="time" class="form-control" required />
-                            </div>
-                        </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text">Total Distance</span>
+                        <input type="decimal" name="distance" class="form-control" required />
                     </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Round Route</span>
-                        <input type="text" name="round_route" class="form-control" required />
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text">Rider Cost</span>
+                        <input type="number" name="cost" class="form-control" required />
                     </div>
-                    <button type="submit" class="btn btn-primary">Schedule</button>
-                </form>
-            <?php else : ?>
-                <div class="alert alert-success" role="alert">No <strong>un-scheduled customers</strong> found!</div>
-            <?php endif; ?>
-            <hr>
-    <?php
-        }
-    }
-    ?>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text">Total Time</span>
+                        <input type="text" name="time" class="form-control" required />
+                    </div>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Round Route</span>
+                <input type="text" name="round_route" class="form-control" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Schedule</button>
+        </form>
+    <?php else : ?>
+        <div class="alert alert-success" role="alert">No <strong>un-scheduled customers</strong> found!</div>
+    <?php endif; ?>
+    <hr>
 
     <?php
     // include 'db.php';
