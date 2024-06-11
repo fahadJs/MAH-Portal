@@ -112,11 +112,11 @@
                             Raw Materials Ledger
                         </a> -->
                         <hr class="m-0">
-                        <a class="nav-link" href="delivery_schedule.php">
+                        <a class="nav-link" href="breakfast_delivery_schedule.php">
                             <div class="sb-nav-link-icon"></div>
                             Breakfast Delivery Schedule
                         </a>
-                        <a class="nav-link" href="breakfast_delivery_schedule.php">
+                        <a class="nav-link" href="delivery_schedule.php">
                             <div class="sb-nav-link-icon"></div>
                             Lunch Delivery Schedule
                         </a>
