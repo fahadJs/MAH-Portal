@@ -18,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $totalTime = $_POST['time'];
     $custNumbers = $_POST['cust_number'];
     $sequences = $_POST['sequence'];
+    $location = $_POST['location'];
     $roundRoute = $_POST['round_route'];
 
     // Start transaction
@@ -38,8 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Insert into delivery_schedule_riders_details table
         foreach ($custNumbers as $index => $custNumber) {
             $sequence = $sequences[$index];
-            $detailsQuery = "INSERT INTO delivery_schedule_riders_details (cust_number, sequence, delivery_schedule_riders_id) 
-                             VALUES ('$custNumber', '$sequence', '$deliveryScheduleRidersId')";
+            $locate = $location[$index];
+            $detailsQuery = "INSERT INTO delivery_schedule_riders_details (cust_number, sequence, location, delivery_schedule_riders_id) 
+                             VALUES ('$custNumber', '$sequence', '$locate', '$deliveryScheduleRidersId')";
             mysqli_query($connection, $detailsQuery);
 
             // GET the cust_id

@@ -331,7 +331,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                     </select>
 
                     <span class="input-group-text">Coordinates</span>
-                    <input type="text" class="form-control customer-location" name="location[]" readonly required>
+                    <input type="text" class="form-control customer-location" name="location[]" required>
 
                     <button class="btn btn-danger btn-remove">Remove</button>
                     <button class="btn btn-success btn-add">Add New</button>
@@ -412,15 +412,27 @@ while ($row = mysqli_fetch_assoc($result)) {
                                 <li class="list-group-item"><?= $detail['sequence'] ?>: <?= $detail['cust_number'] ?></li>
                             <?php endforeach; ?>
                         </ul>
-                        <form method="POST" action="../public/lunch_update_schedule.php" class="mt-3">
-                            <input type="hidden" name="dsr_id" value="<?= $dsr_id ?>">
-                            <?php foreach ($rider['details'] as $detail) : ?>
-                                <input type="hidden" name="dsrd_id[]" value="<?= $detail['dsrd_id'] ?>">
-                            <?php endforeach; ?>
-                            <input type="hidden" name="round_route" value="<?= $detail['round_route'] ?>">
-                            <input type="hidden" name="date" value="<?= $rider['info']['date'] ?>">
-                            <button type="submit" class="btn btn-primary">Update</button>
-                        </form>
+                        <div class="d-flex">
+                            <form method="POST" action="../public/lunch_update_schedule.php" class="mt-3">
+                                <input type="hidden" name="dsr_id" value="<?= $dsr_id ?>">
+                                <?php foreach ($rider['details'] as $detail) : ?>
+                                    <input type="hidden" name="dsrd_id[]" value="<?= $detail['dsrd_id'] ?>">
+                                <?php endforeach; ?>
+                                <input type="hidden" name="round_route" value="<?= $detail['round_route'] ?>">
+                                <input type="hidden" name="date" value="<?= $rider['info']['date'] ?>">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+
+                            <form method="POST" style="margin-left: 10px;" action="../process/lunch_approve_message_process.php" class="mt-3">
+                                <input type="hidden" name="dsr_id" value="<?= $dsr_id ?>">
+                                <?php foreach ($rider['details'] as $detail) : ?>
+                                    <input type="hidden" name="dsrd_id[]" value="<?= $detail['dsrd_id'] ?>">
+                                <?php endforeach; ?>
+                                <input type="hidden" name="round_route" value="<?= $detail['round_route'] ?>">
+                                <input type="hidden" name="date" value="<?= $rider['info']['date'] ?>">
+                                <button type="submit" class="btn btn-success">Send Update</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

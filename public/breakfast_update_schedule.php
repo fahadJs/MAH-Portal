@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // $dsrId = $dsrDetails['id'];
 
-    $dsrdQuery = "SELECT * FROM breakfast_delivery_schedule_riders_details dsrd JOIN customers c ON dsrd.cust_number = c.cust_number WHERE dsrd.delivery_schedule_riders_id = '$dsr_id' ORDER BY dsrd.sequence ASC";
+    $dsrdQuery = "SELECT dsrd.location as new_location, dsrd.*, c.* FROM breakfast_delivery_schedule_riders_details dsrd JOIN customers c ON dsrd.cust_number = c.cust_number WHERE dsrd.delivery_schedule_riders_id = '$dsr_id' ORDER BY dsrd.sequence ASC";
     $dsrdRes = mysqli_query($connection, $dsrdQuery);
     $dsrdDetails = [];
     while ($row = mysqli_fetch_assoc($dsrdRes)) {
@@ -261,7 +261,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </select>
 
                         <span class="input-group-text">Coordinates</span>
-                        <input type="text" class="form-control customer-location" name="location[]" value="<?php echo $detail['location']; ?>" readonly>
+                        <input type="text" class="form-control customer-location" name="location[]" value="<?php echo $detail['new_location']; ?>">
 
                         <button class="btn btn-success btn-add">Add New</button>
                         <button class="btn btn-danger btn-remove">Remove</button>
