@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sequences = $_POST['sequence'];
     $removed = $_POST['removed_customers'];
     $roundRoute = $_POST['round_route'];
+    $location = $_POST['location'];
 
     // Start transaction
     mysqli_begin_transaction($connection);
@@ -63,8 +64,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Insert into delivery_schedule_riders_details table
         foreach ($custNumbers as $index => $custNumber) {
             $sequence = $sequences[$index];
-            $detailsQuery = "INSERT INTO dinner_delivery_schedule_riders_details (cust_number, sequence, delivery_schedule_riders_id) 
-                             VALUES ('$custNumber', '$sequence', '$deliveryScheduleRidersId')";
+            $locate = $location[$index];
+            $detailsQuery = "INSERT INTO dinner_delivery_schedule_riders_details (cust_number, sequence, location, delivery_schedule_riders_id) 
+                             VALUES ('$custNumber', '$sequence', '$locate', '$deliveryScheduleRidersId')";
             mysqli_query($connection, $detailsQuery);
 
             // GET the cust_id

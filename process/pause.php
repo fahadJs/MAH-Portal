@@ -15,6 +15,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             throw new Exception("Failed to update status: " . mysqli_error($connection));
         }
 
+        $updateCustNumberB = "UPDATE customers_breakfast SET status = 'on-hold' WHERE cust_id = '$cust_id'";
+        if (!mysqli_query($connection, $updateCustNumberB)) {
+            throw new Exception("Failed to update status: " . mysqli_error($connection));
+        }
+
+        $updateCustNumberD = "UPDATE customers_dinner SET status = 'on-hold' WHERE cust_id = '$cust_id'";
+        if (!mysqli_query($connection, $updateCustNumberD)) {
+            throw new Exception("Failed to update status: " . mysqli_error($connection));
+        }
+
         // Commit the transaction
         mysqli_commit($connection);
 
