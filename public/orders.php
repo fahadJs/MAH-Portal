@@ -23,8 +23,8 @@ while ($row = mysqli_fetch_assoc($result)) {
     $customerName = $row['name'];
     $nextDay = date('Y-m-d', strtotime('+1 day'));
 
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
-        if(isset($_POST['date'])){
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST['date'])) {
             $nextDay = $_POST['date'];
         }
     }
@@ -88,7 +88,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     </ol>
 
     <form method="POST" action="#" class="d-flex">
-        <input type="date" class="form-control mb-0 m-2" name="date" value="<?php echo $nextDay;?>" style="width: fit-content;" required/>
+        <input type="date" class="form-control mb-0 m-2" name="date" value="<?php echo $nextDay; ?>" style="width: fit-content;" required />
         <button type="submit" class="btn btn-success mb-0 m-2">Search</button>
     </form>
 
@@ -97,23 +97,23 @@ while ($row = mysqli_fetch_assoc($result)) {
             <?php foreach ($customers as $customer) : ?>
                 <!-- <?php
 
-                // $statusClass = '';
-                // switch ($customer['status']) {
-                //     case 'pending':
-                //         $statusClass = 'alert-success'; // Change class to alert-info for pending status
-                //         $alertMessage = 'New Dish'; // Set alert message for pending status
-                //         break;  
-                //     case 'on-hold':
-                //         $statusClass = 'alert-warning'; // Change class to alert-info for on-hold status
-                //         $alertMessage = 'Pending Dish'; // No special message for on-hold status
-                //         break;
-                //     default:
-                //         $statusClass = 'alert-secondary'; // Default class for other statuses
-                //         $alertMessage = ''; // No special message for other statuses
-                //         break;
-                // }
+                        // $statusClass = '';
+                        // switch ($customer['status']) {
+                        //     case 'pending':
+                        //         $statusClass = 'alert-success'; // Change class to alert-info for pending status
+                        //         $alertMessage = 'New Dish'; // Set alert message for pending status
+                        //         break;  
+                        //     case 'on-hold':
+                        //         $statusClass = 'alert-warning'; // Change class to alert-info for on-hold status
+                        //         $alertMessage = 'Pending Dish'; // No special message for on-hold status
+                        //         break;
+                        //     default:
+                        //         $statusClass = 'alert-secondary'; // Default class for other statuses
+                        //         $alertMessage = ''; // No special message for other statuses
+                        //         break;
+                        // }
 
-                ?> -->
+                        ?> -->
                 <div class="mb-3">
                     <h6 class="mb-2"><?php echo $customer['name']; ?> - <?php echo $customer['date']; ?></h6>
                     <div class="input-group">
@@ -136,10 +136,20 @@ while ($row = mysqli_fetch_assoc($result)) {
     <?php endif; ?>
     <hr>
 
-    <h1 class="mt-4">All Lunch Orders</h1>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">All the previous lunch orders - Latest on top</li>
-    </ol>
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1>All Lunch Orders</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">All the previous lunch orders - Latest on top</li>
+            </ol>
+        </div>
+        <div>
+            <form method="POST" action="../process/delete_lunch_orders_process.php" class="d-flex">
+                <input type="date" class="form-control mb-0 m-2" name="date" value="<?php echo $nextDay; ?>" style="width: fit-content;" required />
+                <button type="submit" class="btn btn-danger mb-0 m-2">Delete</button>
+            </form>
+        </div>
+    </div>
     <?php
     // Fetch data from orders table
     $query = "SELECT * FROM orders ORDER BY date DESC";

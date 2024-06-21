@@ -102,7 +102,7 @@
                             <div class="sb-nav-link-icon"></div>
                             Follow Up Section
                         </a>
-                        <!-- <hr class="m-0">
+                        <hr class="m-0">
                         <a class="nav-link" href="raw_material.php">
                             <div class="sb-nav-link-icon"></div>
                             Raw Materials
@@ -110,7 +110,7 @@
                         <a class="nav-link" href="raw_material_ledger.php">
                             <div class="sb-nav-link-icon"></div>
                             Raw Materials Ledger
-                        </a> -->
+                        </a>
                         <hr class="m-0">
                         <a class="nav-link" href="breakfast_delivery_schedule.php">
                             <div class="sb-nav-link-icon"></div>
