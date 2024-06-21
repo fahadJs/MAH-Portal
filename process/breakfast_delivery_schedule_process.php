@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sequence = $sequences[$index];
             $locate = $location[$index];
             $detailsQuery = "INSERT INTO breakfast_delivery_schedule_riders_details (cust_number, sequence, location, delivery_schedule_riders_id) 
-                             VALUES ('$custNumber', '$sequence', '$locate'; '$deliveryScheduleRidersId')";
+                             VALUES ('$custNumber', '$sequence', '$locate', '$deliveryScheduleRidersId')";
             mysqli_query($connection, $detailsQuery);
 
             // GET the cust_id
