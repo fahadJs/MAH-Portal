@@ -21,7 +21,7 @@ $customers = array();
 while ($row = mysqli_fetch_assoc($result)) {
     $customerId = $row['id'];
     $customerName = $row['name'];
-    $customerLocation = $row['coordinates'];
+    $customerLocation = $row['location'];
     $nextDay = date('Y-m-d');
 
     if ($_SERVER["REQUEST_METHOD"] == "POST" || isset($_GET['date'])) {
@@ -330,7 +330,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         <?php endforeach ?>
                     </select>
 
-                    <span class="input-group-text">Coordinates</span>
+                    <span class="input-group-text">Location</span>
                     <input type="text" class="form-control customer-location" name="location[]" required>
 
                     <button class="btn btn-danger btn-remove">Remove</button>
@@ -404,7 +404,7 @@ while ($row = mysqli_fetch_assoc($result)) {
                         ?>
                         <h5 class="card-title">Rider: <?= $name ?></h5>
                         <p class="card-text mb-0">Total Distance: <?= $rider['info']['total_distance'] ?> km</p>
-                        <p class="card-text mb-0">Total Cost: <?= $rider['info']['total_rider_cost'] ?></p>
+                        <p class="card-text mb-0">Total Cost: Rs <?= $rider['info']['total_rider_cost'] ?></p>
                         <p class="card-text">Total Time: <?= $rider['info']['total_time'] ?></p>
                         <h6>Delivery Details:</h6>
                         <ul class="list-group list-group-flush">
