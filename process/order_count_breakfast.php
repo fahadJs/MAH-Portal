@@ -52,7 +52,7 @@ $rotiRawMaterialQuery = "SELECT * FROM raw_material WHERE name LIKE '%aata%'";
 $resq = mysqli_query($connection, $rotiRawMaterialQuery);
 $ataId = mysqli_fetch_assoc($resq)['id'];
 
-$rotiInGm = $totalRotiCount * 60;
+$rotiInGm = $totalRotiCount * 90;
 
 // Start transaction
 $connection->begin_transaction();
