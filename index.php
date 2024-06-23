@@ -241,7 +241,7 @@ require_once('../db/db.php');
             echo '<form action="../process/deal_update.php" method="POST">';
 
             // Start table for deals
-            echo '<table class="table">';
+            echo '<table class="table table-bordered">';
             echo '<thead>';
             echo '<tr>';
             echo '<th scope="col">Days</th>';
@@ -306,7 +306,7 @@ require_once('../db/db.php');
             echo '<form action="../process/deal_dinner_update.php" method="POST">';
 
             // Start table for deals
-            echo '<table class="table">';
+            echo '<table class="table table-bordered">';
             echo '<thead>';
             echo '<tr>';
             echo '<th scope="col">Days</th>';

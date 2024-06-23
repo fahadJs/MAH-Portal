@@ -188,7 +188,7 @@ if (mysqli_num_rows($result) > 0) {
 
     // Check if there are any deliveries
     if (mysqli_num_rows($result) > 0) {
-        echo '<table class="table">';
+        echo '<table class="table table-bordered">';
         echo '<thead>';
         echo '<tr>';
         echo '<th scope="col">ID</th>';

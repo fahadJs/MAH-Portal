@@ -79,17 +79,27 @@ $count = $row['count'];
                 <li class="breadcrumb-item active">Dashboard</li>
             </ol>
 
+            <div class="d-flex">
+                <div>
+                    <a href="../public/customers_quick_info.php"><button class="btn btn-success">Customers quick info</button></a>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <a href="../public/index.php"><button type="submit" class="btn btn-success" style="margin-left: 10px;">Reset search</button></a>
+                </div>
+            </div>
+
         </div>
         <div>
             <div class="d-flex">
-                <form method="POST" action="#" class="d-flex">
+                <form method="POST" action="../public/index.php" class="d-flex">
                     <input type="text" class="form-control mb-0 m-2" name="search_by_name" required placeholder="Search by Name" />
                     <button type="submit" class="btn btn-success mb-0 m-2">Search</button>
                 </form>
             </div>
 
             <div class="d-flex">
-                <form method="POST" action="#" class="d-flex">
+                <form method="POST" action="../public/index.php" class="d-flex">
                     <input type="text" class="form-control mb-0 m-2" name="search_by_id" required placeholder="Search by ID eg. A-1" />
                     <button type="submit" class="btn btn-success mb-0 m-2">Search</button>
                 </form>
@@ -97,6 +107,7 @@ $count = $row['count'];
         </div>
     </div>
 
+    <hr>
     <?php
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -152,7 +163,7 @@ $count = $row['count'];
             echo '</h5>';
             echo '<div class="d-flex ">';
 
-            
+
 
             // echo '<form action="../process/cancel.php" method="POST">';
             // echo '<input type="hidden" name="customer_id" value="' . $customer_id . '"/>';
@@ -383,202 +394,17 @@ $count = $row['count'];
                 echo '</a>';
             }
 
-            // echo '<a href="/mah-portal/public/dinner_deal.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
-            // echo '<button type="button" class="btn btn-primary w-100">';
-            // echo 'Add';
-            // echo '</button>';
-            // echo '</a>';
-
-            // echo '<a href="/mah-portal/public/upgrade_dinner.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
-            // echo '<button type="button" class="btn btn-success w-100">';
-            // echo 'Upgrade';
-            // echo '</button>';
-            // echo '</a>';
-
             echo '</div>';
             echo '</div>';
             echo '</div>';
 
-
-            // echo '<div class="card flex-fill" style="margin-left:20px;">';
-            // echo '<div class="card-header">Diet</div>';
-            // echo '<div class="card-body">';
-            // echo '<div class="d-flex flex-column">';
-            // // Button to open modal
-
-            // echo '<button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#customerModalDiet' . $customer['id'] . '">';
-            // echo 'Deal';
-            // echo '</button>';
-
-            // echo '<a href="/mah-portal/public/diet_deal.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
-            // echo '<button type="button" class="btn btn-primary w-100">';
-            // echo 'Add';
-            // echo '</button>';
-            // echo '</a>';
-
-            // echo '<a href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '" class="w-100 mt-2">';
-            // echo '<button type="button" class="btn btn-success w-100">';
-            // echo 'Upgrade';
-            // echo '</button>';
-            // echo '</a>';
-
-            // echo '</div>';
-            // echo '</div>';
-            // echo '</div>';
-
-
-
-            // Button to open modal
-            // echo '<button type="button" style="margin-left: 20px;" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#customerModal' . $customer['id'] . '">';
-            // echo 'Lunch Deal';
-            // echo '</button>';
-
-            // // Button to open Dinner modal
-            // echo '<button type="button" style="margin-left: 20px;" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#customerModalDinner' . $customer['id'] . '">';
-            // echo 'Dinner Deal';
-            // echo '</button>';
-
-            // echo '<a href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '">';
-            // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success">';
-            // echo 'Upgrade';
-            // echo '</button>';
-            // echo '</a>';
-
-            // echo '<a href="/mah-portal/public/dinner_deal.php?cust_id=' . $customer['id'] . '">';
-            // echo '<button style="margin-left: 20px;" type="button" class="btn btn-secondary">';
-            // echo 'Add Dinner';
-            // echo '</button>';
-            // echo '</a>';
-
             echo '</div>';
-
-            // Button to update customer
-            // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal' . $customer['id'] . '">';
-            // echo 'Restart Subscription!';
-            // echo '</button>';
-
-
-
-            // if (mysqli_num_rows($deal_result) > 0) {
-            //     // Count the number of rows with status pending or on-hold
-            //     $pending_count = 0;
-            //     while ($deal = mysqli_fetch_assoc($deal_result)) {
-            //         if ($deal['status'] === 'pending' || $deal['status'] === 'on-hold') {
-            //             $pending_count++;
-            //         }
-            //     }
-
-            //     // Display subscription status based on pending count
-            //     // if ($pending_count > 0) {
-            //     // Button to launch new modal
-            //     // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" disabled>';
-            //     // echo '<a style="color: white; text-decoration: none;" href="/mah-portal/public/upgrade.php?cust_id=' . $customer['id'] . '">';
-            //     // echo 'Upgrade';
-            //     // echo '</a>';
-            //     // echo '</button>';
-            //     // } else {
-            //     // Button to launch new modal
-
-            //     // }
-            // } else {
-            //     // No deals found for this customer
-            //     echo '<p>No deals found for this customer.</p>';
-            // }
-
-
-            // Button to launch new modal
-            // echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newModal' . $customer['id'] . '">';
-            // echo 'Upgrade';
-            // echo '</button>';
-
-            // $deal_result_subs = mysqli_query($connection, $deal_query);
-            // if (mysqli_num_rows($deal_result_subs) > 0) {
-            //     // Count the number of rows with status pending or on-hold
-            //     $pending_count = 0;
-            //     while ($deal = mysqli_fetch_assoc($deal_result_subs)) {
-            //         if ($deal['status'] === 'pending' || $deal['status'] === 'on-hold') {
-            //             $pending_count++;
-            //         }
-            //     }
-
-            //     // Display subscription status based on pending count
-            //     if ($pending_count > 0) {
-            //         // Display the deals and the restart subscription button
-            //         echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal' . $customer['id'] . '" disabled>';
-            //         echo 'Restart Subscription';
-            //         echo '</button>';
-            //         // echo '<span style="margin-left: 20px; color: green;">Subscription Active!</span>';
-            //         echo '<div class="alert alert-success mt-4" role="alert">
-            //                 Subscription Active!
-            //             </div>';
-            //     } else {
-            //         // Subscription expired
-            //         echo '<button style="margin-left: 20px;" type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateModal' . $customer['id'] . '">';
-            //         echo 'Restart Subscription';
-            //         echo '</button>';
-            //         // echo '<span style="margin-left: 20px; color: red;">Subscription Expired!</span>';
-            //         echo '<div class="alert alert-danger mt-4" role="alert">
-            //                 Subscription Expired!
-            //             </div>';
-            //     }
 
             echo '<form action="../process/cust_note.php" method="POST" class="mt-4">';
             echo '<textarea class="form-control" name="cust_note" placeholder="' . $cust_note . '" required></textarea>';
             echo '<input type="hidden" name="cust_id" value="' . $customer_id . '"/>';
             echo '<button type="submit" class="btn btn-success mt-3">Submit</button>';
             echo '</form>';
-            // } else {
-            //     // No deals found for this customer
-            //     echo '<p>No deals found for this customer.</p>';
-            // }
-
-            // // Bootstrap Modal for customer deals
-            // echo '<div class="modal fade" id="customerModal' . $customer['id'] . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">';
-            // echo '<div class="modal-dialog">';
-            // echo '<div class="modal-content">';
-            // echo '<div class="modal-header">';
-            // echo '<h5 class="modal-title" id="exampleModalLabel">' . $customer['name'] . '\'s Deals</h5>';
-            // echo '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
-            // echo '</div>';
-            // echo '<div class="modal-body">';
-
-            // // Start table for deals
-            // echo '<table class="table">';
-            // echo '<thead>';
-            // echo '<tr>';
-            // echo '<th scope="col">Dish</th>';
-            // echo '<th scope="col">Days</th>';
-            // echo '<th scope="col">Status</th>';
-            // echo '</tr>';
-            // echo '</thead>';
-            // echo '<tbody>';
-
-            // // $deal_query = "SELECT * FROM customers_deals WHERE cust_id = '$customer_id'";
-            // $deal_result_modal = mysqli_query($connection, $deal_query);
-
-            // // Check if there are any deals for this customer
-            // if (mysqli_num_rows($deal_result_modal) > 0) {
-            //     while ($deal = mysqli_fetch_assoc($deal_result_modal)) {
-            //         echo '<tr>';
-            //         echo '<td>' . $deal['dish'] . '</td>';
-            //         echo '<td>' . $deal['weekdays'] . '</td>';
-            //         echo '<td>' . $deal['status'] . '</td>';
-            //         echo '</tr>';
-            //     }
-            // } else {
-            //     // No deals found for this customer
-            //     echo '<tr><td colspan="3">No deals found for this customer.</td></tr>';
-            // }
-
-            // echo '</tbody>';
-            // echo '</table>';
-            // // End table for deals
-
-            // echo '</div>'; // End modal body
-            // echo '</div>'; // End modal content
-            // echo '</div>'; // End modal dialog
-            // echo '</div>'; // End modal fade
-
 
             // Bootstrap Modal for customer deals
             echo '<div class="modal fade" id="customerModal' . $customer['id'] . '" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">';
@@ -612,7 +438,7 @@ $count = $row['count'];
             echo '<form action="../process/deal_update.php" method="POST">';
 
             // Start table for deals
-            echo '<table class="table">';
+            echo '<table class="table table-bordered">';
             echo '<thead>';
             echo '<tr>';
             echo '<th scope="col">Days</th>';
@@ -695,7 +521,7 @@ $count = $row['count'];
             echo '<form action="../process/deal_dinner_update.php" method="POST">';
 
             // Start table for deals
-            echo '<table class="table">';
+            echo '<table class="table table-bordered">';
             echo '<thead>';
             echo '<tr>';
             echo '<th scope="col">Days</th>';
@@ -777,7 +603,7 @@ $count = $row['count'];
             echo '<form action="../process/deal_breakfast_update.php" method="POST">';
 
             // Start table for deals
-            echo '<table class="table">';
+            echo '<table class="table table-bordered">';
             echo '<thead>';
             echo '<tr>';
             echo '<th scope="col">Days</th>';
