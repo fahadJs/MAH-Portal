@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Prepare the SQL statement for inserting into raw_material_ledger
         $stmt = $connection->prepare("INSERT INTO raw_material_ledger (raw_material_id, price, weight, type, created_at) VALUES (?, ?, ?, ?, ?)");
-        $reason = "Order deleted!";
+        $reason = "Lunch Order deleted!";
         $zeroPrice = 0;
         $stmt->bind_param("iiiss", $ataId, $zeroPrice, $rotiInGm, $reason, $currentDate);
 

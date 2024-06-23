@@ -72,10 +72,13 @@ while ($row = mysqli_fetch_assoc($result)) {
     if (success === 'true') {
         Swal.fire({
             icon: 'success',
-            title: 'Order Sent Successfully',
+            title: 'Operation Successful!',
             showConfirmButton: false,
             timer: 2000
         });
+        setTimeout(function() {
+            window.location.href = '../public/orders.php';
+        }, 2000);
     }
 </script>
 
@@ -92,7 +95,74 @@ while ($row = mysqli_fetch_assoc($result)) {
         <button type="submit" class="btn btn-success mb-0 m-2">Search</button>
     </form>
 
+
+
     <?php if (!empty($customers)) : ?>
+        <?php
+        // Initialize an empty array to store dish counts
+        $dishCounts = array();
+        // Initialize Roti count
+        $totalRotiCount = 0;
+        ?>
+        <?php foreach ($customers as $customer) : ?>
+
+            <?php
+            $dishes = explode(',', $customer['dish']);
+            $persons = intval($customer['persons']);
+
+            foreach ($dishes as $dish) {
+                $dish = trim($dish);
+
+                $rotiCount = 0;
+                if (preg_match('/(\d+)\s*Roti/i', $dish, $matches)) {
+                    $rotiCount = intval($matches[1]);
+                    $totalRotiCount += $rotiCount * $persons;
+                    $dish = preg_replace('/(\d+)\s*Roti/i', 'Roti', $dish);
+                }
+
+                if (!empty($dish)) {
+                    $dishCount = $persons;
+
+                    if (isset($dishCounts[$dish])) {
+                        $dishCounts[$dish] += $dishCount;
+                    } else {
+                        $dishCounts[$dish] = $dishCount;
+                    }
+                }
+            }
+            ?>
+        <?php endforeach; ?>
+        <hr>
+
+        <?php
+        // Fetch raw material for roti
+        $rotiRawMaterialQuery = "SELECT * FROM raw_material WHERE name LIKE '%aata%'";
+        $resq = mysqli_query($connection, $rotiRawMaterialQuery);
+        $row = mysqli_fetch_assoc($resq);
+
+        $ataAvailable = $row['weight'];
+        $ataInKg = $ataAvailable / 1000;
+
+        $rotiInGm = $totalRotiCount * 60;
+        $rotiInKg = $rotiInGm / 1000;
+
+        $ataLeft = $ataInKg - $rotiInKg;
+
+        // echo "<p>Dish counts:\n";
+        // print_r($dishCounts);
+        foreach ($dishCounts as $dishes => $count) {
+            if ($dishes != "Roti") {
+                echo "<p class='m-0'>$dishes - $count</p>";
+            }
+        }
+        echo "<p class='m-0'>-----------------------------------------------------------------</p>";
+        echo "<p class='m-0'>Total Rotis: <strong>$totalRotiCount</strong></p>";
+        echo "<p class='m-0'>Total <strong>Aata</strong> usage: <strong>$rotiInKg kg</strong></p>";
+        echo "<p class='m-0'>Total <strong>Available Aata</strong> in stock: <strong>$ataInKg kg</strong></p>";
+        echo "<p class='m-0'>-----------------------------------------------------------------</p>";
+        echo "<p class='m-0'>Total <strong>Expected Aata</strong> will left in stock: <strong>$ataLeft kg</strong></p>";
+        ?>
+        <hr>
         <form action="../process/order_process.php" method="POST" class="mt-4" id="orderForm">
             <?php foreach ($customers as $customer) : ?>
                 <!-- <?php
@@ -134,8 +204,8 @@ while ($row = mysqli_fetch_assoc($result)) {
             <button type="submit" class="btn btn-primary">Submit Orders</button>
         </form>
     <?php endif; ?>
-    <hr>
 
+    <hr>
     <div class="d-flex justify-content-between align-items-center">
         <div>
             <h1>All Lunch Orders</h1>
@@ -157,7 +227,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     // Check if there are any orders
     if (mysqli_num_rows($result) > 0) {
-        echo '<table class="table">';
+        echo '<table class="table table-bordered">';
         echo '<thead>';
         echo '<tr>';
         echo '<th scope="col">ID</th>';

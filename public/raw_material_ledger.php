@@ -77,7 +77,7 @@ $currentDate = date('Y-m-d', strtotime('+1 day'));
 
     // Check if there are any orders
     if (mysqli_num_rows($result) > 0) {
-        echo '<table class="table">';
+        echo '<table class="table table-bordered">';
         echo '<thead>';
         echo '<tr>';
         echo '<th scope="col">ID</th>';
@@ -113,7 +113,7 @@ $currentDate = date('Y-m-d', strtotime('+1 day'));
             echo '<td>' . $row['id'] . '</td>';
             echo '<td>' . $row['name'] . '</td>';
             echo '<td>' . "Rs " . $row['price'] . '</td>';
-            echo '<td>' . $row['weight'] . " kg" . '</td>';
+            echo '<td>' . $weightInKg . " kg" . '</td>';
             echo '<td>' . $row['created_at'] . '</td>';
             echo '<td>' . $row['updated_at'] . '</td>';
             // echo '<td><div class="alert ' . $statusClass . ' mb-0" role="alert">' . $row['status'] . '</div></td>';
@@ -243,7 +243,7 @@ $currentDate = date('Y-m-d', strtotime('+1 day'));
             $result = mysqli_query($connection, $query);
             // Check if there are any orders
             if (mysqli_num_rows($result) > 0) {
-                echo '<table class="table">';
+                echo '<table class="table table-bordered">';
                 echo '<thead>';
                 echo '<tr>';
                 echo '<th scope="col">ID</th>';

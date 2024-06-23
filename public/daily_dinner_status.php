@@ -151,7 +151,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     </script>
     <?php
 
-    echo '<table class="table">';
+    echo '<table class="table table-bordered">';
     echo '<thead>';
     echo '<tr>';
     echo '<th scope="col"></th>';

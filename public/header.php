@@ -103,10 +103,10 @@
                             Follow Up Section
                         </a>
                         <hr class="m-0">
-                        <a class="nav-link" href="raw_material.php">
+                        <!-- <a class="nav-link" href="raw_material.php">
                             <div class="sb-nav-link-icon"></div>
                             Raw Materials
-                        </a>
+                        </a> -->
                         <a class="nav-link" href="raw_material_ledger.php">
                             <div class="sb-nav-link-icon"></div>
                             Raw Materials Ledger
@@ -125,7 +125,7 @@
                             Dinner Delivery Schedule
                         </a>
                         <hr class="m-0">
-                        
+
                         <!-- <div class="sb-sidenav-menu-heading">Interface</div>
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
