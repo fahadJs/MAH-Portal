@@ -118,5 +118,5 @@ if (curl_errno($curl)) {
 
 curl_close($curl);
 
-header("Location: ../public/orders.php?success=true&rotigm=$rotiInGm");
+header("Location: ../public/orders_dinner.php?success=true&rotigm=$rotiInGm");
 exit();
