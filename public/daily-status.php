@@ -159,7 +159,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     echo '<th scope="col"></th>';
     echo '<th scope="col">Number</th>';
     echo '<th scope="col">Name</th>';
-    echo '<th scope="col">Contact</th>';
+    // echo '<th scope="col">Contact</th>';
     // echo '<th scope="col">Days</th>';
     echo '<th scope="col">Dish</th>';
     echo '<th scope="col">Address</th>';
@@ -190,8 +190,8 @@ while ($row = mysqli_fetch_assoc($result)) {
         echo '<tr>';
         echo '<td><input type="checkbox" name="customers[]" value="' . $customer['number'] . '" class="customer-checkbox" /></td>';
         echo '<td>' . $customer['number'] . '</td>';
-        echo '<td>' . $customer['name'] . '</td>';
-        echo '<td>' . $customer['contact'] . '</td>';
+        echo '<td>' . $customer['name'] . '<br>' . $customer['contact'] . '</td>';
+        // echo '<td>' . $customer['contact'] . '</td>';
         // echo '<td>' . $row['weekdays'] . '</td>';
         echo '<td>' . $customer['dish'] . '</td>';
         echo '<td>' . $customer['address'] . '</td>';
