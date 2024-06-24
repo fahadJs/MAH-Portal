@@ -36,6 +36,12 @@ while ($row = mysqli_fetch_assoc($result)) {
             $dish = preg_replace('/(\d+)\s*Paratha/i', 'Paratha', $dish);
         }
 
+        if (preg_match('/(\d+)\s*Egg/i', $dish, $matches)) {
+            // $rotiCount = intval($matches[1]);
+            // $totalRotiCount += $rotiCount * $persons;
+            $dish = preg_replace('/(\d+)\s*Egg/i', 'Egg', $dish);
+        }
+
         if (!empty($dish)) {
             $dishCount = $persons;
 
@@ -118,5 +124,5 @@ if (curl_errno($curl)) {
 
 curl_close($curl);
 
-header("Location: ../public/orders.php?success=true&rotigm=$rotiInGm");
+header("Location: ../public/orders_breakfast.php?success=true&rotigm=$rotiInGm");
 exit();
