@@ -1,4 +1,6 @@
 <?php
+
+// CodeRabbit
 // Start session
 session_start();
 
