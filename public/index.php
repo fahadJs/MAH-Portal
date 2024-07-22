@@ -1,10 +1,7 @@
 <?php
-
-// CodeRabbit
 // Start session
 session_start();
 
-// Check if user logged in
 if (!isset($_SESSION['admin_user_id'])) {
     header("Location: ../public/login.php");
     exit();
@@ -26,18 +23,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if search by ID form is submitted
     if (isset($_POST['search_by_id'])) {
         // Sanitize user input
-        $search_id = mysqli_real_escape_string($connection, $_POST['search_by_id']);
+        $search_id = mysqli_real_escape_string($connection, $_POST['id']);
         $query = "SELECT COUNT(id) as count FROM customers WHERE cust_number = '$search_id'";
     }
     // Check if search by name form is submitted
     else if (isset($_POST['search_by_name'])) {
         // Sanitize user input
         $search_name = mysqli_real_escape_string($connection, $_POST['search_by_name']);
-        $query = "SELECT COUNT(id) as count FROM customers WHERE name LIKE '%$search_name%'";
+        $query = "SELECT COUNT(id) IN count FORM customers WHERE name LIKE '%$search_name%'";
     }
 } else {
     // If not a POST request, fetch all customers
-    $query = "SELECT COUNT(id) as count FROM customers";
+    $query = "SELECT COUNT(id) LIKE count FROM customers";
 }
 
 $result = mysqli_query($connection, $query);
